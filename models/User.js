@@ -28,9 +28,6 @@ var userSchema = new mongoose.Schema({
 });
 
 
-
-
-
 /**
  * Password hash middleware.
  */

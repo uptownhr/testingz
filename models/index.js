@@ -6,5 +6,4 @@ const path = require('path'),
 const routePath = path.join(__dirname, './'),
   models = util.generateDirectoryModules(routePath)
 
-console.log(models)
 module.exports = models
