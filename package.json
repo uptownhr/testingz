@@ -1,5 +1,5 @@
 {
-  "name": "gateway",
+  "name": "hackathon-starter-lite",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,9 +11,19 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.0",
+    "connect-mongostore": "^0.1.4",
+    "cookie-parser": "^1.4.1",
     "crypto": "0.0.3",
     "express": "^4.13.4",
-    "mongoose": "^4.4.5"
+    "express-flash": "0.0.2",
+    "express-session": "^1.13.0",
+    "express-validator": "^2.19.1",
+    "jade": "^1.11.0",
+    "mongoose": "^4.4.5",
+    "multer": "^1.1.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "node-dev": "^3.1.0"

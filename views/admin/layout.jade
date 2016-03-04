@@ -1,0 +1,81 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(name='description', content='')
+    meta(name='keywords', content='')
+    meta(name='author', content='')
+    title
+      | Overview ·
+    link(href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic', rel='stylesheet')
+    link(href='http://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css', rel='stylesheet')
+    link(href='http://v4-alpha.getbootstrap.com/assets/css/docs.min.css', rel='stylesheet')
+    link(href='/admin/assets/css/toolkit-light.css', rel='stylesheet')
+    link(href='/admin/assets/css/application.css', rel='stylesheet')
+    style.
+      /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+      /* this chunk of css is not part of the toolkit :) */
+      body {
+        width: 1px;
+        min-width: 100%;
+        *width: 100%;
+      }
+  body
+    .container
+      .row
+        .col-md-12
+      .row
+        .col-sm-3.sidebar
+          nav.sidebar-nav
+            .sidebar-header
+              button.nav-toggler.nav-toggler-sm.sidebar-toggler(type='button', data-toggle='collapse', data-target='#nav-toggleable-sm')
+                span.sr-only Toggle nav
+              a.sidebar-brand.img-responsive(href='/admin')
+                span.icon.icon-leaf.sidebar-brand-icon
+                |  Honeybadger
+            #nav-toggleable-sm.collapse.nav-toggleable-sm
+              form.sidebar-form
+                input.form-control(type='text', placeholder='Search...')
+                button.btn-link(type='submit')
+                  span.icon.icon-magnifying-glass
+              ul.nav.nav-pills.nav-stacked
+                li.nav-header Dashboards
+                li
+                  a(href='/admin') Overview
+                br
+                ul.nav.nav-pills.nav-stacked
+                  li.nav-header Administrative
+                  li
+                    a(href='/admin/myaccount') My Account
+                li
+                  a(href='/user/logout') Logout
+              hr.visible-xs.m-t
+        .col-sm-9.content
+          block content
+            h1 Default content
+        #docsModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+          .modal-dialog
+            .modal-content
+              .modal-header
+                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                  span(aria-hidden='true') ×
+                h4#myModalLabel.modal-title Example modal
+              .modal-body
+                p You're looking at an example modal in the dashboard theme.
+              .modal-footer
+                button.btn.btn-primary(type='button', data-dismiss='modal') Cool, got it!
+    script(src='/admin/assets/js/jquery.min.js')
+    script(src='/admin/assets/js/chart.js')
+    script(src='/admin/assets/js/tablesorter.min.js')
+    script(src='/admin/assets/js/toolkit.js')
+    script(src='/admin/assets/js/application.js')
+    script.
+      // execute/clear BS loaders for docs
+      $(function () {
+        while (window.BS && window.BS.loader && window.BS.loader.length) {
+          (window.BS.loader.pop())()
+        }
+      })
+                             

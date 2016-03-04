@@ -1,0 +1,53 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title
+    script(src='https://code.jquery.com/jquery-2.1.4.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
+    link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', rel='stylesheet')
+    link(rel='stylesheet', href='/site/css/style.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css')
+  body
+    nav
+      a(href='/about') About
+      a(href='https://github.com/jaequery/honeybadger', target='_blank') Github
+      .btn-group
+        if user
+          button.btn.btn-info.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+            =user.profile.name || user.email
+            | &nbsp;
+            span.caret
+          ul.dropdown-menu
+            li
+              a(href='/admin') Admin
+            li
+              a(href='/user/account') My Account
+            li
+              a(href='/auth/logout') Logout
+        else
+          a(href='/auth/login') Login
+    br(style='clear: both;')
+    .container.content
+      header.masthead
+        h3.masthead-title
+          .post-page__logo-wrapper
+            a(href='/', title='Home')
+              img.post-page__logo(src='/site/img/logo.svg', alt='React')
+              |             Honeybadger
+      main
+        include partials/flash
+        block content
+      footer.footer
+        small
+          | © Honeybadger
+          time 2016
+          | . All rights reserved.
+    script(async='', src='//platform.twitter.com/widgets.js', charset='utf-8')
+    script(src='http://static.jsbin.com/js/embed.min.js?3.34.0')
+    script.
+      (function () {
+        $('.dropdown-toggle').dropdown();
+      });
+                     
