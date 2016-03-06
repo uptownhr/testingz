@@ -1,9 +1,39 @@
 const router = require('express').Router(),
   User = require('../models/User'),
-  queryString = require('querystring')
+  queryString = require('querystring'),
+  passport = require('passport')
 
 router.get('/login', function(req,res){
   res.render('login')
+})
+
+router.post('/login', function(req,res,next){
+  req.assert('email', 'Email is not valid').isEmail();
+  req.assert('password', 'Password cannot be blank').notEmpty();
+
+  var errors = req.validationErrors();
+
+  if (errors) {
+    req.flash('errors', errors);
+    return res.redirect('/login');
+  }
+
+  passport.authenticate('local', function(err, user, info) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      req.flash('errors', { msg: info.message });
+      return res.redirect('/auth/login');
+    }
+    req.logIn(user, function(err) {
+      if (err) {
+        return next(err);
+      }
+      req.flash('success', { msg: 'Success! You are logged in.' });
+      res.redirect(req.session.returnTo || '/');
+    });
+  })(req, res, next);
 })
 
 router.get('/register', function(req,res){
@@ -59,5 +89,16 @@ router.post('/register', function(req,res,next){
     })
 })
 
+router.get('/o/:provider', function(req,res,next){
+  const provider = req.params.provider
+
+  return passport.authenticate(provider)(req,res,next)
+})
+
+router.get('/o/:provider/callback', function(req,res,next){
+  return passport.authenticate(provider, {failureRedirect: '/auth/login'})(req,res,next)
+}, function(req,res){
+  res.redirect(req.session.returnTo || '/')
+})
 
 module.exports = router

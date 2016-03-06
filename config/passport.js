@@ -48,20 +48,24 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, passw
  */
 exports.isAuthenticated = function(req, res, next) {
   if (req.isAuthenticated()) {
-    return next();
+    return next()
   }
-  res.redirect('/auth/login');
-};
+
+  req.session.returnTo = req.path
+  res.redirect('/auth/login')
+}
 
 /**
  * Authorization Required middleware.
  */
 exports.isAuthorized = function(req, res, next) {
-  var provider = req.path.split('/').slice(-1)[0];
+  var provider = req.path.split('/').slice(-1)[0]
+
+  req.session.returnTo = req.path
 
   if (req.user.tokens.find( token => token.kind == provider ) ){
-    next();
+    next()
   } else {
-    res.redirect('/auth/' + provider);
+    res.redirect('/auth/' + provider)
   }
-};
+}
