@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var userSchema = new mongoose.Schema({
   email: { type: String, unique: true, lowercase: true },
   password: String,
-  role: {type: String, enum: ['admin', 'member']},
+  role: {type: String, enum: ['admin', 'member'], default: 'member'},
 
   facebook: String,
   twitter: String,
@@ -22,6 +22,8 @@ var userSchema = new mongoose.Schema({
     website: { type: String, default: '' },
     picture: { type: String, default: '' }
   },
+
+  askEmail: {type: Boolean, default: true},
 
   resetPasswordToken: String,
   resetPasswordExpires: Date

@@ -96,8 +96,11 @@ router.get('/o/:provider', function(req,res,next){
 })
 
 router.get('/o/:provider/callback', function(req,res,next){
+  const provider = req.params.provider
+
   return passport.authenticate(provider, {failureRedirect: '/auth/login'})(req,res,next)
 }, function(req,res){
+  console.log('callback', req.user)
   res.redirect(req.session.returnTo || '/')
 })
 

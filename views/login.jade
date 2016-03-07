@@ -1,10 +1,10 @@
-extends layout.jade
+extends layout
 
 block content
   .row
     .col-md-8
       p.lead Sign in with email
-      form.form-horizontal(role='form', method='POST', action='/auth/login')
+      form.form-horizontal(role='form', method='POST', action='/auth/o/login')
         .form-group
           label.col-sm-2.control-label(for='email') Email
           .col-sm-8
@@ -20,21 +20,21 @@ block content
               |  Login
       p.lead
         | Or click here to
-        a(href='/auth/register') Sign Up
+        a(href='/auth/o/register') Sign Up
     .col-md-4(style='text-align: left;')
       p.lead Or sign in with ...
-      a.btn.btn-block.btn-social.btn-twitter(href='/auth/twitter')
+      a.btn.btn-block.btn-social.btn-twitter(href='/auth/o/twitter')
         i.fa.btn-xs.fa-twitter
         |  Sign in with Twitter
-      a.btn.btn-block.btn-social.btn-instagram(href='/auth/instagram')
+      a.btn.btn-block.btn-social.btn-instagram(href='/auth/o/instagram')
         i.fa.btn-xs.fa-instagram
         |  Sign in with Instagram
-      a.btn.btn-block.btn-social.btn-facebook(href='/user/facebook')
+      a.btn.btn-block.btn-social.btn-facebook(href='/auth/o/facebook')
         i.fa.btn-xs.fa-facebook
         |  Sign in with Facebook
-      a.btn.btn-block.btn-social.btn-github(href='/user/github')
+      a.btn.btn-block.btn-social.btn-github(href='/auth/o/github')
         i.fa.btn-xs.fa-github
         |  Sign in with Github
-      a.btn.btn-block.btn-social.btn-linkedin(href='/user/linkedin')
+      a.btn.btn-block.btn-social.btn-linkedin(href='/auth/o/linkedin')
         i.fa.btn-xs.fa-linkedin
         |  Sign in with Linkedin

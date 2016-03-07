@@ -1,0 +1,54 @@
+html
+  body
+    .dashhead
+      .dashhead-titles
+        h6.dashhead-subtitle Dashboards
+        h2.dashhead-title Users
+      .btn-toolbar.dashhead-toolbar
+        .btn-group
+          a.btn.btn-primary-outline(href='/admin/user', type='button')
+            | Create New
+            span.icon.icon-plus
+    hr.m-t
+    .flextable.table-actions
+      .flextable-item.flextable-primary
+        .btn-toolbar-item.input-with-icon
+          input.form-control.input-block(type='text', placeholder='Search users')
+          span.icon.icon-magnifying-glass
+      .flextable-item
+    .table-full
+      .table-responsive
+        table.table(data-sort='table')
+          thead
+            tr
+              td
+                input#selectAll.select-all(type='checkbox')
+              th.headerSortUp User #
+              th Username
+              th Email
+              th Role
+              th Created
+              th
+          tbody
+            tr
+              td
+                input.select-row(type='checkbox')
+              td
+              td
+              td
+              td
+              td
+              td
+                a.btn.btn-primary-outline.btn-sm(href='/admin/user/<%=user[:id] %>')
+                  | Edit
+                  span.icon.icon-pencil
+                a.btn.btn-primary-outline.btn-sm(href='/admin/user/delete/<%=user[:id] %>', data-remote='true', data-confirm='Are You Sure?')
+                  | Delete
+                  span.icon.icon-erase
+    .text-center
+    script(type='text/javascript').
+      (function(){
+        $('table.table .header').on('click', function(e){
+          alert('hi');
+        })
+      })

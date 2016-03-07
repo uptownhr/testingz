@@ -14,6 +14,7 @@ const express = require('express'),
 
 
 /*connect to mongodb */
+console.log(config.mongodb)
 mongoose.connect(config.mongodb)
 mongoose.connection.on('error', function(){
   console.log('Mongodb connection error')
@@ -50,5 +51,42 @@ app.use((req,res,next) => {
   res.locals.user = req.user
   next()
 })
+
+/*
+Ask and Set email for social login
+ */
+app.use( function(req,res,next){
+  console.log(req.path, req.user)
+  if(!req.user || !req.user.askEmail || req.path == '/askEmail') return next()
+  console.log('redirecting for email')
+  return res.redirect('/askEmail')
+})
+
+app.get( '/askEmail', function(req,res){
+  res.render('askEmail')
+})
+
+app.post('/askEmail', function(req,res){
+  console.log("POST EMAIL")
+  req.assert('email', 'Email is not valid').isEmail();
+
+  var errors = req.validationErrors();
+
+  if (errors) {
+    console.log('error', errors)
+    req.flash('errors', errors);
+    return res.redirect('/askEmail');
+  }
+
+  const body = req.body
+
+  req.user.askEmail = false
+  req.user.email = body.email
+  req.user.save( function(err, saved){
+    console.log(err, saved)
+    res.redirect('/')
+  })
+})
+
 
 module.exports = app
