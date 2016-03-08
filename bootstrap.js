@@ -10,7 +10,8 @@ const express = require('express'),
   multer = require('multer'),
   upload = multer({ dest: path.join(__dirname, 'uploads') }),
   expressValidator = require('express-validator'),
-  cookieParser = require('cookie-parser')
+  cookieParser = require('cookie-parser'),
+  moment = require('moment')
 
 
 /*connect to mongodb */
@@ -25,6 +26,7 @@ mongoose.connection.on('error', function(){
 const app = express()
 app.set('view engine', 'jade');
 app.locals.pretty = true
+app.locals.moment = moment
 
 // listen on config port, default 3000
 app.listen(config.port, function(e){

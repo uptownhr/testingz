@@ -24,7 +24,7 @@ var userSchema = new mongoose.Schema({
   },
 
   askEmail: {type: Boolean, default: true},
-
+  created: {type: Date, default: Date.now},
   resetPasswordToken: String,
   resetPasswordExpires: Date
 });
