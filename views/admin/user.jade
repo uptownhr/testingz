@@ -27,7 +27,7 @@ block content
         .col-md-12
           .form-group
             label Name
-            input.form-control(type="text" name="profile[name]" placeholder="Name" value=user.profile.name)
+            input.form-control(type="text" name="profile[name]" placeholder="Name" value=user.profile? user.profile.name: '')
           // /.form-group
       // /.row
       #field_role.field.row
