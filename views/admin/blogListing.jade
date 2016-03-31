@@ -49,6 +49,8 @@ block content
                 a.btn.btn-primary-outline.btn-sm(href='/admin/deleteBlog/#{entry._id}', data-remote='true', data-confirm='Are You Sure?')
                   | Delete
                   span.icon.icon-erase
+                a.btn.btn-primary-outline.btn-sm(href='/blog/post/#{entry._id}')
+                  | View
   .text-center
   script(type='text/javascript').
     (function(){
