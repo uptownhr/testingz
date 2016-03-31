@@ -2,7 +2,19 @@ const router = require('express').Router(),
   qs = require('qs'),
   User = require('../models/User'),
   _ = require('lodash'),
-  Entry = require('../models/Entry')
+  Entry = require('../models/Entry');
+var marked = require('marked');
+
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false
+});
 
 router.get('/', function(req,res){
   res.render('admin/overview')
@@ -95,18 +107,25 @@ router.get('/blogListing', function(req, res){
 })
 
 router.get('/createBlog', function(req, res){
-  res.render('admin/createBlog')
+  var user = req.user;
+  console.log("this is the user id: ", user);
+  res.render('admin/createBlog', {
+    user: req.user
+  })
 })
 
 router.post('/saveBlog', function(req, res){
   const body = req.body
+  var userID = req.body.userID
   console.log("this is the post content: ", body)
+  console.log("this is the user ID: ", userID)
   var id = req.body._id
   Entry.findOne({_id: id}, function(err, entry){
     if(entry) {
       entry.title=body.title;
       entry.content=body.content;
       entry.status=body.status;
+      entry.userID=body.userID
       if(err) console.log(err)
       console.log("SAVED: ", entry)
       entry.save(function(err, save){
@@ -118,7 +137,8 @@ router.post('/saveBlog', function(req, res){
       var entry = new Entry({
         title: body.title,
         content: body.content,
-        status: body.status
+        status: body.status,
+        userID: body.userID
       })
       entry.save(function(err, saved){
         console.log("did it save?: ", saved)
@@ -130,9 +150,11 @@ router.post('/saveBlog', function(req, res){
 
 router.get('/editBlog/:_id', function(req, res){
   var id = req.params._id
+  var userID = req.user._id
   Entry.findOne({_id: id}, function(err, entry){
     res.render('admin/editBlog',{
-      entry: entry
+      entry: entry,
+      user: req.user
     })
   })
 })

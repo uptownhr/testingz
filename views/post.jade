@@ -3,6 +3,12 @@ block content
   article.post
     header.post-header
       h1.post-title=post.title
-        header.post-meta(style='margin-bottom:60px;')
-        p.post-date(datetime=post.date)
-        section.post-content=post.content
+      header.post-meta(style='margin-bottom:60px;')
+      p.post-date=post.date
+      section.post-content=post.content
+      br
+
+
+      script.
+        document.getElementById('content').innerHTML =
+                marked(post.content);

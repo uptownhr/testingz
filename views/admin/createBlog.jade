@@ -3,6 +3,7 @@ block content
   link(href='/css/ghostdown.css', media='all', rel='stylesheet')
 
   form(method="POST" action="/admin/saveBlog")
+    input(type="hidden" name="userID" value=user._id)
     .dashhead
       .dashhead-titles
         h6.dashhead-subtitle Blog
