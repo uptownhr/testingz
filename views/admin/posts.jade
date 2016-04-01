@@ -6,8 +6,8 @@ block content
       h2.dashhead-title Listings
     .btn-toolbar.dashhead-toolbar
       .btn-group
-        a.btn.btn-primary-outline(href='/admin/createBlog', type='button')
-          | New Entry
+        a.btn.btn-primary-outline(href='/admin/post', type='button')
+          | New Post
           span.icon.icon-plus
   hr.m-t
   .flextable.table-actions
@@ -25,31 +25,29 @@ block content
               input#selectAll.select-all(type='checkbox')
             th Status
             th Title
-            th Content
             th Date
             th
         tbody
-          each entry in e
+          each post in posts
             tr
               td
                 input.select-row(type='checkbox')
               td
-                =entry.status
+                =post.status
               td
-                =entry.title
-              td.col-md-2
-                =entry.content
+                =post.title
               td
-                =moment(entry.date).format("YYYY-MM-DD")
+                =moment(post.date).format("YYYY-MM-DD")
               td
-                a.btn.btn-primary-outline.btn-sm(href='/admin/editBlog/#{entry._id}')
+                a.btn.btn-primary-outline.btn-sm(href='/admin/post/#{post._id}')
                   | Edit
                   span.icon.icon-pencil
                 | &nbsp;
-                a.btn.btn-primary-outline.btn-sm(href='/admin/deleteBlog/#{entry._id}', data-remote='true', data-confirm='Are You Sure?')
+                a.btn.btn-primary-outline.btn-sm(href='/admin/post/delete/#{post._id}', data-remote='true', data-confirm='Are You Sure?')
                   | Delete
                   span.icon.icon-erase
-                a.btn.btn-primary-outline.btn-sm(href='/blog/post/#{entry._id}')
+                | &nbsp;
+                a.btn.btn-primary-outline.btn-sm(href='/blog/post/#{post._id}')
                   | View
   .text-center
   script(type='text/javascript').

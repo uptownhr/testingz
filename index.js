@@ -5,6 +5,7 @@ const app = require('./bootstrap'),
   passport = require('./config/passport')
 
 app.use('/', controllers.Home)
+app.use('/blog', controllers.Post)
 app.use('/auth', controllers.Auth)
 app.use('/admin', passport.isAuthenticated, passport.isAdmin, controllers.Admin)
 
