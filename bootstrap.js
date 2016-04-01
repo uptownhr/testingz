@@ -12,7 +12,7 @@ const express = require('express'),
   expressValidator = require('express-validator'),
   cookieParser = require('cookie-parser'),
   moment = require('moment'),
-  User = require('./models/User.js')
+  User = require('./models/User')
 
 /*connect to mongodb */
 console.log(config.mongodb)
