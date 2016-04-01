@@ -11,8 +11,8 @@ const express = require('express'),
   upload = multer({ dest: path.join(__dirname, 'uploads') }),
   expressValidator = require('express-validator'),
   cookieParser = require('cookie-parser'),
-  moment = require('moment')
-
+  moment = require('moment'),
+  User = require('./models/User')
 
 /*connect to mongodb */
 console.log(config.mongodb)
@@ -52,6 +52,27 @@ app.use(flash())
 app.use((req,res,next) => {
   res.locals.user = req.user
   next()
+})
+
+/* 
+Admin user seed data
+ */
+app.use(function(req,res,next){
+  User.findOne({ role: 'admin' }, function(err, user){
+    if (err){
+      console.log(err);
+    } else if (!user){
+      var user = new User({
+        email: 'admin',
+        password: 'admin',
+        role: 'admin'
+      });
+      user.save(function(err,user){
+        if (err) console.log(err);
+      });
+    }
+  });
+  next();
 })
 
 /*
