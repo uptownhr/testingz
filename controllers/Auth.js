@@ -58,7 +58,7 @@ router.post('/register', function(req,res,next){
   if (errors) {
     req.flash('errors', errors);
     delete body.password
-    console.log(body, queryString.stringify(body) )
+
     return res.redirect('/auth/register?' + queryString.stringify(body) );
   }
 
@@ -73,7 +73,7 @@ router.post('/register', function(req,res,next){
   User.findOne({email: body.email}).exec()
     .then( (existingUser) => {
       if(existingUser){
-        console.log(existingUser)
+
         req.flash('errors', { msg: 'Account with that email address already exists.' });
         return res.redirect('/auth/register')
       }
@@ -100,7 +100,6 @@ router.get('/o/:provider/callback', function(req,res,next){
 
   return passport.authenticate(provider, {failureRedirect: '/auth/login'})(req,res,next)
 }, function(req,res){
-  console.log('callback', req.user)
   res.redirect(req.session.returnTo || '/')
 })
 
