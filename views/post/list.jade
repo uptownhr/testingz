@@ -1,0 +1,20 @@
+
+
+
+
+extends ../layout
+
+block content
+  each post in posts
+    article.post
+      header.post-header
+        h1.post-title
+          a(href="/blog/post/#{post._id}")=post.title
+        span.post-date=moment(post.date).format('DD MMMM YYYY')
+        section.post-content!=post.content
+
+        hr
+        p by #{post.userID.profile.name || post.userID.profile.email.split('@')[0]}
+        hr
+
+

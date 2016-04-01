@@ -2,7 +2,7 @@ const router = require('express').Router(),
   qs = require('qs'),
   User = require('../models/User'),
   _ = require('lodash'),
-  Entry = require('../models/Entry');
+  Post = require('../models/Post');
 var marked = require('marked');
 
 marked.setOptions({
@@ -21,8 +21,8 @@ router.get('/', function(req,res){
 })
 
 router.get('/user', function(req,res){
-  const query = req.query
-  res.render('admin/user', {user: query})
+  const user = {}
+  res.render('admin/user', {user} )
 })
 
 router.get('/user/:id', function(req,res){
@@ -97,77 +97,68 @@ router.get('/users', function(req,res){
  * Blog Post Editing
  */
 
-router.get('/blogListing', function(req, res){
-  Entry.find(function(err, entry){
-    console.log("this is the entries: ", entry)
-    res.render('admin/blogListing',{
-      e: entry
+router.get('/posts', function(req,res){
+  Post.find(function(err, posts){
+    res.render('admin/posts',{
+      posts
     })
   })
 })
 
-router.get('/createBlog', function(req, res){
-  var user = req.user;
-  console.log("this is the user id: ", user);
-  res.render('admin/createBlog', {
-    user: req.user
-  })
+router.get('/post', function(req, res){
+  const post = {}
+  res.render('admin/post', {post} )
 })
 
-router.post('/saveBlog', function(req, res){
-  const body = req.body
-  var userID = req.body.userID
-  console.log("this is the post content: ", body)
-  console.log("this is the user ID: ", userID)
+router.get('/post/:id', function(req, res){
+  const id = req.params.id
+
+  Post.findOne({_id: id}, function(err, post){
+    res.render('admin/post', {post} )
+  })
+
+})
+
+router.post('/post', function(req, res){
+  const body = req.body,
+    user_id = req.user._id
+
   var id = req.body._id
-  Entry.findOne({_id: id}, function(err, entry){
-    if(entry) {
-      entry.title=body.title;
-      entry.content=body.content;
-      entry.status=body.status;
-      entry.userID=body.userID
-      if(err) console.log(err)
-      console.log("SAVED: ", entry)
-      entry.save(function(err, save){
-        console.log("Did it save?: ", save);
+  Post.findOne({_id: id}, function(err, post){
+    if(post) {
+      post.title = body.title;
+      post.content = body.content;
+      post.status = body.status;
+      post.userID = user_id
+
+      post.save(function(err, save){
+        res.redirect('/admin/posts')
       })
-      res.redirect('/admin/blogListing')
-    }
-    else {
-      var entry = new Entry({
+    }else{
+      var post = new Post({
         title: body.title,
         content: body.content,
         status: body.status,
-        userID: body.userID
+        userID: user_id
       })
-      entry.save(function(err, saved){
-        console.log("did it save?: ", saved)
+
+      post.save(function(err, saved){
+        res.redirect('/admin/posts')
       })
-      res.redirect('/admin/blogListing')
     }
   })
 })
 
-router.get('/editBlog/:_id', function(req, res){
-  var id = req.params._id
-  var userID = req.user._id
-  Entry.findOne({_id: id}, function(err, entry){
-    res.render('admin/editBlog',{
-      entry: entry,
-      user: req.user
-    })
-  })
-})
 
-router.get('/deleteBlog/:id', function(req,res){
-  Entry.remove({_id: req.params.id}, function(err){
+router.get('/post/delete/:id', function(req,res){
+  Post.remove({_id: req.params.id}, function(err){
     if(err){
       req.flash('error', {msg: err.message} )
     }else{
       req.flash('success', {msg: 'deleted'} )
     }
 
-    return res.redirect('/admin/blogListing')
+    return res.redirect('/admin/posts')
   })
 })
 module.exports = router

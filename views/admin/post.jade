@@ -1,0 +1,63 @@
+extends layout
+block content
+  link(href='/css/ghostdown.css', media='all', rel='stylesheet')
+  form(method="POST" action="/admin/post")
+    input(type="hidden" name="_id" value=post._id)
+    .dashhead
+      .dashhead-titles
+        h6.dashhead-subtitle Blog
+        h2.dashhead-title Edit Blog Post
+      .btn-toolbar.dashhead-toolbar
+        button.btn.btn-primary-outline Save Post
+        //
+          <div class="btn-toolbar-item input-with-icon">
+          <input type="text" value="01/01/15 - 01/08/15" class="form-control" data-provide="datepicker">
+          <span class="icon icon-calendar"></span>
+          </div>
+    hr.m-t
+    section.content-header
+      #field_title.field.row
+        .col-md-12
+          .form-group
+            label Title
+            input.form-control(type="text" name="title" placeholder="Title" value=post.title)
+          // /.form-group
+        // /.col
+      // /.row
+      #field_content.field.row
+        .col-md-12
+          .form-group
+            label Content
+              section.editor
+                .outer
+                  .editorwrap
+                    section.entry-markdown
+                      section.entry-markdown-content
+                        textarea(name="content")=post.content
+                    section.entry-preview.active
+                      header.floatingheader
+                        | Preview
+                        span.entry-word-count 0 words
+                      section.entry-preview-content
+                        .rendered-markdown
+          // /.form-group
+      // /.row
+      #field_status.field.row
+        .col-md-12
+          .form-group
+            label Status
+            select.form-control(name="status")
+              for status in ['pending','launched','queued']
+                option(selected=post.status == status)=status
+          // /.form-group
+        // /.col
+      // /.row
+
+block scripts
+  script(src="http://code.jquery.com/ui/1.10.4/jquery-ui.js")
+  script(src='/js/ghostdown.js')
+  script(src="/js/jquery.ghostdown.js")
+  script.
+    $(document).ready(function () {
+      $(".editor").ghostDown();
+    });

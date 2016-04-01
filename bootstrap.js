@@ -58,7 +58,6 @@ app.use((req,res,next) => {
 Ask and Set email for social login
  */
 app.use( function(req,res,next){
-  console.log(req.path, req.user)
   if(!req.user || !req.user.askEmail || req.path == '/askEmail') return next()
   console.log('redirecting for email')
   return res.redirect('/askEmail')
