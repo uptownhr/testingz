@@ -103,4 +103,7 @@ router.get('/o/:provider/callback', function(req,res,next){
   res.redirect(req.session.returnTo || '/')
 })
 
+
+
+
 module.exports = router

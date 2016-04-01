@@ -12,3 +12,5 @@ app.use('/admin', passport.isAuthenticated, passport.isAdmin, controllers.Admin)
 app.get('/test', (req,res) => {
   res.send(req.query)
 })
+
+module.exports = app
