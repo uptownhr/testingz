@@ -15,7 +15,7 @@ router.post('/login', function(req,res,next){
 
   if (errors) {
     req.flash('errors', errors);
-    return res.redirect('/login');
+    return res.redirect('login');
   }
 
   passport.authenticate('local', function(err, user, info) {

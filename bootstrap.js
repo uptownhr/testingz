@@ -63,9 +63,10 @@ app.use(function(req,res,next){
       console.log(err);
     } else if (!user){
       var user = new User({
-        email: 'admin',
+        email: 'admin@admin.com',
         password: 'admin',
-        role: 'admin'
+        role: 'admin',
+        askEmail: false
       });
       user.save(function(err,user){
         if (err) console.log(err);
@@ -79,7 +80,8 @@ app.use(function(req,res,next){
 Ask and Set email for social login
  */
 app.use( function(req,res,next){
-  if(!req.user || !req.user.askEmail || req.path == '/askEmail') return next()
+  if(!req.user || !req.user.askEmail || req.user.email || req.path == '/askEmail') return next()
+
   console.log('redirecting for email')
   return res.redirect('/askEmail')
 })
