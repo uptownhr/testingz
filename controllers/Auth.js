@@ -62,6 +62,14 @@ router.post('/register', function(req,res,next){
     return res.redirect('/auth/register?' + queryString.stringify(body) );
   }
 
+  const user = new User({
+    email: body.email,
+    password: body.password,
+    profile: {
+      name: body.first_name + ' ' + body.last_name
+    }
+  })
+
   User.findOne({email: body.email}).exec()
     .then( (existingUser) => {
       if(existingUser){
