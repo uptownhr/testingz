@@ -189,10 +189,11 @@ passport.use(new TwitterStrategy({
   }
 }));
 */
+/*
 
-/**
+/!**
  * Sign in with Instagram.
- */
+ *!/
 passport.use(new InstagramStrategy({
   clientID: process.env.INSTAGRAM_ID,
   clientSecret: process.env.INSTAGRAM_SECRET,
@@ -240,9 +241,9 @@ passport.use(new InstagramStrategy({
   }
 }));
 
-/**
+/!**
  * Sign in with Facebook.
- */
+ *!/
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_ID,
   clientSecret: process.env.FACEBOOK_SECRET,
@@ -296,9 +297,9 @@ passport.use(new FacebookStrategy({
   }
 }));
 
-/**
+/!**
  * Sign in with GitHub.
- */
+ *!/
 passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_ID,
   clientSecret: process.env.GITHUB_SECRET,
@@ -352,9 +353,9 @@ passport.use(new GitHubStrategy({
   }
 }));
 
-/**
+/!**
  * Sign in with Google.
- */
+ *!/
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_ID,
   clientSecret: process.env.GOOGLE_SECRET,
@@ -406,9 +407,9 @@ passport.use(new GoogleStrategy({
   }
 }));
 
-/**
+/!**
  * Sign in with LinkedIn.
- */
+ *!/
 passport.use(new LinkedInStrategy({
   clientID: process.env.LINKEDIN_ID,
   clientSecret: process.env.LINKEDIN_SECRET,
@@ -461,4 +462,4 @@ passport.use(new LinkedInStrategy({
       });
     });
   }
-}));
+}));*/
