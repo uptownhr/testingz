@@ -2,6 +2,12 @@ var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var mongoose = require('mongoose');
 
+var providerSchema = new mongoose.Schema({
+  name: String,
+  accessToken: String,
+  secondaryToken: String
+})
+
 var userSchema = new mongoose.Schema({
   email: { type: String, unique: true, lowercase: true },
   password: String,
@@ -14,6 +20,8 @@ var userSchema = new mongoose.Schema({
   instagram: String,
   linkedin: String,
   tokens: Array,
+
+  providers: [providerSchema],
 
   profile: {
     name: { type: String, default: '' },
