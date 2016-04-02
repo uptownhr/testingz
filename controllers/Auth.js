@@ -9,8 +9,8 @@ router.get('/login', function(req,res){
 
 router.post('/login', function(req,res,next){
   req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password cannot be blank').notEmpty();
-
+  req.assert('password', 'Password must be at least 6 characters long').len(6);
+  
   var errors = req.validationErrors();
 
   if (errors) {
@@ -50,7 +50,7 @@ router.get('/logout', function(req,res){
 
 router.post('/register', function(req,res,next){
   req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password must be at least 8 characters long').len(8);
+  req.assert('password', 'Password must be at least 6 characters long').len(6);
 
   const errors = req.validationErrors();
   const body = req.body
@@ -61,14 +61,6 @@ router.post('/register', function(req,res,next){
 
     return res.redirect('/auth/register?' + queryString.stringify(body) );
   }
-
-  const user = new User({
-    email: body.email,
-    password: body.password,
-    profile: {
-      name: body.first_name + ' ' + body.last_name
-    }
-  })
 
   User.findOne({email: body.email}).exec()
     .then( (existingUser) => {
@@ -89,6 +81,32 @@ router.post('/register', function(req,res,next){
     })
 })
 
+router.post('/account', function(req,res,next){
+  const body = req.body;
+  var name = body.first_name ? body.first_name + ' ' + body.last_name : req.user.name;
+  var email = body.email ? body.email : req.user.email;
+
+  if (body.email)
+    req.assert('email', 'Email is not valid').isEmail();
+  
+  const errors = req.validationErrors();
+
+  if (errors) {
+    req.flash('errors', errors);
+    return res.redirect('/user/account');
+  }
+
+  User.update({_id: req.user._id}, { profile : {name: name}, email : email}, function(err,doc){
+    if (err){
+      req.flash('errors', {msg: 'Error: Could not update.'});
+      return res.redirect('/user/account');
+    } else {
+      req.flash('success', { msg: 'Success! Account updated!' });
+      return res.redirect('/user/account')
+    }
+  })    
+})
+
 router.get('/o/:provider', function(req,res,next){
   const provider = req.params.provider
 
@@ -102,8 +120,5 @@ router.get('/o/:provider/callback', function(req,res,next){
 }, function(req,res){
   res.redirect(req.session.returnTo || '/')
 })
-
-
-
 
 module.exports = router

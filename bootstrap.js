@@ -64,7 +64,7 @@ app.use(function(req,res,next){
     } else if (!user){
       var user = new User({
         email: 'admin@admin.com',
-        password: 'admin',
+        password: 'adminadmin',
         role: 'admin',
         askEmail: false
       });
