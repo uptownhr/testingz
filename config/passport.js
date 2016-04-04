@@ -129,10 +129,11 @@ function handleOauthLogin(profileMapper){
 }
 
 function mapTwitterProfile(profile){
+  console.log(profile);
   return {
     name: profile.displayName,
     location: profile._json.location,
-    picture: profile.json.profile_image_url_https
+    picture: profile._json.profile_image_url_https
   }
 }
 

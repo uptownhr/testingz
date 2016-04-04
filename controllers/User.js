@@ -5,15 +5,14 @@ router.get('/account', function(req,res){
   var user = req.user.profile;
  
   res.render('account', { query : {
-    first_name: user.name.split(' ')[0],
-    last_name: user.name.split(' ')[1],
-    email: user.email
+    name: user.name,
+    email: req.user.email
   }})
 })
 
 router.post('/account', function(req,res,next){
   const body = req.body;
-  var name = body.first_name ? body.first_name + ' ' + body.last_name : req.user.name;
+  var name = body.name ? body.name : req.user.name;
   var email = body.email ? body.email : req.user.email;
 
   if (body.email)
