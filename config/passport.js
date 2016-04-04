@@ -97,7 +97,7 @@ function handleOauthLogin(profileMapper){
         .then( user => {
           if(user){
             req.flash('errors', {msg: `There is already a ${provider.name} account that belongs to you. Sign in with that account or delete it, then link it with your current account.`});
-            return done();
+            return done()
           }
 
           req.user.providers.push(provider)
@@ -106,21 +106,21 @@ function handleOauthLogin(profileMapper){
     }else{
       findProviderUser(provider_name, profile.id)
       .then( user => {
+
+        //if user found, update profile info and log user in
         if(user){
+          //use oauth profile values if site values is undefined or ''
           _.extendWith(user.profile, mapped_profile, function(obj, src){
-            return ( _.isUndefined(object) || object == '' ) ? src : obj;
+            return ( _.isUndefined(object) || object == '' ) ? src : obj
           })
 
-          return user.save( err => done(err, user) );
+          return user.save( err => done(err, user) )
         }
 
-        user = new User();
-        user.profile = {
-          name: mapped_profile.name,
-          location: mapped_profile.location,
-          picture: mapped_profile.picture
-        }
-        user.providers.push(provider);
+        //user not found, register user and login
+        user = new User()
+        user.profile = mapped_profile
+        user.providers.push(provider)
 
         user.save( err => done(err,user) )
       })
