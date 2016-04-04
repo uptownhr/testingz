@@ -9,8 +9,8 @@ router.get('/login', function(req,res){
 
 router.post('/login', function(req,res,next){
   req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password cannot be blank').notEmpty();
-
+  req.assert('password', 'Password must be at least 6 characters long').len(6);
+  
   var errors = req.validationErrors();
 
   if (errors) {
@@ -50,7 +50,7 @@ router.get('/logout', function(req,res){
 
 router.post('/register', function(req,res,next){
   req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password must be at least 8 characters long').len(8);
+  req.assert('password', 'Password must be at least 6 characters long').len(6);
 
   const errors = req.validationErrors();
   const body = req.body
@@ -102,8 +102,5 @@ router.get('/o/:provider/callback', function(req,res,next){
 }, function(req,res){
   res.redirect(req.session.returnTo || '/')
 })
-
-
-
 
 module.exports = router

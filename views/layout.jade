@@ -21,8 +21,9 @@ html(lang='en')
             | &nbsp;
             span.caret
           ul.dropdown-menu
-            li
-              a(href='/admin') Admin
+            if user.role == 'admin' 
+              li
+                a(href='/admin') Admin
             li
               a(href='/user/account') My Account
             li
