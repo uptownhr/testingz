@@ -8,6 +8,4 @@ var postSchema = new mongoose.Schema({
   status: {type: String, enum: ['pending', 'launched', 'queued']}
 })
 
-
-
-module.exports = mongoose.model('blogEntry', postSchema)
+module.exports = mongoose.model('post', postSchema)
