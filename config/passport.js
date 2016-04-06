@@ -86,7 +86,6 @@ function findProviderUser(provider, id){
 
 function handleOauthLogin(profileMapper){
   return function(req, accessToken, secondaryToken, profile, done){
-
     const provider_name = req.params.provider,
       mapped_profile = profileMapper(profile),
       provider = { accessToken, secondaryToken, name: provider_name }
@@ -129,7 +128,6 @@ function handleOauthLogin(profileMapper){
 }
 
 function mapTwitterProfile(profile){
-  console.log(profile);
   return {
     name: profile.displayName,
     location: profile._json.location,
@@ -144,6 +142,20 @@ passport.use(new TwitterStrategy({
   passReqToCallback: true
 }, handleOauthLogin(mapTwitterProfile)))
 
+function mapInstagramProfile(profile) {
+  return {
+    name: profile._json.data.full_name,
+    website: profile._json.data.website,
+    picture: profile._json.data.profile_picture
+  }
+}
+
+passport.use(new InstagramStrategy({
+  clientID: config.social.instagram.client_id,
+  clientSecret: config.social.instagram.client_secret,
+  callbackURL: '/auth/o/instagram/callback',
+  passReqToCallback: true
+}, handleOauthLogin(mapInstagramProfile)))
 
 /*
 // Sign in with Twitter.
