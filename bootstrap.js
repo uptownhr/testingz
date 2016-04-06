@@ -1,3 +1,4 @@
+"use strict"
 const express = require('express'),
   mongoose = require('mongoose'),
   config = require('./config'),
@@ -12,7 +13,7 @@ const express = require('express'),
   expressValidator = require('express-validator'),
   cookieParser = require('cookie-parser'),
   moment = require('moment'),
-  User = require('./models/User')
+  seed = require('./config/seed.js')()
 
 /*connect to mongodb */
 console.log(config.mongodb)
@@ -52,28 +53,6 @@ app.use(flash())
 app.use((req,res,next) => {
   res.locals.user = req.user
   next()
-})
-
-/* 
-Admin user seed data
- */
-app.use(function(req,res,next){
-  User.findOne({ role: 'admin' }, function(err, user){
-    if (err){
-      console.log(err);
-    } else if (!user){
-      var user = new User({
-        email: 'admin@admin.com',
-        password: 'adminadmin',
-        role: 'admin',
-        askEmail: false
-      });
-      user.save(function(err,user){
-        if (err) console.log(err);
-      });
-    }
-  });
-  next();
 })
 
 /*

@@ -114,7 +114,7 @@ router.get('/post/:id', function(req, res){
   const id = req.params.id
 
   Post.findOne({_id: id}, function(err, post){
-    res.render('admin/post', {post} )
+    if(post) return res.render('admin/post', {post} )
   })
 
 })
@@ -129,7 +129,7 @@ router.post('/post', function(req, res){
       post.title = body.title;
       post.content = body.content;
       post.status = body.status;
-      post.userID = user_id
+      post._author = user_id
 
       post.save(function(err, save){
         res.redirect('/admin/posts')
@@ -139,7 +139,7 @@ router.post('/post', function(req, res){
         title: body.title,
         content: body.content,
         status: body.status,
-        userID: user_id
+        _author: user_id
       })
 
       post.save(function(err, saved){

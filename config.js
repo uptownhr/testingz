@@ -11,6 +11,10 @@ module.exports = {
     instagram:{
       client_id: process.env.INSTAGRAM_CLIENT_ID || 'b57a31bedd2f47449456558a53d127e3',
       client_secret: process.env.INSTAGRAM_CLIENT_SECRET || 'ee3b706754584de19b31ca95c670caec'
+    },
+    github:{
+      client_id: process.env.GITHUB_CLIENT_ID || '5ad4d0cb91ff2b92cfe6',
+      client_secret: process.env.GITHUB_CLIENT_SECRET || 'afc05eda09ad695793f32d5ecb9c5a369a6333af'
     }
   }
 }

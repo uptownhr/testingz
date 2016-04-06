@@ -78,12 +78,23 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, passw
 }));
 
 
+/**
+ * Find User for provider name and provider id
+ * @param provider
+ * @param id
+ * @returns User.promise
+ */
 function findProviderUser(provider, id){
   const elemMatch = {$elemMatch: {provider, id} }
   return User.findOne({ providers: elemMatch })
 }
 
-
+/**
+ * Handls the oauth login callback
+ * Aim is to be a general handler for all oauth providers
+ * @param profileMapper
+ * @returns {Function}
+ */
 function handleOauthLogin(profileMapper){
   return function(req, accessToken, secondaryToken, profile, done){
     const provider_name = req.params.provider,
@@ -96,7 +107,7 @@ function handleOauthLogin(profileMapper){
         .then( user => {
           if(user){
             req.flash('errors', {msg: `There is already a ${provider.name} account that belongs to you. Sign in with that account or delete it, then link it with your current account.`});
-            return done();
+            return done()
           }
 
           req.user.providers.push(provider)
@@ -105,21 +116,21 @@ function handleOauthLogin(profileMapper){
     }else{
       findProviderUser(provider_name, profile.id)
       .then( user => {
+
+        //if user found, update profile info and log user in
         if(user){
+          //use oauth profile values if site values is undefined or ''
           _.extendWith(user.profile, mapped_profile, function(obj, src){
-            return ( _.isUndefined(object) || object == '' ) ? src : obj;
+            return ( _.isUndefined(object) || object == '' ) ? src : obj
           })
 
-          return user.save( err => done(err, user) );
+          return user.save( err => done(err, user) )
         }
 
-        user = new User();
-        user.profile = {
-          name: mapped_profile.name,
-          location: mapped_profile.location,
-          picture: mapped_profile.picture
-        }
-        user.providers.push(provider);
+        //user not found, register user and login
+        user = new User()
+        user.profile = mapped_profile
+        user.providers.push(provider)
 
         user.save( err => done(err,user) )
       })
@@ -127,20 +138,59 @@ function handleOauthLogin(profileMapper){
   }
 }
 
+/**
+ * Maps Twitter profile info to User.profile
+ * @param profile
+ * @returns {{id: *, name: *, location: (*|userSchema.profile.location|{type, default}|Location|String|number|DOMLocator), picture: *}}
+ */
 function mapTwitterProfile(profile){
   return {
+    id: profile.id,
     name: profile.displayName,
     location: profile._json.location,
     picture: profile._json.profile_image_url_https
   }
 }
 
+
+/**
+ * Instantiate TwitterStrategy
+ * Using handleOauthLogin and mapTwitterProfile
+ */
 passport.use(new TwitterStrategy({
   consumerKey: config.social.twitter.client_id,
   consumerSecret: config.social.twitter.client_secret,
   callbackURL: '/auth/o/twitter/callback',
   passReqToCallback: true
-}, handleOauthLogin(mapTwitterProfile)))
+}, handleOauthLogin(mapTwitterProfile)) )
+
+
+/**
+ * Maps Github profiel into User.profile
+ * @param profile
+ */
+function mapGithubProfile(profile){
+  console.log(profile)
+
+  return {
+    id: profile.id,
+    name: profile.displayName,
+    location: profile._json.location,
+    picture: profile._json.avatar_url
+  }
+}
+
+/**
+ * Instantiate GitHubStrategy
+ */
+passport.use(new GitHubStrategy({
+  clientID: config.social.github.client_id,
+  clientSecret: config.social.github.client_secret,
+  callbackURL: 'http://localhost:3000/auth/o/github/callback',
+  passReqToCallback: true
+}, handleOauthLogin(mapGithubProfile)) )
+
+
 
 function mapInstagramProfile(profile) {
   return {
