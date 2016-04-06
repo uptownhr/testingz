@@ -9,9 +9,12 @@ module.exports = function(){
 
     user = new User({
       email: 'admin@admin.com',
-      password: 'admin',
+      password: 'asdfasdf',
       role: 'admin',
-      askEmail: false
+      askEmail: false,
+      profile: {
+        name: 'Admin'
+      }
     });
     user.save(function(err,user){
       if (err) console.log(err);
@@ -24,9 +27,9 @@ module.exports = function(){
 
         post = new Post({
           title: 'First Blog Post',
-          content: "## First blog post\n\nCheck it out\n\n ### [home](/)",
-          userID: user._id,
-          status: 'launched'
+          content: "## First blog post\n\nCheck it out\n\n [github](https://github.com/uptownhr/hackathon-starter-lite)",
+          status: 'launched',
+          _author: user._id,
         })
 
         post.save( function(err, saved){
@@ -39,3 +42,4 @@ module.exports = function(){
     });
   });
 }
+
