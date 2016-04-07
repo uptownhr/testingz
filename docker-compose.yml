@@ -1,0 +1,18 @@
+app:
+  image: node:5.8.0
+  volumes:
+  - ./:/app
+  working_dir: /app
+  command: npm run dev-docker
+  links:
+  - redis
+  - mongo
+  environment:
+  - MONGODB=mongodb://mongo:27017
+  - REDIS=mongodb://redis:6379
+  ports:
+  - 3000:3000
+mongo:
+  image: mongo
+redis:
+  image: redis
