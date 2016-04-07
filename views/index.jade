@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  p
+  p.text-xs-center
     | A bare-minimal starter framework in Express with an admin interface to kickstart your next projects!
   p
     a.btn.btn-block.btn-social.btn-github(href='http://github.com/uptownhr/hackathon-starter-lite')
@@ -11,9 +11,9 @@ block content
 
   .row
     each project in P
-      .col-sm-6
+      .col-sm-4
         .card
-          img.img-circle.card-img-top(src=project.logo_url, height="298")
+          img.img-circle.card-img-top(src=project.logo_url, height="298" style="margin: 0 auto")
           .card-block.text-xs-center
             h4=project.name
             p=project.tag_line
