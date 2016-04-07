@@ -6,7 +6,6 @@ const passport = require('passport'),
   InstagramStrategy = require('passport-instagram').Strategy,
   FacebookStrategy = require('passport-facebook').Strategy,
   GitHubStrategy = require('passport-github').Strategy,
-  LinkedInStrategy = require('passport-linkedin-oauth2').Strategy,
   GoogleStrategy = require('passport-google').Strategy,
   User = require('../models/User');
 
@@ -137,6 +136,30 @@ function handleOauthLogin(profileMapper){
     }
   }
 }
+
+/**
+ * Maps Facebook profile info to User.profile
+ * @param profile
+ * @returns {{id: *, name: *, location: *, picture: *}}
+ */
+function mapFacebookProfile(profile){
+  return {
+    id: profile.id,
+    name: profile.displayName,
+    gender: profile.gender
+  }
+}
+
+/**
+ * Instantiate FacebookStrategy
+ * Using handleOauthLogin and mapTwitterProfile
+ */
+passport.use(new FacebookStrategy({
+  clientID: config.social.facebook.client_id,
+  clientSecret: config.social.facebook.client_secret,
+  callbackURL: '/auth/o/facebook/callback',
+  passReqToCallback: true
+}, handleOauthLogin(mapFacebookProfile)) )
 
 /**
  * Maps Twitter profile info to User.profile
