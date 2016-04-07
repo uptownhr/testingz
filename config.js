@@ -1,6 +1,7 @@
 module.exports = {
   port: process.env.PORT || 3000,
   mongodb: process.env.MONGODB || 'mongodb://localhost:27017/hackathon',
+  redis: process.env.REDIS || 'redis://localhost:6379',
   secret: 'asdfasdfzcvzxcv',
 
   social:{

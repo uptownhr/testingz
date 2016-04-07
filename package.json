@@ -12,7 +12,7 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.0",
-    "connect-mongostore": "^0.1.4",
+    "connect-redis": "^3.0.2",
     "cookie-parser": "^1.4.1",
     "crypto": "0.0.3",
     "express": "^4.13.4",

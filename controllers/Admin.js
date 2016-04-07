@@ -1,9 +1,18 @@
-const router = require('express').Router(),
-  qs = require('qs'),
-  User = require('../models/User'),
+const
+  router = require('express').Router(),
   _ = require('lodash'),
-  Post = require('../models/Post');
-var marked = require('marked');
+  async = require('async'),
+  multer = require('multer'),
+  path = require('path'),
+  upload = multer({ dest: path.join(__dirname, '../uploads') }),
+  qs = require('qs'),
+  marked = require('marked'),
+  models = require('../models'),
+  User =  models.User,
+  Post = models.Post,
+  File = models.File
+
+
 
 marked.setOptions({
   renderer: new marked.Renderer(),
@@ -159,6 +168,16 @@ router.get('/post/delete/:id', function(req,res){
     }
 
     return res.redirect('/admin/posts')
+  })
+})
+
+router.post('/images/upload', upload.array('file', 20), function(req,res){
+  async.mapSeries( req.files, function(file, next){
+    file = new File(file)
+    file.save( saved => next(err,saved) )
+  }, function done(err, results){
+    const file_names = req.results.map( file => file.originalname ).join('<br/>')
+    res.send(`files uploaded<br/> ${file_names}`)
   })
 })
 module.exports = router

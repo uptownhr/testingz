@@ -59,7 +59,7 @@ html(lang='en')
                   li
                     a(href='/admin/posts') Posts
               hr.visible-xs.m-t
-        .col-sm-9.content
+        #flash.col-sm-9.content
           include ../partials/flash
           block content
             h1 Default content
@@ -80,11 +80,44 @@ html(lang='en')
     script(src='/admin/assets/js/toolkit.js')
     script(src='/admin/assets/js/application.js')
     script.
-      // execute/clear BS loaders for docs
+      //global image uploader
       $(function () {
-        while (window.BS && window.BS.loader && window.BS.loader.length) {
-          (window.BS.loader.pop())()
+        function handleImageDrop(e){
+          e.preventDefault()
+          var files = e.originalEvent.dataTransfer.files
+          var formData = new FormData()
+
+          //upload files
+          $(files).each( function(index, file){
+            formData.append('file', file)
+          })
+
+          $.ajax({
+            url: '/admin/images/upload',
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function (data) {
+              $close = $('<button class="close" type="button" data-dismiss="alert"><i class="fa fa-times-circle-o">x</i></button>');
+              $alert = $('<div></div>')
+                      .addClass('alert alert-success')
+                      .html(data)
+                      .append($close)
+
+              $alert.prependTo('#flash')
+            },
+            error: function (err) {
+              console.log('error', err)
+            }
+          })
+
         }
+
+        $('body')
+                .on('dragover', function(){ return false } )
+                .on('dragenter', function(){ return false } )
+                .on('drop', handleImageDrop )
       })
 
     block scripts

@@ -6,33 +6,38 @@ const express = require('express'),
   passport = require('passport'),
   bodyParser = require('body-parser'),
   session = require('express-session'),
-  MongoStore = require('connect-mongostore')(session),
+  RedisStore = require('connect-redis')(session),
   flash = require('express-flash'),
-  multer = require('multer'),
-  upload = multer({ dest: path.join(__dirname, 'uploads') }),
   expressValidator = require('express-validator'),
   cookieParser = require('cookie-parser'),
   moment = require('moment'),
   seed = require('./config/seed.js')()
 
+const app = express()
+
 /*connect to mongodb */
 console.log(config.mongodb)
 mongoose.connect(config.mongodb)
+
 mongoose.connection.on('error', function(){
   console.log('Mongodb connection error')
   process.exit(1)
 })
 
+mongoose.connection.on('connected', function() {
+  console.log('mongo connected')
+  // listen on config port, default 3000
+  app.listen(config.port, function(e){
+    console.log('listening on', config.port)
+
+  })
+})
+
 /* configure application */
-const app = express()
 app.set('view engine', 'jade');
 app.locals.pretty = true
 app.locals.moment = moment
 
-// listen on config port, default 3000
-app.listen(config.port, function(e){
-  console.log('listening on', config.port)
-})
 
 //specify public static directory
 app.use(express.static('public'))
@@ -44,11 +49,12 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: config.secret,
-  store: new MongoStore({'db': 'sessions'})
+  store: new RedisStore({url: config.redis})
 }))
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
+
 
 app.use((req,res,next) => {
   res.locals.user = req.user
