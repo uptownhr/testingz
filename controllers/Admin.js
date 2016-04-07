@@ -10,7 +10,8 @@ const
   models = require('../models'),
   User =  models.User,
   Post = models.Post,
-  File = models.File
+  File = models.File,
+  Project = models.Project
 
 marked.setOptions({
   renderer: new marked.Renderer(),

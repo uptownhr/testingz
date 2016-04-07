@@ -7,8 +7,22 @@ block content
     a.btn.btn-block.btn-social.btn-github(href='http://github.com/uptownhr/hackathon-starter-lite')
       i.fa.btn-xs.fa-github
       |  View on Github
+
   .row
     each project in P
+      .col-md-6
+        .card
+          img.card-img-top(src="/site/img/logo.svg")
+          .card-block.text-xs-center
+            h4 Company
+            p It's the shit
+      .col-md-6
+        .card
+          img.card-img-top(src=project.logo_url)
+          .card-block.text-xs-center
+            h4=project.name
+            p=project.tag_line
+    //
       .col-lg-4.col-sm-6.text-center(style="height: 400px")
         .preview
           .image.text-center
