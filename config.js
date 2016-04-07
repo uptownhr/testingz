@@ -20,6 +20,10 @@ module.exports = {
     github:{
       client_id: process.env.GITHUB_CLIENT_ID || '5ad4d0cb91ff2b92cfe6',
       client_secret: process.env.GITHUB_CLIENT_SECRET || 'afc05eda09ad695793f32d5ecb9c5a369a6333af'
+    },
+    google:{
+      client_id: process.env.GOOGLE_CLIENT_ID || '594900274152-pjsvjn95m0afhg65j0iv9smrrj7umd3k.apps.googleusercontent.com',
+      client_secret: process.env.GOOGLE_CLIENT_SECRET || 'h8UXTLXGkBw6hSa9AXB-1-y3'
     }
   }
 }
