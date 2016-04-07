@@ -2,6 +2,7 @@ const router = require('express').Router(),
   qs = require('qs'),
   User = require('../models/User'),
   _ = require('lodash'),
+  Project= require('../models/Project'),
   Post = require('../models/Post');
 var marked = require('marked');
 
@@ -159,6 +160,76 @@ router.get('/post/delete/:id', function(req,res){
     }
 
     return res.redirect('/admin/posts')
+  })
+})
+
+
+
+//PROJECT SECTION
+
+
+// list projects
+router.get('/projects', function(req,res){
+  Project.find(function(err, project){
+    res.render('admin/projectList',{
+      p: project
+    })
+  })
+})
+// new projects
+router.get('/project', function(req, res){
+  res.render('admin/newProject')
+})
+
+// view/edit projects
+router.get('/project/:id', function(req,res){
+  var id = req.params.id;
+  Project.findOne({_id: id}, function(err, project){
+    console.log("this is the PROJECT to edit: ", project)
+    res.render('admin/projectEdit', {
+      p: project
+    })
+  })
+})
+
+// add new
+router.post('/project/new', function(req, res){
+  var body = req.body;
+  var project = new Project({
+    name: body.name,
+    tag_line: body.tag_line,
+    description: body.description,
+    logo_url: body.logo_url
+  })
+  project.save(function(err, saved) {
+    console.log("this is the saved data: ", saved);
+    res.redirect('/admin/projects')
+  })
+})
+// update
+router.post('/project/:id', function(req, res){
+  var id = req.params.id;
+  var body = req.body;
+  Project.findOne({_id: id}, function(err, project){
+    project.name=body.name;
+    project.tag_line=body.tag_line;
+    project.description=body.description;
+    project.logo_url=body.logo_url;
+    project.save(function(err, saved){
+      console.log("this is what is Saved: ", saved);
+      res.redirect('/admin/projects')
+    })
+  })
+})
+
+router.get('/project/delete/:id', function(req, res){
+  Project.remove({_id: req.params.id}, function(err){
+    if(err){
+      req.flash('error', {msg: err.message} )
+    }else{
+      req.flash('success', {msg: 'deleted'} )
+    }
+    return res.redirect('/admin/projects')
   })
 })
 module.exports = router

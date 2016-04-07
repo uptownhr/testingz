@@ -1,0 +1,53 @@
+extends layout
+block content
+  form(method="POST" action="/admin/project/new")
+    .dashhead
+      .dashhead-titles
+        h6.dashhead-subtitle Projects
+        h2.dashhead-title New Projects
+      .btn-toolbar.dashhead-toolbar
+        button.btn.btn-primary-outline Save Project
+        //
+          <div class="btn-toolbar-item input-with-icon">
+          <input type="text" value="01/01/15 - 01/08/15" class="form-control" data-provide="datepicker">
+          <span class="icon icon-calendar"></span>
+          </div>
+    hr.m-t
+    section.content-header
+      #field_name.field.row
+        .col-md-12
+          .form-group
+            label Name of Project
+            input.form-control(type="text" name="name" placeholder="Project Name")
+          // /.form-group
+        // /.col
+      // /.row
+      #field_tagLine.field.row
+        .col-md-12
+          .form-group
+            label Tag Line
+            input.form-control(type="text" name="tag_line" placeholder="Project Tag line")
+          // /.form-group
+        // /.col
+      // /.row
+      #field_description.field.row
+        .col-md-12
+          .form-group
+            label Description
+            input.form-control(type="text" name="description" placeholder="Project description")
+          // /.form-group
+        // /.col
+      // /.row
+      #field_logoURL.field.row
+        .col-md-12
+          .form-group
+            label Logo URL
+            input.form-control(type="text" name="logo_url" placeholder="Project Logo URL")
+          // /.form-group
+        // /.col
+      // /.row
+
+
+
+block scripts
+  script(src="http://code.jquery.com/ui/1.10.4/jquery-ui.js")
