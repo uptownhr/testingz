@@ -12,8 +12,6 @@ const
   Post = models.Post,
   File = models.File
 
-
-
 marked.setOptions({
   renderer: new marked.Renderer(),
   gfm: true,
@@ -171,6 +169,96 @@ router.get('/post/delete/:id', function(req,res){
   })
 })
 
+
+//PROJECT SECTION
+
+
+// list projects
+router.get('/projects', function(req,res){
+  Project.find(function(err, project){
+    res.render('admin/projectList',{
+      p: project
+    })
+  })
+})
+
+
+// new projects
+router.get('/project', function(req, res){
+  const project = {}
+  res.render('admin/projectEdit', {p: project} )
+})
+
+// view/edit projects
+router.get('/project/:id', function(req,res){
+  var id = req.params.id;
+  Project.findOne({_id: id}, function(err, project){
+    console.log("this is the PROJECT to edit: ", project)
+    res.render('admin/projectEdit', {
+      p: project
+    })
+  })
+})
+
+// add new/edit
+router.post('/project', function(req, res){
+  var id = req.body._id
+  var body = req.body;
+  Project.findOne({_id: id}, function(err, project){
+    if(project){
+      project.name=body.name;
+      project.tag_line=body.tag_line;
+      project.description=body.description;
+      project.logo_url=body.logo_url;
+      project.project_url=body.project_url
+      project.save(function(err, saved){
+        console.log("this is what SAVED: ", saved)
+        res.redirect('/admin/projects')
+      })
+    } else{
+      var project = new Project({
+        name: body.name,
+        tag_line: body.tag_line,
+        description: body.description,
+        logo_url: body.logo_url,
+        project_url: body.project_url
+      })
+      project.save(function(err, saved) {
+        console.log("this is the saved data: ", saved);
+        res.redirect('/admin/projects')
+      })
+    }
+  })
+})
+// update
+router.post('/project/:id', function(req, res){
+  var id = req.params.id;
+  var body = req.body;
+  Project.findOne({_id: id}, function(err, project){
+    project.name=body.name;
+    project.tag_line=body.tag_line;
+    project.description=body.description;
+    project.logo_url=body.logo_url;
+    project.project_url=body.project_url;
+    project.save(function(err, saved){
+      console.log("this is what is Saved: ", saved);
+      res.redirect('/admin/projects')
+    })
+  })
+})
+
+router.get('/project/delete/:id', function(req, res){
+  Project.remove({_id: req.params.id}, function(err){
+    if(err){
+      req.flash('error', {msg: err.message} )
+    }else{
+      req.flash('success', {msg: 'deleted'} )
+    }
+    return res.redirect('/admin/projects')
+  })
+})
+
+
 router.post('/images/upload', upload.array('file', 20), function(req,res){
   async.mapSeries( req.files, function(file, next){
     file = new File(file)
@@ -180,4 +268,5 @@ router.post('/images/upload', upload.array('file', 20), function(req,res){
     res.send(`files uploaded<br/> ${file_names}`)
   })
 })
+
 module.exports = router

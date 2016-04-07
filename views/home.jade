@@ -1,12 +1,19 @@
 extends layout
+style.
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  .mainContainer{
+
+  }
+  #image {
+    max-width: 100px !important;
+
+  }
 
 block content
-  p
-    | A bare-minimal starter framework in Express with an admin interface to kickstart your next projects!
-  p
-    a.btn.btn-block.btn-social.btn-github(href='http://github.com/uptownhr/hackathon-starter-lite')
-      i.fa.btn-xs.fa-github
-      |  View on Github
   .row
     each project in P
       .col-lg-4.col-sm-6.text-center(style="height: 400px")
@@ -21,3 +28,5 @@ block content
               a.btn.btn-success(href=project.project_url)
                 | Visit   
                 i.fa.fa-external-link
+
+script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js')

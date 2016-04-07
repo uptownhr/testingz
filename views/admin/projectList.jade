@@ -1,0 +1,56 @@
+extends layout
+block content
+  .dashhead
+    .dashhead-titles
+      h6.dashhead-subtitle Project
+      h2.dashhead-title Listings
+    .btn-toolbar.dashhead-toolbar
+      .btn-group
+        a.btn.btn-primary-outline(href='/admin/project', type='button')
+          | New Project
+          span.icon.icon-plus
+  hr.m-t
+  .flextable.table-actions
+    .flextable-item.flextable-primary
+      .btn-toolbar-item.input-with-icon
+        input.form-control.input-block(type='text', placeholder='Search users')
+        span.icon.icon-magnifying-glass
+    .flextable-item
+  .table-full
+    .table-responsive
+      table.table(data-sort='table')
+        thead
+          tr
+            td
+              input#selectAll.select-all(type='checkbox')
+            th name
+            th tag_line
+            th description
+            th date created
+            th project_url
+            th
+        tbody
+          each project in p
+            tr
+              td
+                input.select-row(type='checkbox')
+              td
+                =project.name
+              td
+                =project.tag_line
+              td
+                =project.description
+              td
+                =moment(project.date).format("YYYY-MM-DD")
+              td
+                =project.project_url
+              td
+                a.btn.btn-primary-outline.btn-sm(href='/admin/project/#{project._id}')
+                  | View/Edit
+                  span.icon.icon-pencil
+                | &nbsp;
+                a.btn.btn-primary-outline.btn-sm(href='/admin/project/delete/#{project._id}', data-remote='true', data-confirm='Are You Sure?')
+                  | Delete
+                  span.icon.icon-erase
+                | &nbsp;
+  .text-center
