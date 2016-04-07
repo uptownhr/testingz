@@ -1,11 +1,11 @@
 extends layout
 block content
-  form(method="POST" action="/admin/project/#{p._id}")
+  form(method="POST" action="/admin/project")
     input(type="hidden" name="_id" value=p._id)
     .dashhead
       .dashhead-titles
         h6.dashhead-subtitle Project
-        h2.dashhead-title Edit Project
+        h2.dashhead-title New/Edit Project
       .btn-toolbar.dashhead-toolbar
         button.btn.btn-primary-outline Save Project
         //
@@ -19,7 +19,7 @@ block content
         .col-md-12
           .form-group
             label Project Name
-            input.form-control(type="text" name="name" value=p.name)
+            input.form-control(type="text" name="name" placeholder="project name" value=p.name)
           // /.form-group
         // /.col
       // /.row
@@ -27,7 +27,7 @@ block content
         .col-md-12
           .form-group
             label Tag Line
-            input.form-control(type="text" name="tag_line" value=p.tag_line)
+            input.form-control(type="text" name="tag_line" placeholder="Tag Line" value=p.tag_line)
           // /.form-group
         // /.col
       // /.row
@@ -35,7 +35,7 @@ block content
         .col-md-12
           .form-group
             label Description
-            input.form-control(type="text" name="description" value=p.description)
+            input.form-control(type="text" name="description" placeholder="Description" value=p.description)
           // /.form-group
         // /.col
       // /.row
@@ -43,7 +43,7 @@ block content
         .col-md-12
           .form-group
             label Logo URL
-            input.form-control(type="text" name="logo_url" value=p.logo_url)
+            input.form-control(type="text" name="logo_url" placeholder="logo URL" value=p.logo_url)
           // /.form-group
         // /.col
       // /.row

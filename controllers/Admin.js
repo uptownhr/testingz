@@ -176,9 +176,12 @@ router.get('/projects', function(req,res){
     })
   })
 })
+
+
 // new projects
 router.get('/project', function(req, res){
-  res.render('admin/newProject')
+  const project = {}
+  res.render('admin/projectEdit', {p: project} )
 })
 
 // view/edit projects
@@ -192,18 +195,32 @@ router.get('/project/:id', function(req,res){
   })
 })
 
-// add new
-router.post('/project/new', function(req, res){
+// add new/edit
+router.post('/project', function(req, res){
+  var id = req.body._id
   var body = req.body;
-  var project = new Project({
-    name: body.name,
-    tag_line: body.tag_line,
-    description: body.description,
-    logo_url: body.logo_url
-  })
-  project.save(function(err, saved) {
-    console.log("this is the saved data: ", saved);
-    res.redirect('/admin/projects')
+  Project.findOne({_id: id}, function(err, project){
+    if(project){
+      project.name=body.name;
+      project.tag_line=body.tag_line;
+      project.description=body.description;
+      project.logo_url=body.logo_url;
+      project.save(function(err, saved){
+        console.log("this is what SAVED: ", saved)
+        res.redirect('/admin/projects')
+      })
+    } else{
+      var project = new Project({
+        name: body.name,
+        tag_line: body.tag_line,
+        description: body.description,
+        logo_url: body.logo_url
+      })
+      project.save(function(err, saved) {
+        console.log("this is the saved data: ", saved);
+        res.redirect('/admin/projects')
+      })
+    }
   })
 })
 // update
