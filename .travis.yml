@@ -3,6 +3,7 @@ sudo: false
 
 services:
   - mongodb
+  - redis
 
 node_js:
   - "5.8.0"
