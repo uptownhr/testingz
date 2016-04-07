@@ -17,9 +17,17 @@ lighter and easier version of hackathon starter
 2. npm install
 3. npm run dev
 
-## Getting Started using Docker
+### Getting Started using Docker
+If you have docker, all the project Requirements like Node, Mongo and Redis will automatically be installed and available. 
+
+#### Docker Installation
+1. [install docker](https://docs.docker.com/engine/installation/)
+2. [install docker-compose](https://docs.docker.com/compose/install/)
+
+#### Starting the project with Docker
 1. git clone git@github.com:uptownhr/hackathon-starter-lite
-2. docker-compose up
+2. cd hackathon-starter-lite
+3. docker-compose up
 
 ## Docker Basics
 If you are using docker here are some useful commands to know
