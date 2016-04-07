@@ -27,6 +27,7 @@ block content
             th tag_line
             th description
             th date created
+            th project_url
             th
         tbody
           each project in p
@@ -41,6 +42,8 @@ block content
                 =project.description
               td
                 =moment(project.date).format("YYYY-MM-DD")
+              td
+                =project.project_url
               td
                 a.btn.btn-primary-outline.btn-sm(href='/admin/project/#{project._id}')
                   | View/Edit

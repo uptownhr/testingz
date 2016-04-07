@@ -1,0 +1,35 @@
+extends layout
+style.
+  body {
+    width: 1px;
+    min-width: 100%;
+    *width: 100%;
+  }
+  .mainContainer{
+
+  }
+  #image {
+    max-width: 100px !important;
+
+  }
+
+block content
+    h1 This is where content goes md-12
+    .section-preview
+      .container
+        .row
+          each project in P
+            .col-lg-4.col-sm-6(style="height: 400px")
+              .preview
+                .image
+                  a(href=project.project_url)
+                    img.img-responsive(src=project.logo_url, alt='logo image' style="height: 100px")
+                .options
+                  h3=project.name
+                  p=project.description
+                  .btn-group
+                    a.btn.btn-success(href=project.project_url)
+                      | Visit   
+                      i.fa.fa-external-link
+
+script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js')

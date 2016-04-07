@@ -205,6 +205,7 @@ router.post('/project', function(req, res){
       project.tag_line=body.tag_line;
       project.description=body.description;
       project.logo_url=body.logo_url;
+      project.project_url=body.project_url
       project.save(function(err, saved){
         console.log("this is what SAVED: ", saved)
         res.redirect('/admin/projects')
@@ -214,7 +215,8 @@ router.post('/project', function(req, res){
         name: body.name,
         tag_line: body.tag_line,
         description: body.description,
-        logo_url: body.logo_url
+        logo_url: body.logo_url,
+        project_url: body.project_url
       })
       project.save(function(err, saved) {
         console.log("this is the saved data: ", saved);
@@ -232,6 +234,7 @@ router.post('/project/:id', function(req, res){
     project.tag_line=body.tag_line;
     project.description=body.description;
     project.logo_url=body.logo_url;
+    project.project_url=body.project_url;
     project.save(function(err, saved){
       console.log("this is what is Saved: ", saved);
       res.redirect('/admin/projects')

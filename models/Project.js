@@ -5,7 +5,8 @@ var projectSchema = new mongoose.Schema({
   tag_line: {type: String},
   description: {type: String},
   logo_url: {type: String},
-  created_at: {type: Date, default: Date.now()}
+  created_at: {type: Date, default: Date.now()},
+  project_url: {type: String}
 })
 
 module.exports = mongoose.model('project', projectSchema);
