@@ -270,4 +270,101 @@ router.post('/images/upload', upload.array('file', 20), function(req,res){
   })
 })
 
+
+// file model
+
+//display listings of files
+router.get('/files', function(req,res){
+  File.find(function(err, file){
+    console.log("DATA TO BE DISPLAYED: ", file)
+    res.render('admin/fileListing',{
+      F: file
+    })
+  })
+})
+
+//ADD new file model
+router.get('/file', function(req, res){
+  const file = {}
+  res.render('admin/fileEdit', {F: file} )
+})
+
+//view/edit file model
+router.get('/file/:id', function(req,res){
+  var id = req.params.id;
+  File.findOne({_id: id}, function(err, file){
+    console.log("this is the PROJECT to edit: ", file)
+    res.render('admin/fileEdit', {
+      F: file
+    })
+  })
+})
+
+// add new/edit file model
+router.post('/file', function(req, res){
+  var id = req.body._id
+  var body = req.body;
+  console.log("THIS IS THE DATA TO BE SAVED: ", body)
+  File.findOne({_id: id}, function(err, file){
+    if(file){
+      file.original_name=body.original_name;
+      file.encoding=body.encoding;
+      file.mimetype=body.mimetype;
+      file.destination=body.destination;
+      file.filename=body.filename;
+      file.path=body.path;
+      file.size=body.size;
+      file.save(function(err, saved){
+        console.log("this is what SAVED: ", saved)
+        res.redirect('/admin/files')
+      })
+    } else{
+      var file = new File({
+        original_name: body.original_name,
+        encoding: body.encoding,
+        mimetype: body.mimetype,
+        destination: body.destination,
+        filename: body.filename,
+        path: body.path,
+        size: body.size
+      })
+      file.save(function(err, saved) {
+        console.log("this is the saved data: ", saved);
+        res.redirect('/admin/files')
+      })
+    }
+  })
+})
+
+// update file model
+router.post('/file/:id', function(req, res){
+  var id = req.params.id;
+  var body = req.body;
+  File.findOne({_id: id}, function(err, file){
+    file.original_name=body.original_name;
+    file.encoding=body.encoding;
+    file.mimetype=body.mimetype;
+    file.destination=body.destination;
+    file.filename=body.filename;
+    file.path=body.path;
+    file.size=body.size;
+    file.save(function(err, saved){
+      console.log("this is what SAVED: ", saved)
+      res.redirect('/admin/files')
+    })
+  })
+})
+
+// remove file model
+router.get('/file/delete/:id', function(req, res){
+  File.remove({_id: req.params.id}, function(err){
+    if(err){
+      req.flash('error', {msg: err.message} )
+    }else{
+      req.flash('success', {msg: 'deleted'} )
+    }
+    return res.redirect('/admin/files')
+  })
+})
+
 module.exports = router
