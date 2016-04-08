@@ -263,9 +263,9 @@ router.get('/project/delete/:id', function(req, res){
 router.post('/images/upload', upload.array('file', 20), function(req,res){
   async.mapSeries( req.files, function(file, next){
     file = new File(file)
-    file.save( saved => next(err,saved) )
+    file.save( next )
   }, function done(err, results){
-    const file_names = req.results.map( file => file.originalname ).join('<br/>')
+    const file_names = results.map( file => file.originalname ).join('<br/>')
     res.send(`files uploaded<br/> ${file_names}`)
   })
 })
