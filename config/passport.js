@@ -140,13 +140,16 @@ function handleOauthLogin(profileMapper){
 /**
  * Maps Facebook profile info to User.profile
  * @param profile
- * @returns {{id: *, name: *, gender: *}}
+ * @returns {{id: *, name: *, gender: *, location: '', website: '', picture; *}}
  */
 function mapFacebookProfile(profile){
   return {
     id: profile.id,
     name: profile.displayName,
-    gender: profile.gender
+    gender: profile.gender,
+    location: '',
+    website: '',
+    picture: profile._json.picture.data.url
   }
 }
 
@@ -158,19 +161,22 @@ passport.use(new FacebookStrategy({
   clientID: config.social.facebook.client_id,
   clientSecret: config.social.facebook.client_secret,
   callbackURL: '/auth/o/facebook/callback',
+  profileFields: ['id', 'displayName', 'gender', 'profileUrl', 'photos'],
   passReqToCallback: true
 }, handleOauthLogin(mapFacebookProfile)) )
 
 /**
  * Maps Twitter profile info to User.profile
  * @param profile
- * @returns {{id: *, name: *, location: (*|userSchema.profile.location|{type, default}|Location|String|number|DOMLocator), picture: *}}
+ * @returns {{id: *, name: *, gender: '', location: (*|userSchema.profile.location|{type, default}|Location|String|number|DOMLocator), website: '', picture: *}}
  */
 function mapTwitterProfile(profile){
   return {
     id: profile.id,
     name: profile.displayName,
+    gender: '',
     location: profile._json.location,
+    website: '',
     picture: profile._json.profile_image_url_https
   }
 }
@@ -186,18 +192,18 @@ passport.use(new TwitterStrategy({
   passReqToCallback: true
 }, handleOauthLogin(mapTwitterProfile)) )
 
-
 /**
  * Maps Github profile into User.profile
  * @param profile
+ * @returns {{id: *, name: *, gender: '', location: *, website: '', picture; ''}}
  */
 function mapGithubProfile(profile){
-  console.log(profile)
-
   return {
     id: profile.id,
     name: profile.displayName,
+    gender: '',
     location: profile._json.location,
+    website: '',
     picture: profile._json.avatar_url
   }
 }
@@ -215,12 +221,14 @@ passport.use(new GitHubStrategy({
 /**
  * Maps Instagram profile info to User.profile
  * @param profile
- * @returns {{id: *, name: *, website: *, picture: *}}
+ * @returns {{id: *, name: *, gender: '', location: '', website: *, picture: *}}
  */
 function mapInstagramProfile(profile) {
   return {
     id: profile._json.data.id,
     name: profile._json.data.full_name,
+    gender: '',
+    location: '',
     website: profile._json.data.website,
     picture: profile._json.data.profile_picture
   }
@@ -239,13 +247,15 @@ passport.use(new InstagramStrategy({
 /**
  * Maps Google profile info to User.profile
  * @param profile
- * @returns {{id: *, name: *, gender: *, picture: *}}
+ * @returns {{id: *, name: *, gender: *, location: '', website: '', picture: *}}
  */
 function mapGoogleProfile(profile){
   return {
     id: profile.id,
     name: profile.displayName,
     gender: profile._json.gender,
+    location: '',
+    website: '',
     picture: profile._json.image.url
   }
 }
