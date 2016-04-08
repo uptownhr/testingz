@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon index.js",
     "dev-docker": "npm install && npm run dev",
-    "test": "mocha --reporter spec --timeout 5000"
+    "test": "mocha --reporter spec --timeout 5000",
+    "postversion": "git push && git push --tags"
   },
   "author": "",
   "license": "ISC",
