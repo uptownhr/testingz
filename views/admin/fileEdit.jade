@@ -1,0 +1,77 @@
+extends layout
+block content
+  form(method="POST" action="/admin/file")
+    input(type="hidden" name="_id" value=F._id)
+    .dashhead
+      .dashhead-titles
+        h6.dashhead-subtitle Files
+        h2.dashhead-title New/Edit File
+      .btn-toolbar.dashhead-toolbar
+        button.btn.btn-primary-outline Save File
+        //
+          <div class="btn-toolbar-item input-with-icon">
+          <input type="text" value="01/01/15 - 01/08/15" class="form-control" data-provide="datepicker">
+          <span class="icon icon-calendar"></span>
+          </div>
+    hr.m-t
+    section.content-header
+      #field_original_name.field.row
+        .col-md-12
+          .form-group
+            label Original Name
+            input.form-control(type="text" name="original_name" placeholder="file name" value=F.original_name)
+          // /.form-group
+        // /.col
+      // /.row
+      #field_encoding.field.row
+        .col-md-12
+          .form-group
+            label encoding
+            input.form-control(type="text" name="encoding" placeholder="Encoding" value=F.enconding)
+          // /.form-group
+        // /.col
+      // /.row
+      #field_mimetype.field.row
+        .col-md-12
+          .form-group
+            label mimetype
+            input.form-control(type="text" name="mimetype" placeholder="mimetype" value=F.mimetype)
+          // /.form-group
+        // /.col
+      // /.row
+      #field_destination.field.row
+        .col-md-12
+          .form-group
+            label Logo URL
+            input.form-control(type="text" name="destination" placeholder="destination" value=F.destination)
+          // /.form-group
+        // /.col
+      // /.row
+      #field_filename.field.row
+        .col-md-12
+          .form-group
+            label File Name
+            input.form-control(type="text" name="filename" placeholder="filename" value=F.filename)
+          // /.form-group
+        // /.col
+      // /.row
+      #field_path.field.row
+        .col-md-12
+          .form-group
+            label File Path
+            input.form-control(type="text" name="path" placeholder="path" value=F.path)
+          // /.form-group
+        // /.col
+      // /.row
+      #field_size.field.row
+        .col-md-12
+          .form-group
+            label File Size
+            input.form-control(type="text" name="size" placeholder="size" value=F.size)
+          // /.form-group
+        // /.col
+      // /.row
+
+
+block scripts
+  script(src="http://code.jquery.com/ui/1.10.4/jquery-ui.js")
