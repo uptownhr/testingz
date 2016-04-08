@@ -2,12 +2,12 @@ extends layout
 block content
   .dashhead
     .dashhead-titles
-      h6.dashhead-subtitle Project
+      h6.dashhead-subtitle File
       h2.dashhead-title Listings
     .btn-toolbar.dashhead-toolbar
       .btn-group
-        a.btn.btn-primary-outline(href='/admin/project', type='button')
-          | New Project
+        a.btn.btn-primary-outline(href='/admin/file', type='button')
+          | New File
           span.icon.icon-plus
   hr.m-t
   .flextable.table-actions
@@ -23,33 +23,39 @@ block content
           tr
             td
               input#selectAll.select-all(type='checkbox')
-            th name
-            th tag_line
-            th description
-            th date created
-            th project_url
+            th original name
+            th encoding
+            th mimetype
+            th destination
+            th filename
+            th path
+            th size
             th
         tbody
-          each project in p
+          each file in files
             tr
               td
                 input.select-row(type='checkbox')
               td
-                =project.name
+                =file.originalname
               td
-                =project.tag_line
+                =file.encoding
               td
-                =project.description
+                =file.mimetype
               td
-                =moment(project.date).format("YYYY-MM-DD")
+                =file.destination
               td
-                =project.project_url
+                =file.filename
               td
-                a.btn.btn-primary-outline.btn-sm(href='/admin/project/#{project._id}')
+                =file.path
+              td
+                =file.size
+              td
+                a.btn.btn-primary-outline.btn-sm(href='/admin/file/#{file._id}')
                   | View/Edit
                   span.icon.icon-pencil
                 | &nbsp;
-                a.btn.btn-primary-outline.btn-sm(href='/admin/project/delete/#{project._id}', data-remote='true', data-confirm='Are You Sure?')
+                a.btn.btn-primary-outline.btn-sm(href='/admin/file/delete/#{file._id}', data-remote='true', data-confirm='Are You Sure?')
                   | Delete
                   span.icon.icon-erase
                 | &nbsp;

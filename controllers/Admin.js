@@ -176,9 +176,9 @@ router.get('/post/delete/:id', function(req,res){
 
 // list projects
 router.get('/projects', function(req,res){
-  Project.find(function(err, project){
-    res.render('admin/projectList',{
-      p: project
+  Project.find(function(err, projects){
+    res.render('admin/projects',{
+      projects
     })
   })
 })
@@ -187,16 +187,15 @@ router.get('/projects', function(req,res){
 // new projects
 router.get('/project', function(req, res){
   const project = {}
-  res.render('admin/projectEdit', {p: project} )
+  res.render('admin/project', {project} )
 })
 
 // view/edit projects
 router.get('/project/:id', function(req,res){
   var id = req.params.id;
   Project.findOne({_id: id}, function(err, project){
-    console.log("this is the PROJECT to edit: ", project)
-    res.render('admin/projectEdit', {
-      p: project
+    res.render('admin/project', {
+      project
     })
   })
 })
@@ -205,6 +204,7 @@ router.get('/project/:id', function(req,res){
 router.post('/project', function(req, res){
   var id = req.body._id
   var body = req.body;
+
   Project.findOne({_id: id}, function(err, project){
     if(project){
       project.name=body.name;
@@ -213,7 +213,6 @@ router.post('/project', function(req, res){
       project.logo_url=body.logo_url;
       project.project_url=body.project_url
       project.save(function(err, saved){
-        console.log("this is what SAVED: ", saved)
         res.redirect('/admin/projects')
       })
     } else{
@@ -224,8 +223,8 @@ router.post('/project', function(req, res){
         logo_url: body.logo_url,
         project_url: body.project_url
       })
+
       project.save(function(err, saved) {
-        console.log("this is the saved data: ", saved);
         res.redirect('/admin/projects')
       })
     }
@@ -235,6 +234,7 @@ router.post('/project', function(req, res){
 router.post('/project/:id', function(req, res){
   var id = req.params.id;
   var body = req.body;
+
   Project.findOne({_id: id}, function(err, project){
     project.name=body.name;
     project.tag_line=body.tag_line;
@@ -242,7 +242,6 @@ router.post('/project/:id', function(req, res){
     project.logo_url=body.logo_url;
     project.project_url=body.project_url;
     project.save(function(err, saved){
-      console.log("this is what is Saved: ", saved);
       res.redirect('/admin/projects')
     })
   })
@@ -275,10 +274,9 @@ router.post('/images/upload', upload.array('file', 20), function(req,res){
 
 //display listings of files
 router.get('/files', function(req,res){
-  File.find(function(err, file){
-    console.log("DATA TO BE DISPLAYED: ", file)
-    res.render('admin/fileListing',{
-      F: file
+  File.find(function(err, files){
+    res.render('admin/files',{
+      files
     })
   })
 })
@@ -286,16 +284,16 @@ router.get('/files', function(req,res){
 //ADD new file model
 router.get('/file', function(req, res){
   const file = {}
-  res.render('admin/fileEdit', {F: file} )
+  res.render('admin/file', {file} )
 })
 
 //view/edit file model
 router.get('/file/:id', function(req,res){
   var id = req.params.id;
+
   File.findOne({_id: id}, function(err, file){
-    console.log("this is the PROJECT to edit: ", file)
-    res.render('admin/fileEdit', {
-      F: file
+    res.render('admin/file', {
+      file
     })
   })
 })
@@ -304,10 +302,10 @@ router.get('/file/:id', function(req,res){
 router.post('/file', function(req, res){
   var id = req.body._id
   var body = req.body;
-  console.log("THIS IS THE DATA TO BE SAVED: ", body)
+
   File.findOne({_id: id}, function(err, file){
     if(file){
-      file.original_name=body.original_name;
+      file.originalname=body.originalname;
       file.encoding=body.encoding;
       file.mimetype=body.mimetype;
       file.destination=body.destination;
@@ -315,12 +313,11 @@ router.post('/file', function(req, res){
       file.path=body.path;
       file.size=body.size;
       file.save(function(err, saved){
-        console.log("this is what SAVED: ", saved)
         res.redirect('/admin/files')
       })
     } else{
       var file = new File({
-        original_name: body.original_name,
+        originalname: body.originalname,
         encoding: body.encoding,
         mimetype: body.mimetype,
         destination: body.destination,
@@ -329,7 +326,6 @@ router.post('/file', function(req, res){
         size: body.size
       })
       file.save(function(err, saved) {
-        console.log("this is the saved data: ", saved);
         res.redirect('/admin/files')
       })
     }
@@ -349,7 +345,6 @@ router.post('/file/:id', function(req, res){
     file.path=body.path;
     file.size=body.size;
     file.save(function(err, saved){
-      console.log("this is what SAVED: ", saved)
       res.redirect('/admin/files')
     })
   })
