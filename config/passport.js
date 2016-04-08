@@ -84,7 +84,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, passw
  * @returns User.promise
  */
 function findProviderUser(provider, id){
-  const elemMatch = {$elemMatch: {provider, id} }
+  const elemMatch = {$elemMatch: {id, name: provider} }
   return User.findOne({ providers: elemMatch })
 }
 
@@ -98,7 +98,7 @@ function handleOauthLogin(profileMapper){
   return function(req, accessToken, secondaryToken, profile, done){
     const provider_name = req.params.provider,
       mapped_profile = profileMapper(profile),
-      provider = { accessToken, secondaryToken, name: provider_name }
+      provider = { id: profile.id, accessToken, secondaryToken, name: provider_name }
 
     if(req.user){
       //check if this oauth login is already being used
@@ -118,9 +118,10 @@ function handleOauthLogin(profileMapper){
 
         //if user found, update profile info and log user in
         if(user){
+
           //use oauth profile values if site values is undefined or ''
           _.extendWith(user.profile, mapped_profile, function(obj, src){
-            return ( _.isUndefined(object) || object == '' ) ? src : obj
+            return ( _.isUndefined(obj) || obj == '' ) ? src : obj
           })
 
           return user.save( err => done(err, user) )
@@ -250,6 +251,7 @@ passport.use(new InstagramStrategy({
  * @returns {{id: *, name: *, gender: *, location: '', website: '', picture: *}}
  */
 function mapGoogleProfile(profile){
+  console.log('google profile', profile)
   return {
     id: profile.id,
     name: profile.displayName,

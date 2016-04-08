@@ -3,6 +3,7 @@ var crypto = require('crypto');
 var mongoose = require('mongoose');
 
 var providerSchema = new mongoose.Schema({
+  id: String,
   name: String,
   accessToken: String,
   secondaryToken: String
