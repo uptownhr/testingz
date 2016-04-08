@@ -3,7 +3,7 @@ var Post = require('../models/Post');
 var marked = require('marked');
 
 marked.setOptions({
-  gfm: true
+  gfm: false
 })
 
 router.get('/', function(req,res){
