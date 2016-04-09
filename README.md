@@ -65,47 +65,210 @@ General Summary:
       6. to remove specific data set from collection by ID
   Using these routes, you will add functionality into the route to manipulate the data and display the data using the two jade files you created.
 
+STEPS
+
 1.  create a new model schema for a new mongoDB.  
-    a. example: create a new model in '/models'.  Filename can be whatever name you decide: i.e. "newModel.js"
-    b. add "var mongoose = require('mongoose');" at the top line.
-    c. create your own custom schema
-       example:
-           "var newSchema = new mongoose.Schema({
-              name: {type: String},
-              email: {type: String},
-              description: {type: String}
-            })"
-    d.  complete the model by adding: "module.exports = mongoose.model('name of new collection', newSchema)
-        where 'name of new collection' is the name of the new schema you want to create.
-    e.  Look to Project.js and Post.js for an indepth example of what a schema should look like. 
-
-2.  open "Admin.js" in "/controllers"
+    a. example: create a new file in '/models'.  Filename can be whatever name you decide: i.e. "newModel.js"
+    
+    example code:
+       ```js
+       var mongoose = require('mongoose');
+       
+       var newSchema = new mongoose.Schema({
+         firstname: {type: String},
+         lastname: {type: String},
+         email: {type: String}
+       })
+      
+       module.exports = mongoose.model('newDATA', newSchema)
+       ```
+      WHERE 'newDATA' is the name of the collection where you are storing the data.
+    b.  Look to Project.js and Post.js for an indepth example of what a schema should look like. 
+    
+2.  Create two jade files in '/views/admin': one for listing all data, another for viewing/editing specific data.  
+    
+    example filenames: blogListing.jade for listing all data AND blogEditView.jade forview/edit specific data.
+    Example code for jade listing all data:
+    ```js
+    extends layout
+    block content
+      .dashhead
+        .dashhead-titles
+          h6.dashhead-subtitle Example
+          h2.dashhead-title Listings
+        .btn-toolbar.dashhead-toolbar
+          .btn-group
+            a.btn.btn-primary-outline(href='/admin/example', type='button')
+              | New File
+              span.icon.icon-plus
+      hr.m-t
+      .flextable.table-actions
+        .flextable-item.flextable-primary
+          .btn-toolbar-item.input-with-icon
+            input.form-control.input-block(type='text', placeholder='Search users')
+            span.icon.icon-magnifying-glass
+        .flextable-item
+      .table-full
+        .table-responsive
+          table.table(data-sort='table')
+            thead
+              tr
+                td
+                  input#selectAll.select-all(type='checkbox')
+                th first name
+                th last name
+                th email
+                th
+            tbody
+              each data in example
+                tr
+                  td
+                    input.select-row(type='checkbox')
+                  td
+                    =data.firstname
+                  td
+                    =data.lastname
+                  td
+                    =file.email
+                  td
+                    a.btn.btn-primary-outline.btn-sm(href='/admin/example/#{data._id}')
+                      | View/Edit
+                      span.icon.icon-pencil
+                    | &nbsp;
+                    a.btn.btn-primary-outline.btn-sm(href='/admin/example/delete/#{data._id}', data-remote='true', data-confirm='Are You Sure?')
+                      | Delete
+                      span.icon.icon-erase
+                    | &nbsp;
+      .text-center
+      ```
+    Example code for jade viewing/editing specific data:
+    ```js
+    extends layout
+    block content
+      form(method="POST" action="/admin/example")
+        input(type="hidden" name="_id" value=data._id)
+        .dashhead
+          .dashhead-titles
+            h6.dashhead-subtitle Example
+            h2.dashhead-title New/Edit Example
+          .btn-toolbar.dashhead-toolbar
+            button.btn.btn-primary-outline Save Example
+            //
+              <div class="btn-toolbar-item input-with-icon">
+              <input type="text" value="01/01/15 - 01/08/15" class="form-control" data-provide="datepicker">
+              <span class="icon icon-calendar"></span>
+              </div>
+        hr.m-t
+        section.content-header
+          #field_firstname.field.row
+            .col-md-12
+              .form-group
+                label First Name
+                input.form-control(type="text" name="firstname" placeholder="first name" value=data.firstname)
+              // /.form-group
+            // /.col
+          // /.row
+          #field_lastname.field.row
+            .col-md-12
+              .form-group
+                label Last Name
+                input.form-control(type="text" name="lastname" placeholder="last name" value=data.lastname)
+              // /.form-group
+            // /.col
+          // /.row
+          #field_email.field.row
+            .col-md-12
+              .form-group
+                label Email
+                input.form-control(type="text" name="email" placeholder="email" value=data.email)
+              // /.form-group
+            // /.col
+          // /.row
+    block scripts
+    script(src="http://code.jquery.com/ui/1.10.4/jquery-ui.js")
+    ```
+    
+3.  open "Admin.js" in "/controllers"
     a.  add your newly created model to the top portion of "Admin.js"
-        example: NewModel = models.'name of new collection' //without quotes
-
-3.  create and add the 6 routes in "Admin.js" with GET: NEW collection, LIST of collection, EDIT/VIEW collection, REMOVE       collection AND POST: SAVE collection AND UPDATE collection
-    a.  example: 
-        //LIST
-          router.get('/posts', function(req,res){
-          }
-        //New
-          router.get('/post/new', function(req,res){
-          }
-        //EDIT/View
-          router.get('/post/view/:id', function(req,res){
-          }
-        //SAVE
-          router.post('/post/save', function(req,res){
-          }
-        //UPDATE
-          router.post('/post/update/:id', function(req,res){
-          }
-        //REMOVE
-          router.get('/post/delete/:id', function(req,res){
-          }
-
-4.  create two new jade files in '/views/admin': One for displaying all data in mongoDB collection and One for viewing and     editing one specific set of data in the collection.
-      example: blogListing.jade for displaying all data AND blogEditView.jade for editing/viewing specific data
-    a.  open projects.jade and project.jade in '/views/admin'
-    b.  copy the content of projects.jade into your newly created jade file for displaying all data in mongoDB; in our             example it is 'blogListing.jade'.  
-    c.  copy the content of project.jade into your newly created jade file for editing/viewing single specific data; in our         example it is 'blogEditView.jade'
+        example code:
+        ```js
+        NewModel = models.NewModel
+        ```
+        WHERE 'NewModel' is the name of the model created in step 1.
+    b.  create and add 6 routes in "Admin.js" with GET: NEW collection, LIST of collection, EDIT/VIEW collection, REMOVE           collection AND POST: SAVE collection AND UPDATE collection
+        example code where EXAMPLE(S) is/are set by coder.
+        ```js
+        //GET List of Collection - use jade for displaying all data
+        router.get('/examples', function(req,res){
+          Example.find(function(err, example){
+            res.render('admin/blogListing',{
+              example
+            })
+          })
+        })
+        //ADD NEW collection - use jade for view/edit collection
+        router.get('/example', function(req, res){
+          const example = {}
+          res.render('admin/blogEditView', {example} )
+        })
+        //VIEW/EDIT Data - use jade for view/edit collection
+        router.get('/example/:id', function(req,res){
+          var id = req.params.id;
+          Example.findOne({_id: id}, function(err, example){
+            res.render('admin/blogEditView', {
+              example
+            })
+          })
+        })
+        
+        // POST Save data
+        router.post('/example', function(req, res){
+          var id = req.body._id
+          var body = req.body;
+          Example.findOne({_id: id}, function(err, example){
+            if(example){
+              example.firstname=body.firstname;
+              example.lastname=body.lastname;
+              example.email=body.email;
+              example.save(function(err, saved){
+                res.redirect('/admin/examples')
+              })
+            } else{
+              var example = new Example({
+                firstname: body.firstname,
+                lastname: body.lastname,
+                email: body.email
+              })
+              example.save(function(err, saved) {
+                res.redirect('/admin/examples')
+              })
+            }
+          })
+        })
+        
+        // UPDATE specific data
+        router.post('/example/:id', function(req, res){
+          var id = req.params.id;
+          var body = req.body;
+          Example.findOne({_id: id}, function(err, example){
+            example.firstname=body.firstname;
+            example.lastname=body.lastname;
+            example.email=body.email;
+            example.save(function(err, saved){
+              res.redirect('/admin/examples')
+            })
+          })
+        })
+        
+        // REMOVE data
+        router.get('/example/delete/:id', function(req, res){
+          Example.remove({_id: req.params.id}, function(err){
+            if(err){
+              req.flash('error', {msg: err.message} )
+            }else{
+              req.flash('success', {msg: 'deleted'} )
+            }
+            return res.redirect('/admin/examples')
+          })
+        })
+  
