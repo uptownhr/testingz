@@ -60,7 +60,13 @@ Useful to get shell access.
 
 Get into mongo shell.
 
-`docker exec -it hackathonstarterlite_mongo_1 bash`
+`docker exec -it hackathonstarterlite_mongo_1 mongo`
+
+### docker restart
+
+Sometimes nodemon crashes and fails to restart
+
+`docker restart hackathonstarterlite_app_1`
 
 ## Guides and Examples
 [guides](docs/guide.md)
