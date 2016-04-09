@@ -199,19 +199,18 @@ STEPS
 3.  open "Admin.js" in "/controllers"
 
     a.  add your newly created model to the top portion of "Admin.js"
-        
-        ```js
-        NewModel = models.NewModel
-        ```
-        
-        WHERE 'NewModel' is the name of the model created in step 1.
+    ```js
+    NewModel = models.NewModel
+    
+    ```
+    
+    WHERE 'NewModel' is the name of the model created in step 1.
         
     b.  create and add 6 routes in "Admin.js" with GET: NEW collection, LIST of collection, EDIT/VIEW collection, REMOVE           
         collection AND POST: SAVE collection AND UPDATE collection
         
-        example code where EXAMPLE(S) is/are set by coder.
-        
-        ```js
+        example code: 
+```js
         //GET List of Collection - use jade for displaying all data
         router.get('/examples', function(req,res){
           Example.find(function(err, example){
@@ -285,4 +284,4 @@ STEPS
             return res.redirect('/admin/examples')
           })
         })
-  
+```
