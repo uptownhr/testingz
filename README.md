@@ -61,3 +61,6 @@ Useful to get shell access.
 Get into mongo shell.
 
 `docker exec -it hackathonstarterlite_mongo_1 bash`
+
+## Guides and Examples
+[guides](docs/guide.md)
