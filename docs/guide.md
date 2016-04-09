@@ -82,7 +82,7 @@ STEPS
                   td
                     =data.lastname
                   td
-                    =file.email
+                    =data.email
                   td
                     a.btn.btn-primary-outline.btn-sm(href='/admin/example/#{data._id}')
                       | View/Edit
@@ -146,11 +146,11 @@ STEPS
 
     a.  add your newly created model to the top portion of "Admin.js"
     ```js
-    NewModel = models.NewModel
+    Example = models.Example
     
     ```
     
-    WHERE 'NewModel' is the name of the model created in step 1.
+    WHERE 'Example' is the name of the model created in step 1.
         
     b.  create and add 6 routes in "Admin.js" with GET: NEW collection, LIST of collection, EDIT/VIEW collection, REMOVE           
         collection AND POST: SAVE collection AND UPDATE collection
