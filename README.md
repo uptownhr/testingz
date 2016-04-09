@@ -149,6 +149,7 @@ STEPS
       .text-center
       ```
     Example code for jade viewing/editing specific data:
+    
     ```js
     extends layout
     block content
@@ -198,12 +199,11 @@ STEPS
 3.  open "Admin.js" in "/controllers"
 
     a.  add your newly created model to the top portion of "Admin.js"
-    
-        example code:
         
         ```js
         NewModel = models.NewModel
         ```
+        
         WHERE 'NewModel' is the name of the model created in step 1.
         
     b.  create and add 6 routes in "Admin.js" with GET: NEW collection, LIST of collection, EDIT/VIEW collection, REMOVE           
