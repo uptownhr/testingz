@@ -43,9 +43,8 @@ html(lang='en')
                 li.nav-header Dashboards
                 li
                   a(href='/admin') Overview
-                li
-                  a(href='/admin/users') Users
                 br
+
                 ul.nav.nav-pills.nav-stacked
                   li.nav-header Administrative
                   li
@@ -53,26 +52,35 @@ html(lang='en')
                 li
                   a(href='/auth/logout') Logout
                 br
+
+                ul.nav.nav-pills.nav-stacked
+                  li.nav-header User
+                  li
+                    a(href='/admin/users') Users
+                  li
+                    a(href='/admin/user') Add User
+                br
+
                 ul.nav.nav-pills.nav-stacked
                   li.nav-header Blog
                   li
                     a(href='/admin/posts') Posts
+                  li
+                    a(href='/admin/post') Add Post
                 br
                 ul.nav.nav-pills.nav-stacked
-                  li.nav-header Projects
+                  li.nav-header Project
                   li
-                    a(href='/admin/projects') Listing
+                    a(href='/admin/projects') Projects
                   li
-                    a(href='/admin/project') New Project
-                  li
-                    a(href='/') View All Projects
+                    a(href='/admin/project') Add Project
                 br
                 ul.nav.nav-pills.nav-stacked
-                  li.nav-header Files
+                  li.nav-header File
                   li
-                    a(href='/admin/files') File Listing
+                    a(href='/admin/files') Files
                   li
-                    a(href='/admin/file') New File
+                    a(href='/admin/file') Add File
 
 
               hr.visible-xs.m-t
