@@ -57,12 +57,19 @@ Get into mongo shell.
 
 General Summary:
   You will first create a new model for the data you want to copy/read/update/delete.  You will be creating two jade files: one for displaying all data in collection, another one for viewing and editing one specific dataset from collection.  You will also edit the Admin.js file in '/controllers' to set the route as well as the function of the route.  In Admin.js, you will create 6 routes:
+  
       1. to list and display entire data collection.
+      
       2. to create and enter New set of data into the collection
+      
       3. to view/edit 1 specific data set from collection by ID
+      
       4. to save data into the mongoDB
+      
       5. to update specific data set from collection by ID
+      
       6. to remove specific data set from collection by ID
+      
   Using these routes, you will add functionality into the route to manipulate the data and display the data using the two jade files you created.
 
 STEPS
@@ -189,14 +196,21 @@ STEPS
     ```
     
 3.  open "Admin.js" in "/controllers"
+
     a.  add your newly created model to the top portion of "Admin.js"
+    
         example code:
+        
         ```js
         NewModel = models.NewModel
         ```
         WHERE 'NewModel' is the name of the model created in step 1.
-    b.  create and add 6 routes in "Admin.js" with GET: NEW collection, LIST of collection, EDIT/VIEW collection, REMOVE           collection AND POST: SAVE collection AND UPDATE collection
+        
+    b.  create and add 6 routes in "Admin.js" with GET: NEW collection, LIST of collection, EDIT/VIEW collection, REMOVE           
+        collection AND POST: SAVE collection AND UPDATE collection
+        
         example code where EXAMPLE(S) is/are set by coder.
+        
         ```js
         //GET List of Collection - use jade for displaying all data
         router.get('/examples', function(req,res){
