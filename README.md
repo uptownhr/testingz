@@ -1,5 +1,15 @@
 # hackathon-starter-lite
-lighter and easier version of hackathon starter
+Taking [Hackathon Starter](https://github.com/sahat/hackathon-starter) to the next level. 
+
+A framework written with Express. We aim to provide more than just a login boilerplate. 
+
+## Features
+- Login
+- Admin
+- Posts
+- Projects
+- Products
+- Files
 
 [![Build Status](https://travis-ci.org/uptownhr/hackathon-starter-lite.svg)](https://travis-ci.org/uptownhr/hackathon-starter-lite)
 [![Dependency Status](https://david-dm.org/uptownhr/hackathon-starter-lite.svg)](https://david-dm.org/uptownhr/hackathon-starter-lite)
