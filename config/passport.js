@@ -110,7 +110,10 @@ function handleOauthLogin(profileMapper){
           }
 
           req.user.providers.push(provider)
-          req.user.save( (err) => done(err, req.user) )
+          req.user.save( (err) => {
+            req.flash('success', { msg: provider_name + ' account has been linked.' });
+            done(err, req.user);
+          })
         })
     }else{
       findProviderUser(provider_name, profile.id)
@@ -123,7 +126,9 @@ function handleOauthLogin(profileMapper){
             return ( _.isUndefined(object) || object == '' ) ? src : obj
           })
 
-          return user.save( err => done(err, user) )
+          return user.save( err => {
+            done(err, user);
+          })
         }
 
         //user not found, register user and login
