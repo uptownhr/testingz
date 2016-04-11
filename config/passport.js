@@ -9,8 +9,6 @@ const passport = require('passport'),
   GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
   User = require('../models/User');
 
-
-
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -192,8 +190,8 @@ function mapTwitterProfile(profile){
  * Using handleOauthLogin and mapTwitterProfile
  */
 passport.use(new TwitterStrategy({
-  consumerKey: config.social.twitter.client_id,
-  consumerSecret: config.social.twitter.client_secret,
+  consumerKey: config.social.twitter.consumer_key,
+  consumerSecret: config.social.twitter.consumer_secret,
   callbackURL: '/auth/o/twitter/callback',
   passReqToCallback: true
 }, handleOauthLogin(mapTwitterProfile)) )
