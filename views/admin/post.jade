@@ -1,12 +1,5 @@
 extends layout
 block content
-  style.
-    #editor {
-      position: relative;
-      width: 500px;
-      height: 400px;
-    }
-  script(src="/js/ace/theme-twilight.js" type="text/javascript" charset="utf-8")
   form.formx(method="POST" action="/admin/post")
     input(type="hidden" name="_id" value=post._id)
     .dashhead
@@ -54,10 +47,20 @@ block content
 
 block scripts
   script(src="http://code.jquery.com/ui/1.10.4/jquery-ui.js")
+  script(src='/js/ace/ace.js' type="text/javascript" charset="utf-8")
+  style.
+    #editor {
+      position: relative;
+      width: 500px;
+      height: 400px;
+    }
+  script(src="/js/ace/theme-twilight.js" type="text/javascript" charset="utf-8")
   script.
     $(document).ready(function () {
       var editor = ace.edit("editor");
+      var contentVAL = $('.contentPOST').attr('value')
       editor.setTheme("ace/theme/twilight");
+      editor.setValue(contentVAL)
       var $form = $('.formx');
       $form.on("submit", function(){
         var content = editor.getValue();

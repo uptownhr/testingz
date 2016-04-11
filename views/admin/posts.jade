@@ -26,7 +26,6 @@ block content
             th Status
             th Title
             th Date
-            th Content
             th
         tbody
           each post in posts
@@ -39,8 +38,6 @@ block content
                 =post.title
               td
                 =moment(post.date).format("YYYY-MM-DD")
-              td
-                =post.content
               td
                 a.btn.btn-primary-outline.btn-sm(href='/admin/post/#{post._id}')
                   | Edit
