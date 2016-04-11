@@ -49,26 +49,21 @@ router.post('/account', function(req,res,next){
 })
 
 router.get('/account/unlink/:provider', function(req, res, next){
-  var provider = req.params.provider;
-  
-  User.findOne(req.user.id, function(err, user) {
-    if (err) {
-      return next(err);
-    }
-    
-    user.providers = _.filter(user.providers, function(p){
-      return p.name !== provider;
-    });
-    
-    user.save(function(err){
-      if (err){
-        return next(err)
-      }
-      req.flash('success', { msg: provider + ' account has been unlinked.' })
-      res.redirect('/user/account');
-    });
-    
+  var user = req.user, provider = req.params.provider;
+  console.log(user);
+  var providers = _.filter(user.providers, function(p){
+    return p.name !== provider;
   });
+    
+  User.update({_id: user._id},{providers: providers},function(err){
+
+    if (err){
+      return next(err)
+    }
+    req.flash('success', { msg: provider + ' account has been unlinked.' })
+    res.redirect('/user/account');
+  });
+    
 })
 
 module.exports = router
