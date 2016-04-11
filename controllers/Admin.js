@@ -130,7 +130,6 @@ router.get('/post/:id', function(req, res){
 router.post('/post', function(req, res){
   const body = req.body,
     user_id = req.user._id
-
   var id = req.body._id
   Post.findOne({_id: id}, function(err, post){
     if(post) {
