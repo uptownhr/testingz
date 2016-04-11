@@ -256,7 +256,6 @@ passport.use(new InstagramStrategy({
  * @returns {{id: *, name: *, gender: *, location: '', website: '', picture: *}}
  */
 function mapGoogleProfile(profile){
-  console.log('google profile', profile)
   return {
     id: profile.id,
     name: profile.displayName,

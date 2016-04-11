@@ -1,3 +1,10 @@
+/* ALERT
+ *
+ * Please do commit this file or any secret keys to GitHub
+ *
+ */
+
+
 module.exports = {
   port: process.env.PORT || 3000,
   mongodb: process.env.MONGODB || 'mongodb://localhost:27017/hackathon',
