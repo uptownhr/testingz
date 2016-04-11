@@ -1,10 +1,25 @@
 const router = require('express').Router(),
-  User = require('../models/User');
+  User = require('../models/User'),
+  _ = require('lodash');
 
 router.get('/account', function(req,res){
   var user = req.user
 
-  res.render('account', { user } )
+  var providers = {
+    twitter: false,
+    facebook: false,
+    instagram: false,
+    github: false,
+    google: false
+  };
+  
+  user.providers.forEach(function(p){
+    if (providers[p.name] !== "undefined"){ 
+      providers[p.name] = true;
+    }
+  })
+  
+  res.render('account', { user, providers } )
 })
 
 router.post('/account', function(req,res,next){
@@ -31,6 +46,24 @@ router.post('/account', function(req,res,next){
       return res.redirect('/user/account')
     }
   })    
+})
+
+router.get('/account/unlink/:provider', function(req, res, next){
+  var user = req.user, provider = req.params.provider;
+  console.log(user);
+  var providers = _.filter(user.providers, function(p){
+    return p.name !== provider;
+  });
+    
+  User.update({_id: user._id},{providers: providers},function(err){
+
+    if (err){
+      return next(err)
+    }
+    req.flash('success', { msg: provider + ' account has been unlinked.' })
+    res.redirect('/user/account');
+  });
+    
 })
 
 module.exports = router
