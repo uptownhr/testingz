@@ -14,14 +14,6 @@ var userSchema = new mongoose.Schema({
   password: String,
   role: {type: String, enum: ['admin', 'member'], default: 'member'},
 
-  facebook: String,
-  twitter: String,
-  google: String,
-  github: String,
-  instagram: String,
-  linkedin: String,
-  tokens: Array,
-
   providers: [providerSchema],
 
   profile: {
