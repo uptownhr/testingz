@@ -129,8 +129,9 @@ router.get('/post/:id', function(req, res){
 
 router.post('/post', function(req, res){
   const body = req.body,
-    user_id = req.user._id
-
+    user_id = req.user._id,
+    content = req.body.content
+  console.log("this is the content to be saved: ", content)
   var id = req.body._id
   Post.findOne({_id: id}, function(err, post){
     if(post) {
