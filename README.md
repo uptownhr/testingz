@@ -1,5 +1,15 @@
 # hackathon-starter-lite
-lighter and easier version of hackathon starter
+Taking [Hackathon Starter](https://github.com/sahat/hackathon-starter) to the next level. 
+
+A framework written with Express. We aim to provide more than just a login boilerplate. 
+
+## Features
+- Login
+- Admin
+- Posts
+- Projects
+- Products
+- Files
 
 [![Build Status](https://travis-ci.org/uptownhr/hackathon-starter-lite.svg)](https://travis-ci.org/uptownhr/hackathon-starter-lite)
 [![Dependency Status](https://david-dm.org/uptownhr/hackathon-starter-lite.svg)](https://david-dm.org/uptownhr/hackathon-starter-lite)
@@ -50,4 +60,13 @@ Useful to get shell access.
 
 Get into mongo shell.
 
-`docker exec -it hackathonstarterlite_mongo_1 bash`
+`docker exec -it hackathonstarterlite_mongo_1 mongo`
+
+### docker restart
+
+Sometimes nodemon crashes and fails to restart
+
+`docker restart hackathonstarterlite_app_1`
+
+## Guides and Examples
+[guides](docs/guide.md)

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var fileSchema = new mongoose.Schema({
-  original_name: String,
+  originalname: String,
   encoding: String,
   mimetype: String,
   destination: String,

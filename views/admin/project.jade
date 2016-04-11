@@ -1,7 +1,7 @@
 extends layout
 block content
   form(method="POST" action="/admin/project")
-    input(type="hidden" name="_id" value=p._id)
+    input(type="hidden" name="_id" value=project._id)
     .dashhead
       .dashhead-titles
         h6.dashhead-subtitle Project
@@ -19,7 +19,7 @@ block content
         .col-md-12
           .form-group
             label Project Name
-            input.form-control(type="text" name="name" placeholder="project name" value=p.name)
+            input.form-control(type="text" name="name" placeholder="project name" value=project.name)
           // /.form-group
         // /.col
       // /.row
@@ -27,7 +27,7 @@ block content
         .col-md-12
           .form-group
             label Tag Line
-            input.form-control(type="text" name="tag_line" placeholder="Tag Line" value=p.tag_line)
+            input.form-control(type="text" name="tag_line" placeholder="Tag Line" value=project.tag_line)
           // /.form-group
         // /.col
       // /.row
@@ -35,7 +35,7 @@ block content
         .col-md-12
           .form-group
             label Description
-            input.form-control(type="text" name="description" placeholder="Description" value=p.description)
+            input.form-control(type="text" name="description" placeholder="Description" value=project.description)
           // /.form-group
         // /.col
       // /.row
@@ -43,7 +43,7 @@ block content
         .col-md-12
           .form-group
             label Logo URL
-            input.form-control(type="text" name="logo_url" placeholder="logo URL" value=p.logo_url)
+            input.form-control(type="text" name="logo_url" placeholder="logo URL" value=project.logo_url)
           // /.form-group
         // /.col
       // /.row
@@ -51,7 +51,7 @@ block content
         .col-md-12
           .form-group
             label Project URL
-            input.form-control(type="text" name="project_url" placeholder="logo URL" value=p.project_url)
+            input.form-control(type="text" name="project_url" placeholder="logo URL" value=project.project_url)
           // /.form-group
         // /.col
       // /.row
