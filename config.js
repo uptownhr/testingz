@@ -1,3 +1,10 @@
+/* ALERT
+ *
+ * Please do commit this file or any secret keys to GitHub
+ *
+ */
+
+
 module.exports = {
   port: process.env.PORT || 3000,
   mongodb: process.env.MONGODB || 'mongodb://localhost:27017/hackathon',
@@ -10,8 +17,8 @@ module.exports = {
       client_secret: process.env.FACEBOOK_CLIENT_ID || '029377e578b512892b3fc8f295474b84' 
     },
     twitter:{
-      client_id: process.env.TWITTER_CLIENT_ID || 'Jw6gdI0TGsuFzGq9ClIoqWuHu',
-      client_secret: process.env.TWITTER_CLIENT_SECRET || 'rQnElaPgiUUixe0viJ0dbd1M70RpO2a7P2R07pVEk4MPbxBxK7'
+      consumer_key: process.env.TWITTER_CONSUMER_KEY || 'Jw6gdI0TGsuFzGq9ClIoqWuHu',
+      consumer_secret: process.env.TWITTER_CONSUMER_SECRET || 'rQnElaPgiUUixe0viJ0dbd1M70RpO2a7P2R07pVEk4MPbxBxK7'
     },
     instagram:{
       client_id: process.env.INSTAGRAM_CLIENT_ID || 'b57a31bedd2f47449456558a53d127e3',
