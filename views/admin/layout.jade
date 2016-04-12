@@ -26,10 +26,15 @@ html(lang='en')
         position: absolute;
         top: 50%;
         left: -30px;
+        font-size: 1.5em;
       }
       .rightSideBar.open{
         width: 100px;
 
+      }
+      .arrowPopOut:hover{
+        color: purple;
+        font-size: 2em;
       }
       .rightSideBar{
         position: fixed;
@@ -126,7 +131,7 @@ body
               .modal-footer
                 button.btn.btn-primary(type='button', data-dismiss='modal') Cool, got it!
         #popout.rightSideBar
-          div.fa.fa-arrow-left.arrowPopOut
+          div#arrowBut.fa.fa-arrow-left.arrowPopOut
     script(src='/admin/assets/js/jquery.min.js')
     script(src='/admin/assets/js/chart.js')
     script(src='/admin/assets/js/tablesorter.min.js')
@@ -169,12 +174,12 @@ body
         $('.arrowPopOut').click(function(){
           if($('.rightSideBar').hasClass("open")) {
             $('.rightSideBar').removeClass("open")
+            $('#arrowBut').removeClass('fa-arrow-right').addClass('fa-arrow-left')
           } else{
-            $('.rightSideBar').addClass("open");
+            $('.rightSideBar').addClass("open")
+            $('#arrowBut').removeClass("fa-arrow-left").addClass("fa-arrow-right")
           }
         })
-
-
 
         $('body')
                 .on('dragover', function(){ return false } )
