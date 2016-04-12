@@ -69,7 +69,7 @@ block scripts
       editor.setTheme("ace/theme/github")
       editor.setFontSize(14)
 
-      editor.setValue(contentVAL, 1)
+      editor.setValue(contentVAL, -1)
       $('.previewPOST').html(marked(contentVAL))
 
       editor.getSession().on('change', function (e) {
