@@ -36,7 +36,7 @@ module.exports = function(){
       return seed_post.save()
     })
     .then( post => {
-      const seed_project = new Project({
+      const hackathon_project = new Project({
         name: 'hackathon starter lite',
         tag_line: 'create your personal project',
         description: 'jump start your project with an admin, blog, products',
@@ -44,10 +44,17 @@ module.exports = function(){
         project_url: 'https://github.com/uptownhr/hackathon-starter-lite'
       })
 
-      return seed_project.save()
+      const honeybadger_project = new Project({
+        name: 'honeybadger',
+        tag_line: 'A hackathon starter built for simplicity',
+        description: 'Creating Honeybadger, an opensource Ruby/Sinatra based CMS that helps you kickstart projects. It provides a boiler-plate code with the goal of being an extremely simple CMS alternative to Wordpress, Drupa, and etc.',
+        logo_url: '/site/img/logo.svg',
+        project_url: 'https://github.com/jaequery/honeybadger'
+      })
+
+      return hackathon_project.save().then( () => honeybadger_project.save() )
     })
     .catch( err => {
       console.log(err)
     })
 }
-
