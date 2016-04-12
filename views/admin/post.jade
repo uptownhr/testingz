@@ -59,18 +59,20 @@ block scripts
   script(src="/js/ace/theme-twilight.js" type="text/javascript" charset="utf-8")
   script.
     $(document).ready(function () {
-      var editor = ace.edit("editor");
-      var contentVAL = $('.contentPOST').attr('value')
+      var editor = ace.edit("editor"),
+              contentVAL = $('.contentPOST').attr('value') || '# Write some text';
+
       editor.setTheme("ace/theme/twilight");
+
       editor.setValue(contentVAL)
       $('.previewPOST').html(marked(contentVAL));
-      editor.getSession().on('change', function(e){
+
+      editor.getSession().on('change', function (e) {
         $('.previewPOST').html(marked(editor.getValue()));
       })
-      var $form = $('.formx');
-      $form.on("submit", function(){
+
+      $('.formx').on("submit", function () {
         var content = editor.getValue();
         $('.contentPOST').val(content);
       })
-
     });
