@@ -69,4 +69,6 @@ Sometimes nodemon crashes and fails to restart
 `docker restart hackathonstarterlite_app_1`
 
 ## Guides and Examples
-[guides](docs/guide.md)
+- [creating admin crud pages](docs/crud.md)
+- [adding passport oauth providers](docs/passport.md)
+[all guides](docs)
