@@ -58,6 +58,11 @@ block scripts
   script(src='/js/marked.js' type="text/javascript" charset="utf-8")
   script(src="/js/ace/theme-twilight.js" type="text/javascript" charset="utf-8")
   script.
+
+    marked.setOptions({
+      gfm: false
+    })
+
     $(document).ready(function () {
       var editor = ace.edit("editor"),
               contentVAL = $('.contentPOST').attr('value') || '# Write some text';
