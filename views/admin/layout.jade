@@ -31,6 +31,10 @@ html(lang='en')
         width: 100px;
 
       }
+      .arrowPopOut:hover{
+        color: purple;
+        font-size: 2em;
+      }
       .rightSideBar{
         position: fixed;
         top: 0;
@@ -166,8 +170,6 @@ body
             $('.rightSideBar').addClass("open");
           }
         })
-
-
 
         $('body')
                 .on('dragover', function(){ return false } )
