@@ -1,4 +1,4 @@
 # Guides and Examples
 
 - [Adding additional oauth providers](./passport.md)
-- [Creating CRUD pages](crud)
+- [Creating CRUD pages](./crud.md)
