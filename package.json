@@ -35,7 +35,8 @@
     "passport-local": "^1.0.0",
     "passport-oauth": "^1.0.0",
     "passport-twitter": "^1.0.4",
-    "qs": "^6.1.0"
+    "qs": "^6.1.0",
+    "validator": "^5.2.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
