@@ -55,7 +55,7 @@ block content
 block scripts
   script(src='/js/ace/ace.js' type="text/javascript" charset="utf-8")
   script(src='/js/marked.js' type="text/javascript" charset="utf-8")
-  script(src="/js/ace/theme-twilight.js" type="text/javascript" charset="utf-8")
+
   script.
 
     marked.setOptions({
@@ -64,19 +64,20 @@ block scripts
 
     $(document).ready(function () {
       var editor = ace.edit("editor"),
-              contentVAL = $('.contentPOST').attr('value') || '# Write some text';
+              contentVAL = $('.contentPOST').attr('value') || '# Write some text'
 
-      editor.setTheme("ace/theme/twilight");
+      editor.setTheme("ace/theme/github")
+      editor.setFontSize(14)
 
       editor.setValue(contentVAL, 1)
-      $('.previewPOST').html(marked(contentVAL));
+      $('.previewPOST').html(marked(contentVAL))
 
       editor.getSession().on('change', function (e) {
-        $('.previewPOST').html(marked(editor.getValue()));
+        $('.previewPOST').html(marked(editor.getValue()))
       })
 
       $('.formx').on("submit", function () {
-        var content = editor.getValue();
-        $('.contentPOST').val(content);
+        var content = editor.getValue()
+        $('.contentPOST').val(content)
       })
     });
