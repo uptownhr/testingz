@@ -63,7 +63,7 @@ block scripts
       var contentVAL = $('.contentPOST').attr('value')
       editor.setTheme("ace/theme/twilight");
       editor.setValue(contentVAL)
-      $('.previewPOST').html(marked(editor.getValue()));
+      $('.previewPOST').html(marked(contentVAL));
       editor.getSession().on('change', function(e){
         $('.previewPOST').html(marked(editor.getValue()));
       })
