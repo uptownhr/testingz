@@ -13,6 +13,7 @@ html(lang='en')
     link(href='http://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css', rel='stylesheet')
     link(href='/admin/assets/css/toolkit-light.css', rel='stylesheet')
     link(href='/admin/assets/css/application.css', rel='stylesheet')
+    link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css', rel='stylesheet')
     style.
       /* note: this is a hack for ios iframe for bootstrap themes shopify page */
       /* this chunk of css is not part of the toolkit :) */
@@ -21,7 +22,25 @@ html(lang='en')
         min-width: 100%;
         *width: 100%;
       }
-  body
+      .arrowPopOut{
+        position: absolute;
+        top: 50%;
+        left: -30px;
+      }
+      .rightSideBar.open{
+        width: 100px;
+
+      }
+      .rightSideBar{
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 0px;
+        z-index: 9;
+      }
+
+body
     .container
       .row
         .col-md-12
@@ -106,6 +125,8 @@ html(lang='en')
                 p You're looking at an example modal in the dashboard theme.
               .modal-footer
                 button.btn.btn-primary(type='button', data-dismiss='modal') Cool, got it!
+        #popout.rightSideBar
+          div.fa.fa-arrow-left.arrowPopOut
     script(src='/admin/assets/js/jquery.min.js')
     script(src='/admin/assets/js/chart.js')
     script(src='/admin/assets/js/tablesorter.min.js')
@@ -145,6 +166,15 @@ html(lang='en')
           })
 
         }
+        $('.arrowPopOut').click(function(){
+          if($('.rightSideBar').hasClass("open")) {
+            $('.rightSideBar').removeClass("open")
+          } else{
+            $('.rightSideBar').addClass("open");
+          }
+        })
+
+
 
         $('body')
                 .on('dragover', function(){ return false } )
