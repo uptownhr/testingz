@@ -59,4 +59,59 @@ function mapTwitterProfile(profile){
 
 ### Step 4
 
-Authentication for your app is now available via GET to the '/o/:provider' route.
+Authentication for your app is now available via GET to the '/o/:provider' route. Existing OAuth accounts can be unlinked via GET to the '/user/account/unlink/:provider' route.
+
+#### (Optional)
+The buttons to link and unlink the new provider accounts can now be added to the login and account pages, as shown below:
+
+#### Login
+
+*views/login.jade*
+
+```
+.col-md-4(style='text-align: left;')
+      p.lead Or sign in with ...
+      a.btn.btn-block.btn-social.btn-twitter(href='/auth/o/twitter')
+        i.fa.btn-xs.fa-twitter
+        |  Sign in with Twitter
+```
+#### Account 
+
+*controllers/User.js*
+
+Add the provider to the providers object and set it to a default value of false. The providers object will then be checked to see if the provider account is linked for the user.
+
+```
+router.get('/account', function(req,res){
+  var user = req.user
+
+  var providers = {
+    twitter: false
+  };
+  
+  user.providers.forEach(function(p){
+    if (providers[p.name] !== "undefined"){ 
+      providers[p.name] = true;
+    }
+  })
+  
+  res.render('account', { user, providers } )
+})
+```
+
+*views/account.jade*
+
+Locate the div with the "providers" class. Add the following jade with the conditional inside the div for each provider:
+
+```
+.col-sm-6
+    p
+      if providers.twitter
+        a.btn.btn-block.btn-primary.btn-social.btn-twitter(href='/user/account/unlink/twitter')
+          i.fa.btn-xs.fa-twitter
+          | Unlink your Twitter account
+      else
+        a.btn.btn-block.btn-default.btn-social.btn-twitter(href='/auth/o/twitter')
+          i.fa.btn-xs.fa-twitter
+          | Link your Twitter account
+```
