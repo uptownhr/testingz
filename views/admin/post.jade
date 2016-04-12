@@ -1,7 +1,12 @@
 extends layout
 block content
-  link(href='/css/ghostdown.css', media='all', rel='stylesheet')
-  form(method="POST" action="/admin/post")
+  style.
+    #editor {
+      position: relative;
+      width: 100%;
+      height: 400px;
+    }
+  form.formx(method="POST" action="/admin/post")
     input(type="hidden" name="_id" value=post._id)
     .dashhead
       .dashhead-titles
@@ -28,18 +33,12 @@ block content
         .col-md-12
           .form-group
             label Content
-              section.editor
-                .outer
-                  .editorwrap
-                    section.entry-markdown
-                      section.entry-markdown-content
-                        textarea(name="content")=post.content
-                    section.entry-preview.active
-                      header.floatingheader
-                        | Preview
-                        span.entry-word-count 0 words
-                      section.entry-preview-content
-                        .rendered-markdown
+            section.editor
+              .outer
+                .editorwrap
+                  input.contentPOST(type="hidden" name="content" value=post.content)
+                  #editor
+                  div.previewPOST
           // /.form-group
       // /.row
       #field_status.field.row
@@ -55,9 +54,30 @@ block content
 
 block scripts
   script(src="http://code.jquery.com/ui/1.10.4/jquery-ui.js")
-  script(src='/js/ghostdown.js')
-  script(src="/js/jquery.ghostdown.js")
+  script(src='/js/ace/ace.js' type="text/javascript" charset="utf-8")
+  script(src='/js/marked.js' type="text/javascript" charset="utf-8")
+  script(src="/js/ace/theme-twilight.js" type="text/javascript" charset="utf-8")
   script.
+
+    marked.setOptions({
+      gfm: false
+    })
+
     $(document).ready(function () {
-      $(".editor").ghostDown();
+      var editor = ace.edit("editor"),
+              contentVAL = $('.contentPOST').attr('value') || '# Write some text';
+
+      editor.setTheme("ace/theme/twilight");
+
+      editor.setValue(contentVAL, 1)
+      $('.previewPOST').html(marked(contentVAL));
+
+      editor.getSession().on('change', function (e) {
+        $('.previewPOST').html(marked(editor.getValue()));
+      })
+
+      $('.formx').on("submit", function () {
+        var content = editor.getValue();
+        $('.contentPOST').val(content);
+      })
     });
