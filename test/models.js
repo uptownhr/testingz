@@ -1,8 +1,16 @@
 var chai = require('chai');
 var should = chai.should();
+var mongoose = require('mongoose');
 var User = require('../models/User');
 
 describe('User Model', function() {
+  /*before( function(done){
+    mongoose.models = {},
+      mongoose.modelSchemas = {}
+
+    done()
+  })*/
+
   it('should create a new user', function(done) {
     var user = new User({
       email: 'test@gmail.com',

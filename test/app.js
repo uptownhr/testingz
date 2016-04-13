@@ -1,4 +1,5 @@
 var request = require('supertest');
+var mongoose = require('mongoose');
 var app = require('../index.js');
 
 describe('GET /', function() {
@@ -32,3 +33,11 @@ describe('GET /random-url', function() {
       .expect(404, done);
   });
 });
+
+describe('GET /blog', function(){
+  it('should return 200', function(done){
+    request(app)
+      .get('/blog')
+      .expect(200, done)
+  })
+})

@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "nodemon index.js",
     "dev-docker": "npm install && npm run dev",
-    "test": "mocha --reporter spec --timeout 5000",
-    "postversion": "git push && git push --tags"
+    "test": "PORT=9999 mocha --reporter spec --timeout 5000",
+    "test-watch": "PORT=9999 mocha --reporter spec --timeout 5000",
+    "postversion": "git push && git push --tags",
+    "docker-mongo": "docker exec -it hackathonstarterlite_mongo_1 mongo"
   },
   "author": "",
   "license": "ISC",
