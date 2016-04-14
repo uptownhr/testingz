@@ -10,7 +10,12 @@ module.exports = {
   mongodb: process.env.MONGODB || 'mongodb://localhost:27017/hackathon',
   redis: process.env.REDIS || 'redis://localhost:6379',
   secret: 'asdfasdfzcvzxcv',
-
+  payment: {
+    stripe:{
+      public_key: 'pk_test_8iCRH4xJXGEWYt4DkbECYDM8',
+      secret_key: 'sk_test_9yjqifpcg5f0PlJDEIHQWGRm',
+    }
+  },
   social:{
     facebook:{
       client_id: process.env.FACEBOOK_CLIENT_ID || '507223992817678',
