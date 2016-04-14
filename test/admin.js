@@ -54,4 +54,28 @@ describe('Admin', function(){
       })
     })
   })
+
+  describe('GET /admin/posts', function(){
+    it('should return 200 OK', function(done){
+      admin
+        .get('/admin/posts')
+        .expect(200, done)
+    })
+  })
+
+  describe('GET /admin/products', function(){
+    it('should return 200 OK', function(done){
+      admin
+        .get('/admin/products')
+        .expect(200, done)
+    })
+  })
+
+  describe('GET /admin/files', function(){
+    it('should return 200 OK', function(done){
+      admin
+        .get('/admin/files')
+        .expect(200, done)
+    })
+  })
 })
