@@ -21,8 +21,6 @@ block content
       table.table(data-sort='table')
         thead
           tr
-            td
-              input#selectAll.select-all(type='checkbox')
             th Logo
             th Name
             th Tag_line
@@ -31,8 +29,6 @@ block content
         tbody
           each project in projects
             tr
-              td
-                input.select-row(type='checkbox')
               td
                 img(src=project.logo_url style="width: 50px;")
               td

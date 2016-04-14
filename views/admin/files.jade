@@ -21,8 +21,6 @@ block content
       table.table(data-sort='table')
         thead
           tr
-            td
-              input#selectAll.select-all(type='checkbox')
             th Original name
             th Encoding
             th Mimetype
@@ -35,8 +33,6 @@ block content
         tbody
           each file in files
             tr
-              td
-                input.select-row(type='checkbox')
               td
                 =file.originalname
               td

@@ -21,8 +21,6 @@ block content
       table.table(data-sort='table')
         thead
           tr
-            td
-              input#selectAll.select-all(type='checkbox')
             th Image
             th Name
             th Description
@@ -32,8 +30,6 @@ block content
         tbody
           each product in products
             tr
-              td
-                input.select-row(type='checkbox')
               td
                 img(src=product.image_url style="width: 80px;")
               td
