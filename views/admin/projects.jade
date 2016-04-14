@@ -23,11 +23,10 @@ block content
           tr
             td
               input#selectAll.select-all(type='checkbox')
+            th Logo
             th Name
             th Tag_line
-            th Description
             th Created
-            th Project_url
             th Actions
         tbody
           each project in projects
@@ -35,15 +34,13 @@ block content
               td
                 input.select-row(type='checkbox')
               td
+                img(src=project.logo_url style="width: 50px;")
+              td
                 =project.name
               td
                 =project.tag_line
               td
-                =project.description
-              td
                 =moment(project.created).format("YYYY-MM-DD")
-              td
-                =project.project_url
               td
                 a.btn.btn-primary-outline.btn-sm(href='/admin/project/#{project._id}')
                   | View/Edit
