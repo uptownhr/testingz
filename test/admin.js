@@ -11,8 +11,6 @@ const admin_user = {
 // for storing session
 const admin = request.agent(app);
 
-console.log(process.env.REDIS)
-
 describe('Admin', function(){
   before(function(done){
 
@@ -49,7 +47,11 @@ describe('Admin', function(){
     it('should return 200 OK', function(done){
       admin
       .get('/admin/users')
-      .expect(200, done)
+      .expect(200)
+      .then( function(){
+        console.log('yes')
+        done()
+      })
     })
   })
 })

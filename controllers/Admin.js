@@ -76,13 +76,6 @@ router.post('/user', function(req,res){
         res.redirect('/admin/users')
       })
     })
-
-
-  /*const user = new User(req.body)
-
-
-
-  res.send({user, body: req.body})*/
 })
 
 router.get('/user/delete/:id', function(req,res){
