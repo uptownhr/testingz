@@ -25,6 +25,7 @@ If you have docker available, you can get started in two steps.
 1. git clone git@github.com:uptownhr/hackathon-starter-lite
 2. cd hackathon-starter-lite
 3. docker-compose up
+4. visit http://localhost:3000 on your browser *if running docker on osx/windows, you'll use the vbox IP instead of localhost
 
 ### Docker Installation
 1. [install docker](https://docs.docker.com/engine/installation/)
