@@ -7,7 +7,7 @@ block content
     .btn-toolbar.dashhead-toolbar
       .btn-group
         a.btn.btn-primary-outline(href='/admin/product', type='button')
-          | New Product
+          | New Prodsuct
           span.icon.icon-plus
   hr.m-t
   .flextable.table-actions
@@ -23,10 +23,10 @@ block content
           tr
             td
               input#selectAll.select-all(type='checkbox')
+            th Image
             th Name
             th Description
             th Price
-            th Image_url
             th Created
             th Actions
         tbody
@@ -35,13 +35,13 @@ block content
               td
                 input.select-row(type='checkbox')
               td
+                img(src=product.image_url style="width: 80px;")
+              td
                 =product.name
               td
                 =product.description
               td
                 =product.price
-              td
-                =product.image_url
               td
                 =moment(product.date).format("YYYY-MM-DD")
               td
