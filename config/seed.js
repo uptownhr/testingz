@@ -2,6 +2,7 @@
 const User = require('../models/User'),
   Post = require('../models/Post'),
   Project = require('../models/Project'),
+  Product = require('../models/Product'),
   async = require("async")
 
 
@@ -53,6 +54,16 @@ module.exports = function(){
       })
 
       return hackathon_project.save().then( () => honeybadger_project.save() )
+    })
+    .then( () => {
+      const sample_product = new Product({
+        name: 'Sample Product',
+        description: 'This is a sample product',
+        price: '99.99',
+        image_url: 'http://www.anchorpackaging.com/wp-content/uploads/2014/06/SampleKit.jpg'
+      })
+
+      return sample_product.save()
     })
     .catch( err => {
       console.log(err)
