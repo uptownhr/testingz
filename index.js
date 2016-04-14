@@ -1,5 +1,5 @@
 "use strict"
-const app = require('./bootstrap'),
+const app = require('./bootstrap')(),
   controllers = require('./controllers'),
   models = require('./models'),
   passport = require('./config/passport')

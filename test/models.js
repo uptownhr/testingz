@@ -1,13 +1,17 @@
-var chai = require('chai');
-var should = chai.should();
-var mongoose = require('mongoose');
-var User = require('../models/User');
+var config = require('../config')
+var chai = require('chai')
+var should = chai.should()
+var mongoose = require('mongoose')
+var User = require('../models/User')
 
 describe('User Model', function() {
-  /*before( function(done){
-    mongoose.models = {},
-      mongoose.modelSchemas = {}
+  /*before( done => {
+    mongoose.connect(config.mongodb)
+    done()
+  })
 
+  after( done => {
+    mongoose.connection.close()
     done()
   })*/
 
