@@ -21,29 +21,22 @@ block content
       table.table(data-sort='table')
         thead
           tr
-            td
-              input#selectAll.select-all(type='checkbox')
-            th name
-            th tag_line
-            th description
-            th date created
-            th project_url
-            th
+            th Logo
+            th Name
+            th Tag_line
+            th Created
+            th Actions
         tbody
           each project in projects
             tr
               td
-                input.select-row(type='checkbox')
+                img(src=project.logo_url style="width: 50px;")
               td
                 =project.name
               td
                 =project.tag_line
               td
-                =project.description
-              td
-                =moment(project.date).format("YYYY-MM-DD")
-              td
-                =project.project_url
+                =moment(project.created).format("YYYY-MM-DD")
               td
                 a.btn.btn-primary-outline.btn-sm(href='/admin/project/#{project._id}')
                   | View/Edit

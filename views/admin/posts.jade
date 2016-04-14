@@ -21,23 +21,19 @@ block content
       table.table(data-sort='table')
         thead
           tr
-            td
-              input#selectAll.select-all(type='checkbox')
             th Status
             th Title
-            th Date
-            th
+            th Created
+            th Actions
         tbody
           each post in posts
             tr
-              td
-                input.select-row(type='checkbox')
               td
                 =post.status
               td
                 =post.title
               td
-                =moment(post.date).format("YYYY-MM-DD")
+                =moment(post.created).format("YYYY-MM-DD")
               td
                 a.btn.btn-primary-outline.btn-sm(href='/admin/post/#{post._id}')
                   | Edit

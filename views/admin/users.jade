@@ -21,18 +21,14 @@ block content
       table.table(data-sort='table')
         thead
           tr
-            td
-              input#selectAll.select-all(type='checkbox')
             th Email
             th Username
             th Role
             th Created
-            th
+            th Actions
         tbody
           each user in users
             tr
-              td
-                input.select-row(type='checkbox')
               td
                 =user.email
               td

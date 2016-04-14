@@ -21,21 +21,18 @@ block content
       table.table(data-sort='table')
         thead
           tr
-            td
-              input#selectAll.select-all(type='checkbox')
-            th original name
-            th encoding
-            th mimetype
-            th destination
-            th filename
-            th path
-            th size
-            th
+            th Original name
+            th Encoding
+            th Mimetype
+            th Destination
+            th Filename
+            th Path
+            th Size
+            th Created
+            th Actions
         tbody
           each file in files
             tr
-              td
-                input.select-row(type='checkbox')
               td
                 =file.originalname
               td
@@ -50,6 +47,8 @@ block content
                 =file.path
               td
                 =file.size
+              td
+                =file.created
               td
                 a.btn.btn-primary-outline.btn-sm(href='/admin/file/#{file._id}')
                   | View/Edit
