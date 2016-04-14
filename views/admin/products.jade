@@ -23,10 +23,12 @@ block content
           tr
             td
               input#selectAll.select-all(type='checkbox')
-            th name
-            th description
-            th price
-            th image_url
+            th Name
+            th Description
+            th Price
+            th Image_url
+            th Created
+            th Actions
         tbody
           each product in products
             tr
@@ -38,6 +40,8 @@ block content
                 =product.description
               td
                 =product.price
+              td
+                =product.image_url
               td
                 =moment(product.date).format("YYYY-MM-DD")
               td

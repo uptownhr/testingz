@@ -7,7 +7,8 @@ var fileSchema = new mongoose.Schema({
   destination: String,
   filename: String,
   path: String,
-  size: Number
+  size: Number,
+  created: Date
 })
 
 module.exports = mongoose.model('file', fileSchema)

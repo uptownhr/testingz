@@ -23,12 +23,12 @@ block content
           tr
             td
               input#selectAll.select-all(type='checkbox')
-            th name
-            th tag_line
-            th description
-            th date created
-            th project_url
-            th
+            th Name
+            th Tag_line
+            th Description
+            th Created
+            th Project_url
+            th Actions
         tbody
           each project in projects
             tr
@@ -41,7 +41,7 @@ block content
               td
                 =project.description
               td
-                =moment(project.date).format("YYYY-MM-DD")
+                =moment(project.created).format("YYYY-MM-DD")
               td
                 =project.project_url
               td
