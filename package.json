@@ -7,7 +7,7 @@
     "dev": "nodemon index.js",
     "dev-docker": "npm install && npm run dev",
     "test": "PORT=9999 mocha --reporter spec --timeout 5000",
-    "test-watch": "PORT=9999 mocha --reporter spec --timeout 5000",
+    "test-watch": "PORT=9999 nodemon --exec 'mocha --reporter spec --timeout 5000'",
     "postversion": "git push && git push --tags",
     "docker-mongo": "docker exec -it hackathonstarterlite_mongo_1 mongo"
   },

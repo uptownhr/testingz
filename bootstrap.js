@@ -16,8 +16,7 @@ const express = require('express'),
 const app = express()
 
 /*connect to mongodb */
-console.log(config.mongodb)
-mongoose.connect(config.mongodb)
+mongoose.connect( config.mongodb)
 
 mongoose.connection.on('error', function(){
   console.log('Mongodb connection error')
@@ -25,11 +24,9 @@ mongoose.connection.on('error', function(){
 })
 
 mongoose.connection.on('connected', function() {
-  console.log('mongo connected')
   // listen on config port, default 3000
-  app.listen(config.port, function(e){
-    console.log('listening on', config.port)
-
+  app.server = app.listen(config.port, function(e){
+    console.log('listening on', config.port, config.mongodb)
   })
 })
 
