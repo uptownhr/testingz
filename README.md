@@ -16,30 +16,22 @@ A framework written with Express. We aim to provide more than just a login boile
 - Products
 - Files
 
-## Requirements
-- NodeJS
-- MongoDB
-- Redis
-- Docker and Docker Compose *optional
-
 ## Getting Started
-1. git clone git@github.com:uptownhr/hackathon-starter-lite
-2. npm install
-3. npm run dev
+The easiest way to get started and workflow we recommend is by using docker. Docker handles the service depencies for the application to run. For example, Mongodb and Redis will be started and connected using containers. You do not have to worry about installation steps or muddying your host machine with additional services. 
 
-### Getting Started using Docker
-If you have docker, all the project Requirements like Node, Mongo and Redis will automatically be installed and available. 
+If you have docker available, you can get started in two steps.
 
-#### Docker Installation
-1. [install docker](https://docs.docker.com/engine/installation/)
-2. [install docker-compose](https://docs.docker.com/compose/install/)
-
-#### Starting the project with Docker
+### Steps
 1. git clone git@github.com:uptownhr/hackathon-starter-lite
 2. cd hackathon-starter-lite
 3. docker-compose up
 
+### Docker Installation
+1. [install docker](https://docs.docker.com/engine/installation/)
+2. [install docker-compose](https://docs.docker.com/compose/install/)
+
 ## Guides and Examples
+- [getting started without docker](docs/getting-started-without-docker.md)
 - [creating admin crud pages](docs/crud.md)
 - [adding passport oauth providers](docs/passport.md)
 - [docker basics](docs/docker.md)
