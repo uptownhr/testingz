@@ -8,4 +8,9 @@ var productSchema = new mongoose.Schema({
   created_at: {type: Date, default: Date.now()}
 })
 
+productSchema.pre('save', function(next){
+  this.price = Number(this.price.replace(/[^0-9\.]+/g,""));
+  next();
+})
+
 module.exports = mongoose.model('product', productSchema);
