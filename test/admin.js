@@ -11,6 +11,8 @@ const admin_user = {
 // for storing session
 const admin = request.agent(app);
 
+console.log(process.env.REDIS)
+
 describe('Admin', function(){
   before(function(done){
 

@@ -5,7 +5,7 @@ services:
   - mongodb
   - redis
 
-node_js:
+node_js:k
   - "5.8.0"
 
 branches:
