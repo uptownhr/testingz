@@ -4,7 +4,7 @@ const
   async = require('async'),
   multer = require('multer'),
   path = require('path'),
-  upload = multer({ dest: path.join(__dirname, '../uploads') }),
+  upload = multer({ dest: path.join(__dirname, '../public/uploads') }),
   qs = require('qs'),
   marked = require('marked'),
   validator = require('validator'),
