@@ -125,6 +125,8 @@ body
               .modal-footer
                 button.btn.btn-primary(type='button', data-dismiss='modal') Cool, got it!
         #popout.rightSideBar
+          div.rightSideContent(style="height: 100%;")
+            h1 FUCK YOU
           div#arrowBut.fa.fa-arrow-left.arrowPopOut
     script(src='/admin/assets/js/jquery.min.js')
     script(src='/admin/assets/js/chart.js')
@@ -135,6 +137,7 @@ body
       //global image uploader
       $(function () {
         function handleImageDrop(e){
+          console.log("Por que not working?");
           e.preventDefault()
           var files = e.originalEvent.dataTransfer.files
           var formData = new FormData()
@@ -156,6 +159,20 @@ body
                       .addClass('alert alert-success')
                       .html(data)
                       .append($close)
+              $filename = data[0].originalname;
+              $destination = data[0].destination;
+              $file = data[0].filename;
+              $url = "/uploads/" + $file;
+              console.log(`this is the link: ${$url}`);
+              $('.rightSideBar').addClass("open")
+              $('#arrowBut').removeClass("fa-arrow-left").addClass("fa-arrow-right")
+              console.log("this is the filename: ", $filename);
+              if ($filename.includes(".jpg", ".gif")){
+                $('.rightSideContent').append(`<img src="${$url}" style="width: 80px;"></img>`);
+              } else {
+                $('.rightSideContent').append(`<p>"${$filename}"</p>`);
+              }
+
 
               $alert.prependTo('#flash')
             },

@@ -252,6 +252,7 @@ router.get('/project/delete/:id', function(req, res){
   })
 })
 
+// IMAGE DROP FUNCTION
 
 router.post('/images/upload', upload.array('file', 20), function(req,res){
   async.mapSeries( req.files, function(file, next){
@@ -259,7 +260,8 @@ router.post('/images/upload', upload.array('file', 20), function(req,res){
     file.save( next )
   }, function done(err, results){
     const file_names = results.map( file => file.originalname ).join('<br/>')
-    res.send(`files uploaded<br/> ${file_names}`)
+    console.log("this is the result being sent to the display: ", results);
+    res.send(results)
   })
 })
 
