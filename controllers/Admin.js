@@ -98,21 +98,48 @@ router.get('/user/delete/:id', function(req,res){
 })
 
 router.get('/users', function(req,res){
-  User.find().then(users => {
-    res.render('admin/users', {users})
-  })
-
+  
+  var query = User.find();
+  var param = '';
+  
+  if (req.query.search) {
+    param = decodeURI(req.query.search);
+    var search = { $regex : new RegExp(param, "i") };
+    
+    query.or([
+      { email : search },
+      { 'profile.name' : search }
+    ]);
+  }
+  
+  query.exec( function(err, users) {
+    res.render('admin/users', { users, search : param })
+  });
+  
 })
+
 /**
  * Blog Post Editing
  */
 
 router.get('/posts', function(req,res){
-  Post.find(function(err, posts){
-    res.render('admin/posts',{
-      posts
-    })
-  })
+  
+  var query = Post.find();
+  var param = '';
+  
+  if (req.query.search) {
+    param = decodeURI(req.query.search);
+    
+    query.or([{ title :
+      { $regex : new RegExp(param, "i") } }
+    ]);
+  }
+  
+  query.exec( function(err, posts) {
+    res.render('admin/posts', {posts, search : param})
+  });
+  
+  
 })
 
 router.get('/post', function(req, res){
@@ -177,11 +204,23 @@ router.get('/post/delete/:id', function(req,res){
 
 // list projects
 router.get('/projects', function(req,res){
-  Project.find(function(err, projects){
-    res.render('admin/projects',{
-      projects
-    })
-  })
+  
+  var query = Project.find();
+  var param = '';
+  
+  if (req.query.search) {
+    param = decodeURI(req.query.search);
+    var search = { $regex : new RegExp(param, "i") };
+    
+    query.or([
+      { name : search },
+      { project_url : search }
+    ]);
+  }
+  
+  query.exec( function(err, projects) {
+    res.render('admin/projects', { projects, search : param })
+  });
 })
 
 
@@ -274,11 +313,21 @@ router.post('/images/upload', upload.array('file', 20), function(req,res){
 
 // list products
 router.get('/products', function(req,res){
-  Product.find(function(err, products){
-    res.render('admin/products',{
-      products
-    })
-  })
+  var query = Product.find();
+  var param = '';
+  
+  if (req.query.search) {
+    var param = decodeURI(req.query.search);
+    var search = { $regex : new RegExp(param, "i") };
+    
+    query.or([
+      { name : search }
+    ]);
+  }
+  
+  query.exec( function(err, products) {
+    res.render('admin/products', { products, search : param })
+  });
 })
 
 
@@ -356,11 +405,22 @@ router.get('/product/delete/:id', function(req, res){
 
 //display listings of files
 router.get('/files', function(req,res){
-  File.find(function(err, files){
-    res.render('admin/files',{
-      files
-    })
-  })
+  var query = File.find();
+  var param = '';
+  
+  if (req.query.search) {
+    param = decodeURI(req.query.search);
+    var search = { $regex : new RegExp(param, "i") };
+    
+    query.or([
+      { originalname : search },
+      { filename : search }
+    ]);
+  }
+  
+  query.exec( function(err, files) {
+    res.render('admin/files', {files, search : param })
+  });
 })
 
 //ADD new file model

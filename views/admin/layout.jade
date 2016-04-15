@@ -60,7 +60,7 @@ body
                 |  Hackathon Starter Lite
             #nav-toggleable-sm.collapse.nav-toggleable-sm
               form.sidebar-form
-                input.form-control(type='text', placeholder='Search...')
+                input.form-control(type='text', name='side_search', placeholder='Search...')
                 button.btn-link(type='submit')
                   span.icon.icon-magnifying-glass
               ul.nav.nav-pills.nav-stacked
@@ -138,8 +138,8 @@ body
     script(src='/admin/assets/js/toolkit.js')
     script(src='/admin/assets/js/application.js')
     script.
-      //global image uploader
       $(function () {
+        //global image uploader
         function handleImageDrop(e){
           e.preventDefault()
           var files = e.originalEvent.dataTransfer.files
@@ -185,6 +185,18 @@ body
                 .on('dragover', function(){ return false } )
                 .on('dragenter', function(){ return false } )
                 .on('drop', handleImageDrop )
+        
+        // Model Page Searches
+
+        $('.model_search').keypress(function (e) {
+          var key = e.which;
+          if (key === 13 ) {
+            var query = $(this).val();
+            var url = [location.protocol, '//', location.host, location.pathname].join('');
+            if (query.length)
+              window.location.href = url + '?search=' + encodeURI(query);
+          }
+        });
       })
 
     block scripts
