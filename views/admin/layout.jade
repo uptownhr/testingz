@@ -41,8 +41,9 @@ html(lang='en')
         top: 0;
         right: 0;
         bottom: 0;
-        width: 2%;
+        width: 1%;
         background-color: #DDDBD4;
+        min-width: 15px;
       }
 
       .rightSideBarTrigger.open{
@@ -173,7 +174,7 @@ body
             $destination = file.destination;
             $file = file.filename;
             $url = "/uploads/" + $file;
-            $('.rightSideBar').addClass("open")
+            toggleSideBar();
 
             if ($filename.includes(".jpg", ".gif")) {
               $('.rightSideContent').prepend(`<a href="#" class="list-group"><img width="100%" class="trigger img-thumbnail" src="${$url}" value="${$url}" /><p>${$filename}</p></a>`);
@@ -212,7 +213,7 @@ body
 
 
       function toggleSideBar(){
-        $(this).toggleClass('open')
+        $('.rightSideBarTrigger').toggleClass('open')
         $('.rightSideBar').toggleClass('open');
       }
 
