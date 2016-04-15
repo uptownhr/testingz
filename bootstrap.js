@@ -11,7 +11,7 @@ const express = require('express'),
   expressValidator = require('express-validator'),
   cookieParser = require('cookie-parser'),
   moment = require('moment'),
-  seed = require('./config/seed.js')()
+  seed = require('./config/seed.js')
 
 const app = express()
 

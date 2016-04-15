@@ -9,10 +9,10 @@ const User = require('../models/User'),
 //this seeder automatically runs on application startup but ...
 //seeder only runs if a user without admin role exists
 
-module.exports = function(){
-  User.findOne({role:'admin'})
+var seeder = function(){
+  return User.findOne({role:'admin'})
     .then( user => {
-      if(user) throw new Error('skipping seed')
+      if(user) throw new Error(user)
 
       const seed_user = new User({
         email: 'admin@admin.com',
@@ -65,7 +65,7 @@ module.exports = function(){
 
       return sample_product.save()
     })
-    .catch( err => {
-      console.log(err)
-    })
+    .catch( err => err )
 }
+
+module.exports = new seeder()
