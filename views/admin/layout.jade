@@ -45,6 +45,10 @@ html(lang='en')
         background-color: #DDDBD4;
       }
 
+      .rightSideBarTrigger.open{
+        right: 15%;
+      }
+
 body
     .container
       .row
@@ -208,6 +212,7 @@ body
 
 
       function toggleSideBar(){
+        $(this).toggleClass('open')
         $('.rightSideBar').toggleClass('open');
       }
 
