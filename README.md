@@ -2,6 +2,7 @@
 [![Dependency Status](https://david-dm.org/uptownhr/hackathon-starter-lite.svg)](https://david-dm.org/uptownhr/hackathon-starter-lite)
 [![devDependency Status](https://david-dm.org/uptownhr/hackathon-starter-lite/dev-status.svg)](https://david-dm.org/uptownhr/hackathon-starter-lite)
 [![Gitter chat](https://badges.gitter.im/uptownhr/hackathon-starter-lite.png)](https://gitter.im/uptownhr/hackathon-starter-lite)
+[![Coverage Status](https://coveralls.io/repos/github/uptownhr/hackathon-starter-lite/badge.svg?branch=master)](https://coveralls.io/github/uptownhr/hackathon-starter-lite?branch=master)
 
 # hackathon-starter-lite
 Taking [Hackathon Starter](https://github.com/sahat/hackathon-starter) to the next level. 
