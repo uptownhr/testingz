@@ -22,6 +22,7 @@ router.get('/', function(req,res){
 router.get('/post/:id', function(req, res){
   var id = req.params.id
   Post.findOne({_id: id, status: "launched"}).populate('_author').exec( function(err, post){
+    if( !post ) return res.redirect('/blog')
     post.content = marked(post.content)
     res.render('post/view',{
       post
