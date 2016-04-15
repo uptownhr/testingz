@@ -29,7 +29,7 @@ html(lang='en')
         font-size: 1.5em;
       }
       .rightSideBar.open{
-        width: 100px;
+        width: 12%;
 
       }
       .arrowPopOut:hover{
@@ -126,7 +126,6 @@ body
                 button.btn.btn-primary(type='button', data-dismiss='modal') Cool, got it!
         #popout.rightSideBar
           div.rightSideContent(style="height: 100%;")
-            h1 FUCK YOU
           div#arrowBut.fa.fa-arrow-left.arrowPopOut
     script(src='/admin/assets/js/jquery.min.js')
     script(src='/admin/assets/js/chart.js')
@@ -167,9 +166,9 @@ body
               $('.rightSideBar').addClass("open")
               $('#arrowBut').removeClass("fa-arrow-left").addClass("fa-arrow-right")
               if ($filename.includes(".jpg", ".gif")){
-                $('.rightSideContent').append(`<button id="trigger" onclick="copy('${$url}')" data-clipboard-target="#XXX"><img class="imageX" src="${$url}" style="width: 80px;"></img></button>`);
+                $('.rightSideContent').append(`<img class="trigger img-thumbnail" src="${$url}" style="width: 150px;" value="${$url}"></img>`);
               } else {
-                $('.rightSideContent').append(`<button id="trigger" onclick="copy('${$url}')" data-clipboard-target="#XXX"><p>"${$filename}"</p></button>`);
+                $('.rightSideContent').append(`<h1 class="trigger" value="${$url}">"${$filename}"</h1>`);
               }
 
 
@@ -194,6 +193,11 @@ body
                 .on('dragover', function(){ return false } )
                 .on('dragenter', function(){ return false } )
                 .on('drop', handleImageDrop )
+        $('.rightSideContent').on('click', ".trigger", function(){
+          var xxx = $(this).attr("value");
+          console.log(xxx);
+          copy(xxx);
+        })
       })
       function copy(string) {
         var dummy = document.createElement("input");
