@@ -21,12 +21,12 @@ block content
       table.table(data-sort='table')
         thead
           tr
-            td
-              input#selectAll.select-all(type='checkbox')
-            th name
-            th description
-            th price
-            th image_url
+            th Image
+            th Name
+            th Description
+            th Price
+            th Created
+            th Actions
         tbody
           if products.length
             each product in products

@@ -21,13 +21,11 @@ block content
       table.table(data-sort='table')
         thead
           tr
-            td
-              input#selectAll.select-all(type='checkbox')
             th Email
             th Username
             th Role
             th Created
-            th
+            th Actions
         tbody
           if users.length
             each user in users
@@ -54,6 +52,5 @@ block content
             tr
               td(colspan=7, class="text-center")
                 | No users found
-            
   .text-center
     

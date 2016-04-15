@@ -21,16 +21,15 @@ block content
       table.table(data-sort='table')
         thead
           tr
-            td
-              input#selectAll.select-all(type='checkbox')
-            th original name
-            th encoding
-            th mimetype
-            th destination
-            th filename
-            th path
-            th size
-            th
+            th Original name
+            th Encoding
+            th Mimetype
+            th Destination
+            th Filename
+            th Path
+            th Size
+            th Created
+            th Actions
         tbody
           if files.length
             each file in files

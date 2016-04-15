@@ -4,7 +4,7 @@ const
   async = require('async'),
   multer = require('multer'),
   path = require('path'),
-  upload = multer({ dest: path.join(__dirname, '../uploads') }),
+  upload = multer({ dest: path.join(__dirname, '../public/uploads') }),
   qs = require('qs'),
   marked = require('marked'),
   validator = require('validator'),
@@ -76,13 +76,6 @@ router.post('/user', function(req,res){
         res.redirect('/admin/users')
       })
     })
-
-
-  /*const user = new User(req.body)
-
-
-
-  res.send({user, body: req.body})*/
 })
 
 router.get('/user/delete/:id', function(req,res){
