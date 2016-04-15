@@ -15,34 +15,34 @@ html(lang='en')
     link(href='/admin/assets/css/application.css', rel='stylesheet')
     link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css', rel='stylesheet')
     style.
-      /* note: this is a hack for ios iframe for bootstrap themes shopify page */
-      /* this chunk of css is not part of the toolkit :) */
       body {
         width: 1px;
         min-width: 100%;
         *width: 100%;
       }
-      .arrowPopOut{
-        position: absolute;
-        top: 50%;
-        left: -30px;
-        font-size: 1.5em;
-      }
       .rightSideBar.open{
-        width: 100px;
-
-      }
-      .arrowPopOut:hover{
-        color: purple;
-        font-size: 2em;
+        overflow-y: scroll;
+        right: 0;
       }
       .rightSideBar{
+        position: fixed;
+        padding: 10px;
+        top: 0;
+        right: -15%;
+        bottom: 0;
+        width: 15%;
+        z-index: 9;
+        background-color: #f5f5ff;
+        text-align: center;
+      }
+
+      .rightSideBarTrigger{
         position: fixed;
         top: 0;
         right: 0;
         bottom: 0;
-        width: 0px;
-        z-index: 9;
+        width: 2%;
+        background-color: #DDDBD4;
       }
 
 body
@@ -124,10 +124,11 @@ body
                 p You're looking at an example modal in the dashboard theme.
               .modal-footer
                 button.btn.btn-primary(type='button', data-dismiss='modal') Cool, got it!
-        #popout.rightSideBar
-          div.rightSideContent(style="height: 100%;")
-            h1 FUCK YOU
-          div#arrowBut.fa.fa-arrow-left.arrowPopOut
+        .rightSideBarTrigger
+        .rightSideBar
+          h3 Files
+          p drag and drop files
+          div.rightSideContent.list-group
     script(src='/admin/assets/js/jquery.min.js')
     script(src='/admin/assets/js/chart.js')
     script(src='/admin/assets/js/tablesorter.min.js')
@@ -138,7 +139,6 @@ body
       $(function () {
         //global image uploader
         function handleImageDrop(e){
-          console.log("Por que not working?");
           e.preventDefault()
           var files = e.originalEvent.dataTransfer.files
           var formData = new FormData()
@@ -154,49 +154,37 @@ body
             processData: false,
             contentType: false,
             type: 'POST',
-            success: function (data) {
-              $close = $('<button class="close" type="button" data-dismiss="alert"><i class="fa fa-times-circle-o">x</i></button>');
-              $alert = $('<div></div>')
-                      .addClass('alert alert-success')
-                      .html(data)
-                      .append($close)
-              $filename = data[0].originalname;
-              $destination = data[0].destination;
-              $file = data[0].filename;
-              $url = "/uploads/" + $file;
-              $('.rightSideBar').addClass("open")
-              $('#arrowBut').removeClass("fa-arrow-left").addClass("fa-arrow-right")
-              if ($filename.includes(".jpg", ".gif")){
-                $('.rightSideContent').append(`<button id="trigger" onclick="copy('${$url}')" data-clipboard-target="#XXX"><img class="imageX" src="${$url}" style="width: 80px;"></img></button>`);
-              } else {
-                $('.rightSideContent').append(`<button id="trigger" onclick="copy('${$url}')" data-clipboard-target="#XXX"><p>"${$filename}"</p></button>`);
-              }
-
-
-              $alert.prependTo('#flash')
-            },
+            success: addToSideBar,
             error: function (err) {
               console.log('error', err)
             }
           })
 
         }
-        $('.arrowPopOut').click(function(){
-          if($('.rightSideBar').hasClass("open")) {
-            $('.rightSideBar').removeClass("open")
-            $('#arrowBut').removeClass('fa-arrow-right').addClass('fa-arrow-left')
-          } else{
+
+        function addToSideBar(files){
+          //add uploaded files to the sidebar
+          files.forEach(function (file) {
+            $filename = file.originalname;
+            $destination = file.destination;
+            $file = file.filename;
+            $url = "/uploads/" + $file;
             $('.rightSideBar').addClass("open")
-            $('#arrowBut').removeClass("fa-arrow-left").addClass("fa-arrow-right")
-          }
-        })
+
+            if ($filename.includes(".jpg", ".gif")) {
+              $('.rightSideContent').prepend(`<a href="#" class="list-group"><img width="100%" class="trigger img-thumbnail" src="${$url}" value="${$url}" /><p>${$filename}</p></a>`);
+            } else {
+              $('.rightSideContent').prepend(`<a href="#" class="list-group"><h3 class="trigger" value="${$url}">"${$filename}"</h3></a>`);
+            }
+          })
+        }
+
         $('body')
                 .on('dragover', function(){ return false } )
                 .on('dragenter', function(){ return false } )
                 .on('drop', handleImageDrop )
-        
-        // Model Page Searches
 
+        // Model Page Searches
         $('.model_search').keypress(function (e) {
           var key = e.which;
           if (key === 13 ) {
@@ -206,7 +194,23 @@ body
               window.location.href = url + '?search=' + encodeURI(query);
           }
         });
+
+        //copies file url to clipboard
+        $('.rightSideContent').on('click', ".trigger", function(e){
+          e.preventDefault();
+          var url = $(this).attr("value");
+          copy(url);
+        })
+
+        $('.rightSideBarTrigger').click( toggleSideBar )
       })
+
+
+
+      function toggleSideBar(){
+        $('.rightSideBar').toggleClass('open');
+      }
+
       function copy(string) {
         var dummy = document.createElement("input");
         // Add it to the document
