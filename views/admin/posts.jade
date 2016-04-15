@@ -13,7 +13,7 @@ block content
   .flextable.table-actions
     .flextable-item.flextable-primary
       .btn-toolbar-item.input-with-icon
-        input.form-control.input-block(type='text', placeholder='Search users')
+        input.form-control.input-block.model_search(type='text', value="#{search}", placeholder='Search posts')
         span.icon.icon-magnifying-glass
     .flextable-item
   .table-full
@@ -26,29 +26,28 @@ block content
             th Created
             th Actions
         tbody
-          each post in posts
+          if posts.length
+            each post in posts
+              tr
+                td
+                  =post.status
+                td
+                  =post.title
+                td
+                  =moment(post.date).format("YYYY-MM-DD")
+                td
+                  a.btn.btn-primary-outline.btn-sm(href='/admin/post/#{post._id}')
+                    | Edit
+                    span.icon.icon-pencil
+                  | &nbsp;
+                  a.btn.btn-primary-outline.btn-sm(href='/admin/post/delete/#{post._id}', data-remote='true', data-confirm='Are You Sure?')
+                    | Delete
+                    span.icon.icon-erase
+                  | &nbsp;
+                  a.btn.btn-primary-outline.btn-sm(href='/blog/post/#{post._id}')
+                    | View
+          else
             tr
-              td
-                =post.status
-              td
-                =post.title
-              td
-                =moment(post.created).format("YYYY-MM-DD")
-              td
-                a.btn.btn-primary-outline.btn-sm(href='/admin/post/#{post._id}')
-                  | Edit
-                  span.icon.icon-pencil
-                | &nbsp;
-                a.btn.btn-primary-outline.btn-sm(href='/admin/post/delete/#{post._id}', data-remote='true', data-confirm='Are You Sure?')
-                  | Delete
-                  span.icon.icon-erase
-                | &nbsp;
-                a.btn.btn-primary-outline.btn-sm(href='/blog/post/#{post._id}')
-                  | View
+              td(colspan=7, class="text-center")
+                | No posts found
   .text-center
-  script(type='text/javascript').
-    (function(){
-      $('table.table .header').on('click', function(e){
-        alert('hi');
-      })
-    })

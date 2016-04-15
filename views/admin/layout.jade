@@ -132,8 +132,8 @@ body
     script(src='/admin/assets/js/toolkit.js')
     script(src='/admin/assets/js/application.js')
     script.
-      //global image uploader
       $(function () {
+        //global image uploader
         function handleImageDrop(e){
           e.preventDefault()
           var files = e.originalEvent.dataTransfer.files
@@ -179,6 +179,18 @@ body
                 .on('dragover', function(){ return false } )
                 .on('dragenter', function(){ return false } )
                 .on('drop', handleImageDrop )
+        
+        // Model Page Searches
+
+        $('.model_search').keypress(function (e) {
+          var key = e.which;
+          if (key === 13 ) {
+            var query = $(this).val();
+            var url = [location.protocol, '//', location.host, location.pathname].join('');
+            if (query.length)
+              window.location.href = url + '?search=' + encodeURI(query);
+          }
+        });
       })
 
     block scripts
