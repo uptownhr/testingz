@@ -169,7 +169,7 @@ body
               if ($filename.includes(".jpg", ".gif")){
                 $('.rightSideContent').append(`<button id="trigger" onclick="copy('${$url}')" data-clipboard-target="#XXX"><img class="imageX" src="${$url}" style="width: 80px;"></img></button>`);
               } else {
-                $('.rightSideContent').append(`<p>"${$filename}"</p>`);
+                $('.rightSideContent').append(`<button id="trigger" onclick="copy('${$url}')" data-clipboard-target="#XXX"><p>"${$filename}"</p></button>`);
               }
 
 
