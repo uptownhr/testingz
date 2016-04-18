@@ -36,14 +36,18 @@ const adminLoggedIn = function(){
 describe('Admin', function(){
   const sample_user = User({ email: 'test@test.com', password: 'asdfasdf' })
   const sample_post = Post({ title: ''})
-  const sample_project = Project({ })
-  const sample_product = Product({ })
-  const sample_file = File({ })
+  const sample_project = Project({name: "fuck you", description: "fuck all people" })
+  const sample_product = Product({name: "fuck you", description: "fuck yo mama" })
+  const sample_file = File({originalname: "fuck you too", destination: "die slow mothafucker" })
 
   before(function(done){
     Promise.all([
       adminLoggedIn(),
-      sample_user.save()
+      sample_user.save(),
+      sample_post.save(),
+      sample_project.save(),
+      sample_product.save(),
+      sample_file.save()
     ]).then( () => done(), function error(err){
       done(err)
     })
@@ -108,6 +112,86 @@ describe('Admin', function(){
     it('should return 200 OK', function(done){
       admin
         .get('/admin/files')
+        .expect(200, done)
+    })
+  })
+
+  describe('GET /admin/user', function(){
+    it('should return 200 OK', function(done){
+      admin
+        .get('/admin/user')
+        .expect(200, done)
+    })
+  })
+
+  describe('GET /admin/user/:id', function(){
+    it('should return 200 OK', function(done){
+      admin
+        .get('/admin/user/' + sample_user._id)
+        .expect(200, done)
+    })
+  })
+
+  describe('GET /admin/post', function(){
+    it('should return 200 OK', function(done){
+      admin
+        .get('/admin/post')
+        .expect(200, done)
+    })
+  })
+
+  describe('GET /admin/post/:id', function(){
+    it('should return 200 OK', function(done){
+      admin
+        .get('/admin/post/' + sample_post._id)
+        .expect(200, done)
+    })
+  })
+
+  describe('GET /admin/project', function(){
+    it('should return 200 OK', function(done){
+      admin
+        .get('/admin/project')
+        .expect(200, done)
+    })
+  })
+
+  describe('GET /admin/project/:id', function(){
+    it('should return 200 OK', function(done){
+      admin
+        .get('/admin/project/' + sample_project._id)
+        .expect(200, done)
+    })
+  })
+
+  describe('GET /admin/product', function(){
+    it('should return 200 OK', function(done){
+      admin
+        .get('/admin/product')
+        .expect(200, done)
+    })
+  })
+
+  describe('GET /admin/product/:id', function(){
+    it('should return 200 OK', function(done){
+      admin
+        .get('/admin/product/' + sample_product._id)
+        .expect(200, done)
+    })
+  })
+
+  describe('GET /admin/file', function(){
+    it('should return 200 OK', function(done){
+      admin
+        .get('/admin/file')
+        .expect(200, done)
+    })
+  })
+
+  describe('GET /admin/file/:id', function(){
+    it('should return 200 OK', function(done){
+      admin
+        .get('/admin/file/' + sample_file._id)
         .expect(200, done)
     })
   })
