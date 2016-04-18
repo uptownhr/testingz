@@ -34,6 +34,22 @@ describe( 'App', function(){
         .expect(200, done);
     });
   });
+  
+  describe('GET /auth/logout', function() {
+    it('should return 302 redirect', function(done){
+      request(app)
+      .get('/auth/logout')
+      .expect(302, done)
+    })
+  });
+  
+  describe('GET /auth/logout', function() {
+    it('should return 302 redirect', function(done){
+      request(app)
+      .get('/auth/logout')
+      .expect(302, done)
+    })
+  });
 
   describe('GET /auth/register', function() {
     it('should return 200 OK', function(done) {
@@ -42,7 +58,47 @@ describe( 'App', function(){
         .expect(200, done);
     });
   });
-
+  
+  describe('GET /auth/register', function() {
+    it('should return 200 OK', function(done) {
+      request(app)
+        .get('/auth/register')
+        .expect(200, done);
+    });
+  });
+  
+  describe('GET /auth/o/twitter', function() {
+    it('should return 302 redirect', function(done){
+      request(app)
+      .get('/auth/o/twitter')
+      .expect(302, done)
+    })
+  });
+  
+  describe('GET /auth/o/twitter/callback', function() {
+    it('should return 302 redirect', function(done){
+      request(app)
+      .get('/auth/o/twitter/callback')
+      .expect(302, done)
+    })
+  });
+  
+  describe('GET /auth/o/testing/', function() {
+    it('should return 302 redirect', function(done){
+      request(app)
+      .get('/auth/o/testing')
+      .expect(302, done)
+    })
+  });
+  
+  describe('GET /auth/o/testing/callback', function() {
+    it('should return 302 redirect', function(done){
+      request(app)
+      .get('/auth/o/testing/callback')
+      .expect(302, done)
+    })
+  });
+  
   describe('GET /random-url', function() {
     it('should return 404', function(done) {
       request(app)

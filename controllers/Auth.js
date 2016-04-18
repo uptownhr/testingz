@@ -89,6 +89,14 @@ router.post('/register', function(req,res,next){
     })
 })
 
+router.get('/o/testing', function(req,res,next){
+  res.redirect('/');
+})
+
+router.get('/o/testing/callback', function(req,res,next){
+  res.redirect('/');
+})
+
 router.get('/o/:provider', function(req,res,next){
   const provider = req.params.provider
 
