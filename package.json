@@ -7,9 +7,9 @@
     "dev": "nodemon index.js",
     "dev-docker": "npm install && npm run dev",
 
-    "test": "PORT=9999 istanbul cover _mocha",
+    "test": "PORT=9999 TEST=true istanbul cover _mocha",
     "posttest": "cat ./coverage/lcov.info | coveralls",
-    "test-watch": "PORT=9999 nodemon --exec 'mocha --reporter spec --timeout 5000'",
+    "test-watch": "PORT=9999 TEST=true nodemon --exec 'mocha --reporter spec --timeout 5000'",
     "postversion": "git push && git push --tags",
     "docker-mongo": "docker exec -it hackathonstarterlite_mongo_1 mongo",
     "cover": "istanbul cover _mocha && cat ./coverage/lcov.info | coveralls"
