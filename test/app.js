@@ -118,14 +118,24 @@ describe( 'App', function(){
         .expect(200, done)
     })
   })
-
+  
+  describe('GET /blog/post/:id', function(){
+    it('should return 200', function(done) {
+      Post.findOne({ title: 'First Blog Post' }, function(err, post) {
+        var url = '/blog/post/' + post._id;
+        request(app)
+          .get(url)
+          .expect(200, done)
+      });
+    });
+  });
+  
   describe('GET /user/account', function(){
     it('should return 300 unauthorized', function(done){
       request(app)
-      .get('/user/account')
-      .expect(302, done)
+        .get('/user/account')
+        .expect(302, done)
     })
-
 
     it('should return 200 when authorized', function(done){
       user
@@ -137,18 +147,17 @@ describe( 'App', function(){
   describe('GET /user/account/unlink/testing', function(){
     it('should return 302', function(done){
       request(app)
-      .get('/user/account/unlink/testing')
-      .expect(302, done)
+        .get('/user/account/unlink/testing')
+        .expect(302, done)
     })
     
   });
-  
 
   describe('GET /user/account/unlink/mock_provider', function(){
     it('should return 302', function(done){
       request(app)
-      .get('/user/account/unlink/mock_provider')
-      .expect(302, done)
+        .get('/user/account/unlink/mock_provider')
+        .expect(302, done)
     })
     
     it('should not find the mock_provider', function(done) {
@@ -161,25 +170,4 @@ describe( 'App', function(){
     });
     
   });
-  
-  /*
-  describe('GET /blog/post/:id', function(){
-    //create post record in db before testing
-    var blog = new Post({
-      title : 'Test Post',
-      content : 'Test Description',
-      status : 'pending'
-    });
-    console.log(blog)
-    
-    blog.save(function(err, post){
-      it('should return 200', function(done){
-        console.log(post._id);
-        request(app)
-        .get('/blog/post/' + post._id)
-        .expect(200, done)
-      })
-    });
-    
-  });*/
 })
