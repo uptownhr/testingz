@@ -5,17 +5,14 @@ var app = require('../index.js'),
   seed = require('../config/seed')
 
 before(done => {
+
   seed
     .then( addMockProvider )
     .then( done.bind(null,null) )
-    .catch( done.bind(null,null) )
+    .catch( function(err){
+      console.log('seed error', err)
 
-  /*setTimeout(User.findOne({role:'admin'}, function(err, user){
-
-
-    user.save( (err) => done() )
-  }), 500)*/
-
+    } )
 })
 
 after(done => {
