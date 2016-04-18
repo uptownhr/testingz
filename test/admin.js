@@ -36,9 +36,9 @@ const adminLoggedIn = function(){
 describe('Admin', function(){
   const sample_user = User({ email: 'test@test.com', password: 'asdfasdf' })
   const sample_post = Post({ title: ''})
-  const sample_project = Project({name: "fuck you", description: "fuck all people" })
-  const sample_product = Product({name: "fuck you", description: "fuck yo mama" })
-  const sample_file = File({originalname: "fuck you too", destination: "die slow mothafucker" })
+  const sample_project = Project({name: "gordo", description: "projectFAT" })
+  const sample_product = Product({name: "gordo", description: "productFAT" })
+  const sample_file = File({originalname: "gordo", destination: "fileFAT" })
 
   before(function(done){
     Promise.all([
