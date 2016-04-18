@@ -50,7 +50,7 @@ router.post('/account', function(req,res,next){
 
 router.get('/account/unlink/:provider', function(req, res, next){
   var user = req.user, provider = req.params.provider;
-  console.log(user);
+
   var providers = _.filter(user.providers, function(p){
     return p.name !== provider;
   });

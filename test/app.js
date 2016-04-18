@@ -1,5 +1,9 @@
 var request = require('supertest'),
+  chai = require('chai'),
+  expect = chai.expect,
+  _ = require('lodash'),
   mongoose = require('mongoose'),
+  User = require('../models/User'),
   Post = require('../models/Post');
 
 var app = require('../index.js')
@@ -9,7 +13,6 @@ const user_info = {
   email: 'admin@admin.com',
   password: 'asdfasdf'
 }
-
 
 describe( 'App', function(){
   before(function(done){
@@ -137,19 +140,29 @@ describe( 'App', function(){
       .get('/user/account/unlink/testing')
       .expect(302, done)
     })
+    
   });
   
-  /*
-  //expect 302 && mock_provider no longer exists in users
+
   describe('GET /user/account/unlink/mock_provider', function(){
     it('should return 302', function(done){
       request(app)
       .get('/user/account/unlink/mock_provider')
       .expect(302, done)
     })
+    
+    it('should not find the mock_provider', function(done) {
+      User.findOne({ email: user_info.email }, function(err, user) {
+        if (err) return done(err);
+        _.map(user.providers, 'name');
+        expect('mock_provider').to.not.be.oneOf(user.providers);
+        done();
+      });
+    });
+    
   });
   
-  
+  /*
   describe('GET /blog/post/:id', function(){
     //create post record in db before testing
     var blog = new Post({
@@ -157,7 +170,8 @@ describe( 'App', function(){
       content : 'Test Description',
       status : 'pending'
     });
-
+    console.log(blog)
+    
     blog.save(function(err, post){
       it('should return 200', function(done){
         console.log(post._id);
