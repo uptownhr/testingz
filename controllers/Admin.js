@@ -6,7 +6,6 @@ const
   path = require('path'),
   upload = multer({ dest: path.join(__dirname, '../public/uploads') }),
   qs = require('qs'),
-  marked = require('marked'),
   validator = require('validator'),
   models = require('../models'),
   User =  models.User,
@@ -14,17 +13,6 @@ const
   File = models.File,
   Project = models.Project,
   Product = models.Product;
-
-marked.setOptions({
-  renderer: new marked.Renderer(),
-  gfm: true,
-  tables: true,
-  breaks: false,
-  pedantic: false,
-  sanitize: true,
-  smartLists: true,
-  smartypants: false
-});
 
 router.get('/', function(req,res){
   res.render('admin/overview')

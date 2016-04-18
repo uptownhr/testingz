@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "nodemon index.js",
     "dev-docker": "npm install && npm run dev",
-
     "test": "PORT=9999 TEST=true istanbul cover _mocha",
     "posttest": "cat ./coverage/lcov.info | coveralls",
     "test-watch": "PORT=9999 TEST=true nodemon --exec 'mocha --reporter spec --timeout 5000'",
@@ -29,7 +28,6 @@
     "express-validator": "^2.19.1",
     "jade": "^1.11.0",
     "lodash": "^4.6.1",
-    "marked": "^0.3.5",
     "moment": "^2.12.0",
     "mongoose": "^4.4.5",
     "multer": "^1.1.0",
@@ -42,6 +40,7 @@
     "passport-oauth": "^1.0.0",
     "passport-twitter": "^1.0.4",
     "qs": "^6.1.0",
+    "remarkable": "^1.6.2",
     "stripe": "^4.5.0",
     "validator": "^5.2.0"
   },
