@@ -46,14 +46,6 @@ describe( 'App', function(){
       .expect(302, done)
     })
   });
-  
-  describe('GET /auth/logout', function() {
-    it('should return 302 redirect', function(done){
-      request(app)
-      .get('/auth/logout')
-      .expect(302, done)
-    })
-  });
 
   describe('GET /auth/register', function() {
     it('should return 200 OK', function(done) {
