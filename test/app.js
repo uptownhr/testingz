@@ -147,7 +147,7 @@ describe( 'App', function(){
 
   describe('GET /user/account/unlink/mock_provider', function(){
     it('should return 302', function(done){
-      request(app)
+      user
         .get('/user/account/unlink/mock_provider')
         .expect(302, done)
     })
@@ -155,8 +155,8 @@ describe( 'App', function(){
     it('should not find the mock_provider', function(done) {
       User.findOne({ email: user_info.email }, function(err, user) {
         if (err) return done(err);
-        _.map(user.providers, 'name');
-        expect('mock_provider').to.not.be.oneOf(user.providers);
+        var providers = _.map(user.providers, 'name');
+        expect('mock_provider').to.not.be.oneOf(providers);
         done();
       });
     });
