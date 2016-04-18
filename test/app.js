@@ -1,5 +1,6 @@
 var request = require('supertest'),
-  mongoose = require('mongoose');
+  mongoose = require('mongoose'),
+  Post = require('../models/Post');
 
 var app = require('../index.js')
 
@@ -129,5 +130,42 @@ describe( 'App', function(){
         .expect(200,done)
     })
   })
+  
+  describe('GET /user/account/unlink/testing', function(){
+    it('should return 302', function(done){
+      request(app)
+      .get('/user/account/unlink/testing')
+      .expect(302, done)
+    })
+  });
+  
+  /*
+  //expect 302 && mock_provider no longer exists in users
+  describe('GET /user/account/unlink/mock_provider', function(){
+    it('should return 302', function(done){
+      request(app)
+      .get('/user/account/unlink/mock_provider')
+      .expect(302, done)
+    })
+  });
+  
+  
+  describe('GET /blog/post/:id', function(){
+    //create post record in db before testing
+    var blog = new Post({
+      title : 'Test Post',
+      content : 'Test Description',
+      status : 'pending'
+    });
 
+    blog.save(function(err, post){
+      it('should return 200', function(done){
+        console.log(post._id);
+        request(app)
+        .get('/blog/post/' + post._id)
+        .expect(200, done)
+      })
+    });
+    
+  });*/
 })
