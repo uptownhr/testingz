@@ -231,15 +231,14 @@ describe( 'App', function(){
 
     it('should not log user in if bad password', function(done){
       user.get('/auth/logout')
-        .then( function(){
+        .expect(302, function(){
           return user.post('/auth/login').send({email: 'admin@admin.com'})
-            .expect(302)
+            .expect(302, function(){
+              user
+                .get('/admin/')
+                .expect(302, done)
+            })
 
-        })
-        .then( function(){
-          user
-            .get('/admin/')
-            .expect(302, done)
         })
     })
   })
