@@ -43,7 +43,6 @@ describe('Admin', function(){
   const sample_project = Project({name: "gordo", description: "projectFAT" })
   const sample_product = Product({name: "gordo", description: "productFAT" })
   const sample_file = File({originalname: "gordo", destination: "fileFAT" })
-  const stripeToken = "gordo"
 
   before(function(done){
     Promise.all([
