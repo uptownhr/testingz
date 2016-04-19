@@ -34,12 +34,16 @@ const adminLoggedIn = function(){
 }
 
 describe('Admin', function(){
+  /*Test GET requests*/
   const sample_user = User({ email: 'test@test.com', password: 'asdfasdf' })
   const sample_post = Post({ title: ''})
   const sample_project = Project({name: "gordo", description: "projectFAT" })
   const sample_product = Product({name: "gordo", description: "productFAT" })
   const sample_file = File({originalname: "gordo", destination: "fileFAT" })
-
+  
+  /* Test POST requests */
+  const test_user = { name: 'tester', email: 'post@post.com', password: 'postpost'}
+  
   before(function(done){
     Promise.all([
       adminLoggedIn(),
@@ -195,6 +199,24 @@ describe('Admin', function(){
         .expect(200, done)
     })
   })
+  
+  //make sure user exists in db && redirect occurs
+  describe('POST /admin/user', function(){
+    it('should return 302', function(done){
+      //remember to remove user
+      admin
+        .post('/admin/user')
+        .send(test_user)
+        .expect(302, done);
+    });
+    
+    it('should create a new user named tester', function(done){
+      User.findOne({ name : 'tester'}, function(err, user){
+        if (err) return done(err);
+        done();
+      })
+    })
+  })
 
   after( function(){
     sample_user.remove()
@@ -202,5 +224,8 @@ describe('Admin', function(){
     sample_project.remove()
     sample_product.remove()
     sample_file.remove()
+    
+    //remove data created by POST requests
+    User(test_user).remove();
   })
 })
