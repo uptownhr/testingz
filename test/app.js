@@ -14,6 +14,9 @@ const user_info = {
   password: 'asdfasdf'
 }
 
+const test_user = User({email: 'asdf@asdf.com', password:'asdf'})
+test_user.save()
+
 describe( 'App', function(){
   before(function(done){
 
@@ -162,4 +165,39 @@ describe( 'App', function(){
     });
     
   });
+
+  describe('POST /user/account', function(){
+    it('should 302 redirect when invalid email is given', function(done){
+      user.post('/user/account')
+      .send({email: 'asdf'})
+      .expect(302, done)
+    })
+
+    it('should 302 redirect to /user/accounts when valid email address given', function(done){
+      const email = 'zzzz@aol.com'
+
+      user.post('/user/account')
+        .send({email})
+        .expect(302, function(e, res){
+          if(e) return done(e)
+          res.header.location.should.equal('/user/account')
+          User.findOne({email}, function(err, found){
+            found.should.not.be.null
+            done()
+          })
+        })
+    })
+
+    it('should 302 redirect and not update if email is taken', function(done){
+      const email = 'asdf@asdf.com'
+      user.post('/user/account')
+        .send({email})
+        .expect(302, function(e){
+          User.findOne({email}, function(err, user){
+            user._id.should.eql(test_user._id)
+            done()
+          })
+        })
+    })
+  })
 })
