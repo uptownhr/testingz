@@ -213,4 +213,34 @@ describe( 'App', function(){
       })
     })
   })
+
+  describe('POST /auth/login', function(){
+    it('should not log user in if email not found', function(done){
+      user.get('/auth/logout')
+        .then( function(){
+          return user.post('/auth/login').send({email: 'zzzzzz'})
+            .expect(302)
+
+        })
+        .then( function(){
+          user
+            .get('/user/account')
+            .expect(302, done)
+        })
+    })
+
+    it('should not log user in if bad password', function(done){
+      user.get('/auth/logout')
+        .then( function(){
+          return user.post('/auth/login').send({email: 'admin@admin.com'})
+            .expect(302)
+
+        })
+        .then( function(){
+          user
+            .get('/admin/')
+            .expect(302, done)
+        })
+    })
+  })
 })
