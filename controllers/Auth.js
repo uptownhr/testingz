@@ -1,4 +1,5 @@
 const router = require('express').Router(),
+  config = require('../config'),
   User = require('../models/User'),
   queryString = require('querystring'),
   passport = require('passport')
@@ -91,14 +92,21 @@ router.post('/register', function(req,res,next){
 
 router.get('/o/:provider', function(req,res,next){
   const provider = req.params.provider
-
-  return passport.authenticate(provider)(req,res,next)
+  if (config.social.hasOwnProperty(provider)) {
+    return passport.authenticate(provider)(req,res,next)
+  } else {
+    res.redirect('/');
+  }
 })
 
 router.get('/o/:provider/callback', function(req,res,next){
   const provider = req.params.provider
-
-  return passport.authenticate(provider, {failureRedirect: '/auth/login'})(req,res,next)
+  
+  if (config.social.hasOwnProperty(provider)) {
+    return passport.authenticate(provider, {failureRedirect: '/auth/login'})(req,res,next);
+  } else{
+    res.redirect('/');
+  }
 }, function(req,res){
   res.redirect(req.session.returnTo || '/')
 })

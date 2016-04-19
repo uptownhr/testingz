@@ -1,5 +1,10 @@
 var request = require('supertest'),
-  mongoose = require('mongoose');
+  chai = require('chai'),
+  expect = chai.expect,
+  _ = require('lodash'),
+  mongoose = require('mongoose'),
+  User = require('../models/User'),
+  Post = require('../models/Post');
 
 var app = require('../index.js')
 
@@ -8,7 +13,6 @@ const user_info = {
   email: 'admin@admin.com',
   password: 'asdfasdf'
 }
-
 
 describe( 'App', function(){
   before(function(done){
@@ -34,6 +38,14 @@ describe( 'App', function(){
         .expect(200, done);
     });
   });
+  
+  describe('GET /auth/logout', function() {
+    it('should return 302 redirect', function(done){
+      request(app)
+      .get('/auth/logout')
+      .expect(302, done)
+    })
+  });
 
   describe('GET /auth/register', function() {
     it('should return 200 OK', function(done) {
@@ -42,7 +54,47 @@ describe( 'App', function(){
         .expect(200, done);
     });
   });
-
+  
+  describe('GET /auth/register', function() {
+    it('should return 200 OK', function(done) {
+      request(app)
+        .get('/auth/register')
+        .expect(200, done);
+    });
+  });
+  
+  describe('GET /auth/o/twitter', function() {
+    it('should return 302 redirect', function(done){
+      request(app)
+      .get('/auth/o/twitter')
+      .expect(302, done)
+    })
+  });
+  
+  describe('GET /auth/o/twitter/callback', function() {
+    it('should return 302 redirect', function(done){
+      request(app)
+      .get('/auth/o/twitter/callback')
+      .expect(302, done)
+    })
+  });
+  
+  describe('GET /auth/o/testing/', function() {
+    it('should return 302 redirect', function(done){
+      request(app)
+      .get('/auth/o/testing')
+      .expect(302, done)
+    })
+  });
+  
+  describe('GET /auth/o/testing/callback', function() {
+    it('should return 302 redirect', function(done){
+      request(app)
+      .get('/auth/o/testing/callback')
+      .expect(302, done)
+    })
+  });
+  
   describe('GET /random-url', function() {
     it('should return 404', function(done) {
       request(app)
@@ -58,14 +110,24 @@ describe( 'App', function(){
         .expect(200, done)
     })
   })
-
+  
+  describe('GET /blog/post/:id', function(){
+    it('should return 200', function(done) {
+      Post.findOne({ title: 'First Blog Post' }, function(err, post) {
+        var url = '/blog/post/' + post._id;
+        request(app)
+          .get(url)
+          .expect(200, done)
+      });
+    });
+  });
+  
   describe('GET /user/account', function(){
     it('should return 300 unauthorized', function(done){
       request(app)
-      .get('/user/account')
-      .expect(302, done)
+        .get('/user/account')
+        .expect(302, done)
     })
-
 
     it('should return 200 when authorized', function(done){
       user
@@ -73,5 +135,31 @@ describe( 'App', function(){
         .expect(200,done)
     })
   })
+  
+  describe('GET /user/account/unlink/testing', function(){
+    it('should return 302', function(done){
+      request(app)
+        .get('/user/account/unlink/testing')
+        .expect(302, done)
+    })
+    
+  });
 
+  describe('GET /user/account/unlink/mock_provider', function(){
+    it('should return 302', function(done){
+      user
+        .get('/user/account/unlink/mock_provider')
+        .expect(302, done)
+    })
+    
+    it('should not find the mock_provider', function(done) {
+      User.findOne({ email: user_info.email }, function(err, user) {
+        if (err) return done(err);
+        var providers = _.map(user.providers, 'name');
+        expect('mock_provider').to.not.be.oneOf(providers);
+        done();
+      });
+    });
+    
+  });
 })
