@@ -4,7 +4,8 @@ var request = require('supertest'),
   _ = require('lodash'),
   mongoose = require('mongoose'),
   User = require('../models/User'),
-  Post = require('../models/Post');
+  Post = require('../models/Post'),
+  Product = require('../models/Product')
 
 var app = require('../index.js')
 
@@ -198,6 +199,18 @@ describe( 'App', function(){
             done()
           })
         })
+    })
+  })
+
+  describe('POST /charge', function() {
+    it('should return 200 OK', function (done) {
+      Product.findOne(function (err, product) {
+        const req = {stripeToken: "gordo", id: product._id}
+        request(app)
+          .post('/charge')
+          .send(req)
+          .expect(302, done)
+      })
     })
   })
 })
