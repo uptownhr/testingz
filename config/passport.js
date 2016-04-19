@@ -32,21 +32,6 @@ exports.isAuthenticated = function(req, res, next) {
 }
 
 /**
- * Authorization Required middleware.
- */
-exports.isAuthorized = function(req, res, next) {
-  var provider = req.path.split('/').slice(-1)[0]
-
-  req.session.returnTo = req.path
-
-  if (req.user.tokens.find( token => token.kind == provider ) ){
-    next()
-  } else {
-    res.redirect('/auth/' + provider)
-  }
-}
-
-/**
  * Role is admin
  */
 exports.isAdmin = function(req,res,next){

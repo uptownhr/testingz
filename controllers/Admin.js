@@ -287,7 +287,6 @@ router.post('/images/upload', upload.array('file', 20), function(req,res){
     file.save( next )
   }, function done(err, results){
     const file_names = results.map( file => file.originalname ).join('<br/>')
-    console.log("this is the result being sent to the display: ", results);
     res.send(results)
   })
 })
@@ -340,7 +339,6 @@ router.post('/product', function(req, res){
     errors.push('Price is not valid');
   
   if (errors.length) {
-    console.log(errors);
     req.flash('errors', {msg: errors.join('<br>')});
     return res.redirect('/admin/product/'+id);
   }

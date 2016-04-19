@@ -16,6 +16,11 @@ const admin_user = {
   password: 'asdfasdf'
 }
 
+const sample_user_info = {
+  email: 'test@test.com',
+  password: 'asdfasdf'
+}
+
 // for storing session
 
 const admin = request.agent(app);
@@ -25,16 +30,15 @@ const adminLoggedIn = function(){
     admin
       .post('/auth/login')
       .send(admin_user)
-      .expect(302, function(e){
+      .expect(302, function(e, res){
         if(e) return reject(e)
         return resolve()
       })
   })
-
 }
 
 describe('Admin', function(){
-  const sample_user = User({ email: 'test@test.com', password: 'asdfasdf' })
+  const sample_user = User(sample_user_info)
   const sample_post = Post({ title: ''})
   const sample_project = Project({name: "gordo", description: "projectFAT" })
   const sample_product = Product({name: "gordo", description: "productFAT" })
@@ -59,6 +63,20 @@ describe('Admin', function(){
       request(app)
         .get('/admin/')
         .expect(302, done)
+    })
+
+    it('should return 200 with error message Only admins may access the admin page', function(done){
+      const user = request.agent(app);
+
+      user.post('/auth/login')
+        .send(sample_user_info)
+        .expect(302, function(err, res) {
+          if(err) return done(err)
+
+          user.get('/admin/')
+            .expect(200, done)
+        })
+
     })
   })
 
