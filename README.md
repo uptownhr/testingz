@@ -36,7 +36,7 @@ If you've been thinking about creating a personal site or a site for your projec
   - Blog
 
 ## Getting Started
-The easiest way to get started and workflow we recommend is by using docker. Docker handles the service depencies for the application to run. For example, Mongodb and Redis will be started and connected using containers. You do not have to worry about installation steps or muddying your host machine with additional services. 
+The easiest way to get started and the workflow we recommend is using docker. Docker handles the service depencies for the application to run. For example, Mongodb and Redis will be started and connected to the application automaticlaly. You do not have to worry about installation steps or muddying your host machine with additional services. 
 
 If you have docker available, you can get started in two steps.
 
