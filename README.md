@@ -4,21 +4,39 @@
 [![Gitter chat](https://badges.gitter.im/uptownhr/hackathon-starter-lite.png)](https://gitter.im/uptownhr/hackathon-starter-lite)
 [![Coverage Status](https://coveralls.io/repos/github/uptownhr/hackathon-starter-lite/badge.svg?branch=master)](https://coveralls.io/github/uptownhr/hackathon-starter-lite?branch=master)
 
-# hackathon-starter-lite
-Taking [Hackathon Starter](https://github.com/sahat/hackathon-starter) to the next level. 
+# hackable
+Personal site starter for express developers.
 
-A framework written with Express. We aim to provide more than just a login boilerplate. 
+Hackable comes pre-built with an admin that is easy to hack with your express chops. Hackable keeps things familiar and uses libraries common to express developers. No new API's to learn - no magic. 
+
+The goal of the project is to provide you with a hackable prototype that you can mold to your liking.
+
+If you've been thinking about creating a personal site or a site for your project, give Hackable a shot!.
+
+
+## Main Stack
+- Mongoose
+- Pug (previously known as Jade)
+- Passport
 
 ## Features
 - Login
+  - Email / Password
+  - Twitter, Github, Facebook, Gmail
 - Admin
-- Posts
-- Projects
-- Products
-- Files
+  - Users
+  - Posts
+  - Projects
+  - Products
+  - Files
+- Website
+  - Landing Page
+    - Projects
+    - Products
+  - Blog
 
 ## Getting Started
-The easiest way to get started and workflow we recommend is by using docker. Docker handles the service depencies for the application to run. For example, Mongodb and Redis will be started and connected using containers. You do not have to worry about installation steps or muddying your host machine with additional services. 
+The easiest way to get started and the workflow we recommend is using docker. Docker handles the service depencies for the application to run. For example, Mongodb and Redis will be started and connected to the application automaticlaly. You do not have to worry about installation steps or muddying your host machine with additional services. 
 
 If you have docker available, you can get started in two steps.
 
