@@ -12,7 +12,6 @@ html(lang='en')
     link(rel='stylesheet', href='/site/css/style.css')
   body
     nav
-      a(href='/about') About
       a(href='https://github.com/uptownhr/hackathon-starter-lite', target='_blank') Github
       a(href='/blog') Blog
       .btn-group
@@ -37,13 +36,13 @@ html(lang='en')
           .post-page__logo-wrapper
             a(href='/', title='Home')
               img.post-page__logo(src='/site/img/logo.svg', alt='React')
-              |             Hackathon Starer Lite
+              |             hackable
       main
         include partials/flash
         block content
       footer.footer
         small
-          | © Hackathon Starter Lite
+          | © hackable
           time 2016
           | . All rights reserved.
     script(src='/admin/assets/js/jquery.min.js')
