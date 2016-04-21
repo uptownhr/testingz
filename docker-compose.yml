@@ -1,5 +1,5 @@
 app:
-  image: node:5.8.0
+  image: uptownhr/hackable
   volumes:
   - ./:/app
   - node_modules:/app/node_modules

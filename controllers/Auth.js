@@ -11,7 +11,7 @@ router.get('/login', function(req,res){
 router.post('/login', function(req,res,next){
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password must be at least 6 characters long').len(6);
-  
+
   var errors = req.validationErrors();
 
   if (errors) {
