@@ -13,6 +13,7 @@ The goal of the project is to provide you with a hackable prototype that you can
 
 If you've been thinking about creating a personal site or a site for your project, give Hackable a shot!.
 
+[Demo](http://hackable.penguin.ws)
 
 ## Main Stack
 - Mongoose
