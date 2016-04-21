@@ -202,6 +202,7 @@ describe( 'App', function(){
     })
   })
 
+
   describe('POST /charge', function() {
     it('should return 200 OK', function (done) {
       Product.findOne(function (err, product) {
