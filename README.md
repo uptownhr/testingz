@@ -15,6 +15,10 @@ If you've been thinking about creating a personal site or a site for your projec
 
 [Demo](http://hackable.penguin.ws)
 
+Admin Login: admin@admin.com / asdfasdf
+
+To access admin, use pull-down menu once logged in as admin or go to /admin
+
 ## Main Stack
 - Mongoose
 - Pug (previously known as Jade)
