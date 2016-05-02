@@ -13,7 +13,11 @@ The goal of the project is to provide you with a hackable prototype that you can
 
 If you've been thinking about creating a personal site or a site for your project, give Hackable a shot!.
 
-[Demo](http://hackable.penguin.ws)
+## [Demo](http://hackable.penguin.ws)
+
+Admin Login: admin@admin.com / asdfasdf
+
+To access admin, use pull-down menu once logged in as admin or go to /admin
 
 ## Main Stack
 - Mongoose
@@ -42,8 +46,8 @@ The easiest way to get started and the workflow we recommend is using docker. Do
 If you have docker available, you can get started in two steps.
 
 ### Steps
-1. git clone git@github.com:uptownhr/hackathon-starter-lite
-2. cd hackathon-starter-lite
+1. git clone git@github.com:uptownhr/hackable
+2. cd hackable
 3. docker-compose up
 4. visit http://localhost:3000 on your browser *if running docker on osx/windows, you'll use the vbox IP instead of localhost
 
