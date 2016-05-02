@@ -10,6 +10,11 @@ $(function () {
      $('.rightSideBarTrigger').removeClass('open');
      $('.rightSideBar').removeClass('open');
    }
+   
+   function toggleSideBar(){
+     $('.rightSideBarTrigger').toggleClass('open')
+     $('.rightSideBar').toggleClass('open');
+   }
   
   //global image uploader
   function handleImageDrop(e){
@@ -68,7 +73,7 @@ $(function () {
       copy(url);
     })
 
-     $('.rightSideBarTrigger').click( openSideBar )
+     $('.rightSideBarTrigger').click( toggleSideBar )
   })
   
 
