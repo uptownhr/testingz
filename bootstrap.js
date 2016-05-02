@@ -10,8 +10,9 @@ const express = require('express'),
   flash = require('express-flash'),
   expressValidator = require('express-validator'),
   cookieParser = require('cookie-parser'),
-  moment = require('moment'),
-  seed = require('./config/seed.js')
+  moment = require('moment')
+
+require('./config/seed.js')
 
 const RedisStore = require('connect-redis')(session)
 const app = express()
