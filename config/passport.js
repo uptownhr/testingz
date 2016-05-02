@@ -1,20 +1,21 @@
-const passport = require('passport'),
-  config = require('../config'),
+const config = require('../config'),
   _ = require('lodash'),
-  LocalStrategy = require('passport-local').Strategy,
-  TwitterStrategy = require('passport-twitter').Strategy,
-  InstagramStrategy = require('passport-instagram').Strategy,
-  FacebookStrategy = require('passport-facebook').Strategy,
-  GitHubStrategy = require('passport-github').Strategy,
-  GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
-  User = require('../models/User');
+  passport = require('passport'),
+  User = require('../models/User')
 
-passport.serializeUser(function(user, done) {
+const LocalStrategy = require('passport-local').Strategy
+const TwitterStrategy = require('passport-twitter').Strategy
+const InstagramStrategy = require('passport-instagram').Strategy
+const FacebookStrategy = require('passport-facebook').Strategy
+const GitHubStrategy = require('passport-github').Strategy
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
+
+passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
+passport.deserializeUser(function (id, done) {
+  User.findById(id, function (err, user) {
     done(err, user);
   });
 });
@@ -22,7 +23,7 @@ passport.deserializeUser(function(id, done) {
 /**
  * Login Required middleware.
  */
-exports.isAuthenticated = function(req, res, next) {
+exports.isAuthenticated = function (req, res, next) {
   if (req.isAuthenticated()) {
     return next()
   }
@@ -34,22 +35,21 @@ exports.isAuthenticated = function(req, res, next) {
 /**
  * Role is admin
  */
-exports.isAdmin = function(req,res,next){
-  if(req.user && req.user.role == 'admin') return next()
-
+exports.isAdmin = function (req, res, next) {
+  if (req.user && req.user.role == 'admin') return next()
   res.send('Only admins may access the admin page')
 }
-
 
 /**
  * Sign in using Email and Password.
  */
-passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, password, done) {
-  User.findOne({ email: email.toLowerCase() }, function(err, user) {
+passport.use(new LocalStrategy({ usernameField: 'email' }, function (email, password, done) {
+  User.findOne({ email: email.toLowerCase() }, function (err, user) {
     if (!user) {
       return done(null, false, { message: 'Email ' + email + ' not found.' });
     }
-    user.comparePassword(password, function(err, isMatch) {
+
+    user.comparePassword(password, function (err, isMatch) {
       if (isMatch) {
         return done(null, user);
       } else {
@@ -59,15 +59,14 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, passw
   });
 }));
 
-
 /**
  * Find User for provider name and provider id
  * @param provider
  * @param id
  * @returns User.promise
  */
-function findProviderUser(provider, id){
-  const elemMatch = {$elemMatch: {id, name: provider} }
+function findProviderUser(provider, id) {
+  const elemMatch = { $elemMatch: { id, name: provider } }
   return User.findOne({ providers: elemMatch })
 }
 
@@ -77,51 +76,53 @@ function findProviderUser(provider, id){
  * @param profileMapper
  * @returns {Function}
  */
-function handleOauthLogin(profileMapper){
-  return function(req, accessToken, secondaryToken, profile, done){
-    const provider_name = req.params.provider,
-      mapped_profile = profileMapper(profile),
-      provider = { id: profile.id, accessToken, secondaryToken, name: provider_name }
-
-    if(req.user){
+function handleOauthLogin(profileMapper) {
+  return function (req, accessToken, secondaryToken, profile, done) {
+    const providerName = req.params.provider;
+    const mappedProfile = profileMapper(profile);
+    const provider = { id: profile.id, accessToken, secondaryToken, name: providerName }
+    if (req.user) {
       //check if this oauth login is already being used
-      findProviderUser(provider_name, profile.id)
-        .then( user => {
-          if(user){
-            req.flash('errors', {msg: `There is already a ${provider.name} account that belongs to you. Sign in with that account or delete it, then link it with your current account.`});
+      findProviderUser(providerName, profile.id)
+        .then(user => {
+          if (user) {
+            req.flash('errors',
+              { msg: `There is already a ${provider.name}
+            account that belongs to you. Sign in with that account or
+            delete it, then link it with your current account.` });
             return done()
           }
 
           req.user.providers.push(provider)
-          req.user.save( (err) => {
-            req.flash('success', { msg: provider_name + ' account has been linked.' });
+          req.user.save((err) => {
+            req.flash('success', { msg: providerName + ' account has been linked.' });
             done(err, req.user);
           })
         })
-    }else{
-      findProviderUser(provider_name, profile.id)
-      .then( user => {
+    }else {
+      findProviderUser(providerName, profile.id)
+        .then(user => {
 
-        //if user found, update profile info and log user in
-        if(user){
+          //if user found, update profile info and log user in
+          if (user) {
 
-          //use oauth profile values if site values is undefined or ''
-          _.extendWith(user.profile, mapped_profile, function(obj, src){
-            return ( _.isUndefined(obj) || obj == '' ) ? src : obj
-          })
+            //use oauth profile values if site values is undefined or ''
+            _.extendWith(user.profile, mappedProfile, function (obj, src) {
+              return (_.isUndefined(obj) || obj == '') ? src : obj
+            })
 
-          return user.save( err => {
-            done(err, user);
-          })
-        }
+            return user.save(err => {
+              done(err, user);
+            })
+          }
 
-        //user not found, register user and login
-        user = new User()
-        user.profile = mapped_profile
-        user.providers.push(provider)
+          //user not found, register user and login
+          user = new User()
+          user.profile = mappedProfile
+          user.providers.push(provider)
 
-        user.save( err => done(err,user) )
-      })
+          user.save(err => done(err, user))
+        })
     }
   }
 }
@@ -131,7 +132,7 @@ function handleOauthLogin(profileMapper){
  * @param profile
  * @returns {{id: *, name: *, gender: *, location: '', website: '', picture; *}}
  */
-function mapFacebookProfile(profile){
+function mapFacebookProfile(profile) {
   return {
     id: profile.id,
     name: profile.displayName,
@@ -152,14 +153,15 @@ passport.use(new FacebookStrategy({
   callbackURL: '/auth/o/facebook/callback',
   profileFields: ['id', 'displayName', 'gender', 'profileUrl', 'photos'],
   passReqToCallback: true
-}, handleOauthLogin(mapFacebookProfile)) )
+}, handleOauthLogin(mapFacebookProfile)))
 
 /**
  * Maps Twitter profile info to User.profile
  * @param profile
- * @returns {{id: *, name: *, gender: '', location: (*|userSchema.profile.location|{type, default}|Location|String|number|DOMLocator), website: '', picture: *}}
+ * @returns {{id: *, name: *, gender: '', location: (*|userSchema.profile.location|
+ * {type, default}|Location|String|number|DOMLocator), website: '', picture: *}}
  */
-function mapTwitterProfile(profile){
+function mapTwitterProfile(profile) {
   return {
     id: profile.id,
     name: profile.displayName,
@@ -179,14 +181,14 @@ passport.use(new TwitterStrategy({
   consumerSecret: config.social.twitter.consumer_secret,
   callbackURL: '/auth/o/twitter/callback',
   passReqToCallback: true
-}, handleOauthLogin(mapTwitterProfile)) )
+}, handleOauthLogin(mapTwitterProfile)))
 
 /**
  * Maps Github profile into User.profile
  * @param profile
  * @returns {{id: *, name: *, gender: '', location: *, website: '', picture; ''}}
  */
-function mapGithubProfile(profile){
+function mapGithubProfile(profile) {
   return {
     id: profile.id,
     name: profile.displayName,
@@ -205,7 +207,7 @@ passport.use(new GitHubStrategy({
   clientSecret: config.social.github.client_secret,
   callbackURL: 'http://localhost:3000/auth/o/github/callback',
   passReqToCallback: true
-}, handleOauthLogin(mapGithubProfile)) )
+}, handleOauthLogin(mapGithubProfile)))
 
 /**
  * Maps Instagram profile info to User.profile
@@ -238,7 +240,7 @@ passport.use(new InstagramStrategy({
  * @param profile
  * @returns {{id: *, name: *, gender: *, location: '', website: '', picture: *}}
  */
-function mapGoogleProfile(profile){
+function mapGoogleProfile(profile) {
   return {
     id: profile.id,
     name: profile.displayName,
@@ -259,4 +261,4 @@ passport.use(new GoogleStrategy({
   callbackURL: '/auth/o/google/callback',
   passReqToCallback: true,
   scope: 'https://www.googleapis.com/auth/plus.login'
-}, handleOauthLogin(mapGoogleProfile)) )
+}, handleOauthLogin(mapGoogleProfile)))
