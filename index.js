@@ -1,4 +1,5 @@
-"use strict"
+'use strict'
+
 const app = require('./bootstrap'),
   controllers = require('./controllers'),
   models = require('./models'),
