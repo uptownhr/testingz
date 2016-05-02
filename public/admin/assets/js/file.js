@@ -1,4 +1,16 @@
 $(function () {
+  
+  //sidebar show/hide
+  function openSideBar() {
+    $('.rightSideBarTrigger').addClass('open');
+    $('.rightSideBar').addClass('open');
+   }
+   
+   function closeSideBar() {
+     $('.rightSideBarTrigger').removeClass('open');
+     $('.rightSideBar').removeClass('open');
+   }
+  
   //global image uploader
   function handleImageDrop(e){
     e.preventDefault()
@@ -31,7 +43,7 @@ $(function () {
       $destination = file.destination;
       $file = file.filename;
       $url = "/uploads/" + $file;
-      toggleSideBar();
+      openSideBar();
 
       if ($filename.includes(".jpg", ".gif")) {
         $('.rightSideContent').prepend(`<a href="#" class="list-group"><img width="100%" class="trigger img-thumbnail" src="${$url}" value="${$url}" /><p>${$filename}</p></a>`);
@@ -46,8 +58,9 @@ $(function () {
             .on('dragenter', function(){ return false } )
             .on('drop', handleImageDrop )
 
-
-
+    //listener for when user is done uploading files
+    $('#done_btn')
+            .on('click', closeSideBar )
     //copies file url to clipboard
     $('.rightSideContent').on('click', ".trigger", function(e){
       e.preventDefault();
@@ -55,15 +68,9 @@ $(function () {
       copy(url);
     })
 
-    $('.rightSideBarTrigger').click( toggleSideBar )
+     $('.rightSideBarTrigger').click( openSideBar )
   })
-
-
-
-  function toggleSideBar(){
-    $('.rightSideBarTrigger').toggleClass('open')
-    $('.rightSideBar').toggleClass('open');
-  }
+  
 
   function copy(string) {
     var dummy = document.createElement("input");
