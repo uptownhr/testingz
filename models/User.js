@@ -35,8 +35,8 @@ var userSchema = new mongoose.Schema({
  * Password hash middleware.
  */
 userSchema.pre('save', function (next) {
-  var user = this;
-  if (!user.isModified('password')) {
+  var _this = this;
+  if (!_this.isModified('password')) {
     return next();
   }
 
@@ -45,12 +45,12 @@ userSchema.pre('save', function (next) {
       return next(err);
     }
 
-    bcrypt.hash(user.password, salt, null, function (err, hash) {
+    bcrypt.hash(_this.password, salt, null, function (err, hash) {
       if (err) {
         return next(err);
       }
 
-      user.password = hash;
+      _this.password = hash;
       next();
     });
   });
