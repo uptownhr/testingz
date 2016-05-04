@@ -31,9 +31,9 @@ router.post('/charge', function (req, res) {
       source: stripeToken
     }, function (err, charge) {
       if (err && err.type == 'StripeCardError') {
-        req.flash('error', { msg: 'Error: Card has been declined.' });
+        req.flash('errors', { msg: 'Error: Card has been declined.' });
       } else if (err) {
-        req.flash('error', { msg: 'Error: Payment did not go through.' });
+        req.flash('errors', { msg: 'Error: Payment did not go through.' });
       } else {
         req.flash('success', { msg: 'Success: Payment has been accepted.' });
       }
