@@ -1,3 +1,10 @@
+<p align="center">
+  <a href="http://gulpjs.com">
+    <img src="https://raw.githubusercontent.com/uptownhr/hackable/master/public/site/img/hackable-logo.png">
+  </a>
+  <p align="center">Personal site starter for express developers.</p>
+</p>
+
 [![Build Status](https://travis-ci.org/uptownhr/hackable.svg)](https://travis-ci.org/uptownhr/hackable)
 [![Dependency Status](https://david-dm.org/uptownhr/hackable.svg)](https://david-dm.org/uptownhr/hackable)
 [![devDependency Status](https://david-dm.org/uptownhr/hackable/dev-status.svg)](https://david-dm.org/uptownhr/hackable)
