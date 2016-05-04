@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "dev-docker": "npm install && npm run dev",
     "test": "PORT=9999 TEST=true istanbul cover _mocha",
     "posttest": "cat ./coverage/lcov.info | coveralls",
     "test-watch": "PORT=9999 TEST=true nodemon --exec 'mocha --reporter spec --timeout 5000'",
     "postversion": "git push && git push --tags",
     "cover": "istanbul cover _mocha && cat ./coverage/lcov.info | coveralls",
+    "dev-docker": "npm install && npm run dev",
     "docker-mongo": "docker exec -it hackable_mongo_1 mongo",
     "docker-app": "docker exec -it hackable_app_1 bash",
     "docker-npm": "docker exec hackable_app_1 npm"

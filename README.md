@@ -55,6 +55,11 @@ If you have docker available, you can get started in two steps.
 1. [install docker](https://docs.docker.com/engine/installation/)
 2. [install docker-compose](https://docs.docker.com/compose/install/)
 
+### NPM Helper commands
+- Getting into the app container: `npm run docker-app`
+- Getting into the mongo shell: `npm run docker-mongo`
+- NPM inside the app container: `npm run docker-npm`
+
 ## Guides and Examples
 - [getting started without docker](docs/getting-started-without-docker.md)
 - [creating admin crud pages](docs/crud.md)
