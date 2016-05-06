@@ -5,15 +5,11 @@ const
   multer = require('multer'),
   path = require('path'),
   qs = require('qs'),
-  validator = require('validator'),
-  models = require('../models')
+  validator = require('validator')
+
+const { User, Post, File, Project, Product } = require('../models')
 
 const upload = multer({ dest: path.join(__dirname, '../public/uploads') })
-const User =  models.User
-const Post = models.Post
-const File = models.File
-const Project = models.Project
-const Product = models.Product
 
 router.get('/', function (req, res) {
   res.render('admin/overview')
@@ -22,7 +18,6 @@ router.get('/', function (req, res) {
 router.get('/user', function (req, res) {
   const user = {}
   res.render('admin/user', { user })
-  console.log("wf0t");
 })
 
 router.get('/user/:id', function (req, res) {
@@ -42,7 +37,6 @@ router.post('/user', function (req, res) {
   var errors = req.validationErrors();
 
   if (errors) {
-    console.log(errors);
     req.flash('errors', errors);
     return res.redirect('/admin/user?' + qs.stringify(req.body));
   }

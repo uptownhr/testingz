@@ -1,4 +1,5 @@
-const router = require('express').Router()
+const router = require('koa-router')()
+
 const async = require('async'),
   Promise = require('bluebird'),
   config = require('../config'),
@@ -6,7 +7,7 @@ const async = require('async'),
   Product = require('../models/Product');
 
 const stripe = require('stripe')(config.payment.stripe.secret_key);
-router.get('/', function (req, res) {
+/*router.get('/', function (req, res) {
 
   const projects = Project.find({}).exec()
   const products = Product.find({}).exec()
@@ -18,9 +19,9 @@ router.get('/', function (req, res) {
       stripe: config.payment.stripe.public_key
     })
   })
-})
+})*/
 
-router.post('/charge', function (req, res) {
+/*router.post('/charge', function (req, res) {
   const stripeToken = req.body.stripeToken
 
   Product.findOne({ _id: req.body.id }).exec().then(product => {
@@ -40,6 +41,6 @@ router.post('/charge', function (req, res) {
       res.redirect('/');
     });
   }).catch(e => console.log(err))
-})
+})*/
 
 module.exports = router

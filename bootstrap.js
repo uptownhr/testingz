@@ -1,12 +1,15 @@
 'use strict'
 
-const express = require('express'),
+const Koa = require('koa'),
+  Pug = require('koa-pug'),
+  serve = require('koa-static'),
   mongoose = require('mongoose'),
   config = require('./config'),
   path = require('path'),
-  passport = require('passport'),
-  bodyParser = require('body-parser'),
-  session = require('express-session'),
+  passport = require('koa-passport'),
+  bodyParser = require('koa-bodyparser'),
+  session = require('koa-generic-session'),
+  redisStore = require('koa-redis'),
   flash = require('express-flash'),
   expressValidator = require('express-validator'),
   cookieParser = require('cookie-parser'),
@@ -14,8 +17,7 @@ const express = require('express'),
 
 require('./config/seed.js')
 
-const RedisStore = require('connect-redis')(session)
-const app = express()
+const app = new Koa()
 
 /*connect to mongodb */
 mongoose.connect(config.mongodb)
@@ -33,28 +35,38 @@ mongoose.connection.on('connected', () => {
 })
 
 /* configure application */
-app.set('view engine', 'jade')
-app.locals.pretty = true
-app.locals.moment = moment
+const pug = new Pug({
+  viewPath: './views',
+  debug: false,
+  compileDebug: false,
+  pretty: true,
+  locals: {
+    moment
+  },
+  basedir: './views',
+  helperPath: [],
+  app: app
+})
+
+const convert = require('koa-convert')
 
 //specify public static directory
-app.use(express.static('public'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(expressValidator());
-app.use(cookieParser());
-app.use(session({
+app.use(serve('public'))
+app.use(bodyParser())
+
+
+app.keys = ['secret']
+app.use(convert(session({
   resave: true,
   saveUninitialized: true,
   secret: config.secret,
-  store: new RedisStore({ url: config.redis })
-}))
+  store: redisStore({ url: config.redis })
+})))
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(flash())
 
-app.use((req, res, next) => {
-  res.locals.user = req.user
+app.use((ctx, next) => {
+  pug.locals.user = ctx.req.user
   next()
 })
 
@@ -65,7 +77,7 @@ app.use((req, res, next) => {
   return res.redirect('/askEmail')
 })
 
-app.get('/askEmail', (req, res) => {
+/*app.get('/askEmail', (req, res) => {
   res.render('askEmail')
 })
 
@@ -89,6 +101,6 @@ app.post('/askEmail', (req, res) => {
     console.log(err, saved)
     res.redirect('/')
   })
-})
+})*/
 
 module.exports = app
