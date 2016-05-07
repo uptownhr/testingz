@@ -42,4 +42,9 @@ router.post('/charge', function (req, res) {
   }).catch(e => console.log(err))
 })
 
+// contact us route 
+router.get('/contact', function (req, res) {
+  res.render('contact.jade');
+})
+
 module.exports = router
