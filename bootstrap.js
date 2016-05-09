@@ -52,9 +52,8 @@ pug.use(app)
 const convert = require('koa-convert')
 
 //specify public static directory
-app.use(serve('public'))
+app.use(convert(serve('public')))
 app.use(bodyParser())
-app.use(flash())
 
 app.keys = ['secret']
 app.use(convert(session({
@@ -65,6 +64,14 @@ app.use(convert(session({
 })))
 app.use(passport.initialize())
 app.use(passport.session())
+
+app.use(convert(flash()))
+
+app.use(async (ctx, next) => {
+  console.log(ctx.flash)
+  pug.locals.messages = ctx.flash
+  await next()
+})
 
 /*app.use(async (ctx, next) => {
   console.log('wtf')

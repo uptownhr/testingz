@@ -11,7 +11,7 @@ const stripe = require('stripe')(config.payment.stripe.secret_key);
 router.get('/', async ctx => {
   const [projects, products] = await Promise.all([Project.find(), Product.find()])
 
-  ctx.render('index.pug', {
+  ctx.render('index', {
     projects,
     products,
     stripe: config.payment.stripe.public_key
@@ -19,26 +19,26 @@ router.get('/', async ctx => {
 })
 
 router.post('charge', async ctx => {
-  const stripeToken = req.body.stripeToken
+  const stripeToken = ctx.request.body.stripeToken
+  const product = await Product.findOne({ _id: ctx.request.body.id })
 
-  const product = await Product.findOne({ _id: req.body.id })
-
-  stripe.charges.create({
-    amount: product.price * 100, //cents
-    description: product.name,
-    currency: 'usd',
-    source: stripeToken
-  }, (err, charge) => {
+  try {
+    let charge = await stripe.charges.create({
+      amount: product.price * 100, //cents
+      description: product.name,
+      currency: 'usd',
+      source: stripeToken
+    })
+  }catch (err) {
     if (err && err.type == 'StripeCardError') {
-      req.flash('errors', { msg: 'Error: Card has been declined.' });
+      ctx.flash.errors = [{ msg: 'Error: Card has been declined.' }]
     } else if (err) {
-      req.flash('errors', { msg: 'Error: Payment did not go through.' });
-    } else {
-      req.flash('success', { msg: 'Success: Payment has been accepted.' });
+      ctx.flash.errors = [{ msg: 'Error: Payment did not go through.' }]
     }
+  }
 
-    ctx.redirect('/');
-  });
+  ctx.flash.success = [{ msg: 'Success: Payment has been accepted.' }]
+  ctx.redirect('/');
 })
 
 module.exports = router
