@@ -55,10 +55,10 @@ block content
                 input(type="hidden", name="id", value="#{product._id}")
                 script(
                   src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                  data-key="#{stripe}"
-                  data-amount="#{product.price * 100}"
-                  data-name="#{product.name}"
-                  data-description="#{product.description}"
-                  data-image="#{product.image_url}"
+                  data-key=stripe
+                  data-amount=product.price * 100
+                  data-name=product.name
+                  data-description=product.description
+                  data-image=product.image_url
                   data-locale="auto"
                 )

@@ -10,7 +10,7 @@ const Koa = require('koa'),
   bodyParser = require('koa-bodyparser'),
   session = require('koa-generic-session'),
   redisStore = require('koa-redis'),
-  flash = require('express-flash'),
+  flash = require('koa-flash'),
   expressValidator = require('express-validator'),
   cookieParser = require('cookie-parser'),
   moment = require('moment')
@@ -37,23 +37,24 @@ mongoose.connection.on('connected', () => {
 /* configure application */
 const pug = new Pug({
   viewPath: './views',
-  debug: false,
-  compileDebug: false,
+  debug: true,
+  compileDebug: true,
   pretty: true,
   locals: {
-    moment
+    moment,
+    messages: {}
   },
   basedir: './views',
   helperPath: [],
-  app: app
-})
 
+})
+pug.use(app)
 const convert = require('koa-convert')
 
 //specify public static directory
 app.use(serve('public'))
 app.use(bodyParser())
-
+app.use(flash())
 
 app.keys = ['secret']
 app.use(convert(session({
@@ -65,17 +66,19 @@ app.use(convert(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use((ctx, next) => {
+/*app.use(async (ctx, next) => {
+  console.log('wtf')
   pug.locals.user = ctx.req.user
   next()
 })
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
+  console.log('wtf')
   if (!req.user || !req.user.askEmail || req.user.email || req.path == '/askEmail') return next()
 
   console.log('redirecting for email')
   return res.redirect('/askEmail')
-})
+})*/
 
 /*app.get('/askEmail', (req, res) => {
   res.render('askEmail')

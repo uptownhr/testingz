@@ -1,18 +1,13 @@
 'use strict'
+require('babel-register')
 
-/*const app = require('./bootstrap'),
+const app = require('./bootstrap'),
   controllers = require('./controllers'),
   models = require('./models'),
-  passport = require('./config/passport')*/
+  passport = require('./config/passport')
 
-var Koa = require('koa');
-var app = new Koa()
-var router = require('koa-router')();
+app.use(controllers.Home.routes())
 
-router.get('/', function (ctx, next) {});
-
-//app.use('/', controllers.Home.routes())
-app.use('/', router.routes())
 /*
 app.use('/blog', controllers.Post)
 app.use('/auth', controllers.Auth)
