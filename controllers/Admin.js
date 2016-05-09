@@ -9,11 +9,13 @@ const
   models = require('../models')
 
 const upload = multer({ dest: path.join(__dirname, '../public/uploads') })
+// Get Model Schemas
 const User =  models.User
 const Post = models.Post
 const File = models.File
 const Project = models.Project
 const Product = models.Product
+const Contact = models.Contact
 
 router.get('/', function (req, res) {
   res.render('admin/overview')
@@ -500,6 +502,15 @@ router.get('/file/delete/:id', function (req, res) {
   })
 })
 
+// route to contacts list view in admin ctrl panel 
+router.get('/contacts', function(req, res) {
+  res.render('admin/contacts.jade')
+})
+
+// route to individual contact view/edit in admin ctrl panel
+router.get('/contact', function(req, res) {
+  res.render('admin/contact.jade')
+})
 
 
 module.exports = router
