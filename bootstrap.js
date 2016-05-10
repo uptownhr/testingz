@@ -10,14 +10,30 @@ const Koa = require('koa'),
   bodyParser = require('koa-bodyparser'),
   session = require('koa-generic-session'),
   redisStore = require('koa-redis'),
-  flash = require('koa-flash'),
-  expressValidator = require('express-validator'),
+  flash = require('koa-flash-simple'),
   cookieParser = require('cookie-parser'),
-  moment = require('moment')
+  moment = require('moment'),
+  _ = require('lodash')
 
 require('./config/seed.js')
 
 const app = new Koa()
+
+var { Validator, FileValidator } = require('koa-validate')
+Validator.prototype.addError = function (tip) {
+  this.goOn = false;
+  if (this.value && this instanceof FileValidator) {
+    this.value.goOn = false;
+  }
+
+  if (!this.context.errors) {
+    this.context.errors = [];
+  }
+
+  this.context.errors.push(tip);
+}
+
+require('koa-validate')(app)
 
 /*connect to mongodb */
 mongoose.connect(config.mongodb)
@@ -28,10 +44,12 @@ mongoose.connection.on('error', () => {
 })
 
 mongoose.connection.on('connected', () => {
-  // listen on config port, default 3000
-  app.server = app.listen(config.port, function (e) {
-    console.log('listening on', config.port, config.mongodb)
-  })
+  console.log('Mongodb connected')
+})
+
+// listen on config port, default 3000
+app.server = app.listen(config.port, function (e) {
+  console.log('listening on', config.port, config.mongodb)
 })
 
 /* configure application */
@@ -46,16 +64,26 @@ const pug = new Pug({
   },
   basedir: './views',
   helperPath: [],
-
+  noCache: true
 })
+pug.options.noCache = true
 pug.use(app)
 const convert = require('koa-convert')
 
 //specify public static directory
+app.use(async (ctx, next) => {
+  try {
+    await next()
+  } catch (err) {
+    ctx.status = err.status || 500
+    ctx.body = { msg: err.message }
+    ctx.app.emit('error', err, this)
+  }
+})
 app.use(convert(serve('public')))
 app.use(bodyParser())
 
-app.keys = ['secret']
+app.keys = [config.secret]
 app.use(convert(session({
   resave: true,
   saveUninitialized: true,
@@ -65,20 +93,44 @@ app.use(convert(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use(convert(flash()))
-
 app.use(async (ctx, next) => {
-  console.log(ctx.flash)
-  pug.locals.messages = ctx.flash
+  console.log(ctx.session)
   await next()
 })
 
-/*app.use(async (ctx, next) => {
-  console.log('wtf')
-  pug.locals.user = ctx.req.user
-  next()
+//app.use(convert(flash()))
+
+/* flash middleware */
+app.use(async (ctx, next) => {
+  let data = ctx.session.flash || {}
+
+  delete ctx.session.flash
+
+  ctx.flash = (type, val) => {
+    console.log(type, val)
+    ctx.session.flash = { [type]: val }
+  }
+
+  ctx.messages = () => {
+    return data
+  }
+
+  await next()
 })
 
+/* add flash messages */
+app.use(async (ctx, next) => {
+  pug.locals.messages = ctx.messages()
+  await next()
+})
+
+/* add logged in user to locals */
+app.use(async (ctx, next) => {
+  pug.locals.user = ctx.req.user
+  await next()
+})
+
+/*
 app.use(async (req, res, next) => {
   console.log('wtf')
   if (!req.user || !req.user.askEmail || req.user.email || req.path == '/askEmail') return next()

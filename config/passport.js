@@ -1,6 +1,6 @@
 const config = require('../config'),
   _ = require('lodash'),
-  passport = require('passport'),
+  passport = require('koa-passport'),
   User = require('../models/User')
 
 const LocalStrategy = require('passport-local').Strategy

@@ -11,7 +11,7 @@ var request = require('supertest'),
   expect = chai.expect;
 
 
-var app = require('../index.js');
+var app = require('../index.js').server;
 
 const admin_user = {
   email: 'admin@admin.com',
@@ -24,7 +24,6 @@ const sample_user_info = {
 }
 
 // for storing session
-
 const admin = request.agent(app);
 const adminLoggedIn = function(){
   return new Promise( function(resolve, reject){

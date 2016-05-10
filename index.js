@@ -7,12 +7,10 @@ const app = require('./bootstrap'),
   passport = require('./config/passport')
 
 app.use(controllers.Home.routes())
+app.use(controllers.Auth.routes())
 
-/*
-app.use('/blog', controllers.Post)
-app.use('/auth', controllers.Auth)
+/*app.use('/blog', controllers.Post)
 app.use('/user', passport.isAuthenticated, controllers.User)
-app.use('/admin', passport.isAuthenticated, passport.isAdmin, controllers.Admin)
-*/
+app.use('/admin', passport.isAuthenticated, passport.isAdmin, controllers.Admin)*/
 
 module.exports = app

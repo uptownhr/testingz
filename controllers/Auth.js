@@ -1,43 +1,35 @@
-const router = require('express').Router(),
-  config = require('../config'),
+const router = require('koa-router')({ prefix: '/auth' })
+
+const config = require('../config'),
   User = require('../models/User'),
   queryString = require('querystring'),
-  passport = require('passport')
+  passport = require('koa-passport')
 
-router.get('/login', function (req, res) {
-  res.render('login')
+router.get('/login', async ctx => {
+  ctx.render('login')
 })
 
-router.post('/login', function (req, res, next) {
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password must be at least 6 characters long').len(6);
+router.post('/login', async (ctx, next) => {
+  ctx.checkBody('email', 'Email is not valid').isEmail()
+  ctx.checkBody('password', 'Password must be at least 6 characters long').len(6)
 
-  var errors = req.validationErrors();
-
-  if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('login');
+  if (ctx.errors) {
+    ctx.flash('errors', ctx.errors)
+    return ctx.redirect('login')
   }
 
-  passport.authenticate('local', function (err, user, info) {
-    if (err) {
-      return next(err);
-    }
-
+  await passport.authenticate('local', async function (user, info, status) {
     if (!user) {
-      req.flash('errors', { msg: info.message });
-      return res.redirect('/auth/login');
+      console.log(info)
+      ctx.flash('errors', info.message);
+      return ctx.redirect('/auth/login');
     }
 
-    req.logIn(user, function (err) {
-      if (err) {
-        return next(err);
-      }
-
-      req.flash('success', { msg: 'Success! You are logged in.' });
-      res.redirect(req.session.returnTo || '/');
-    });
-  })(req, res, next);
+    ctx.flash('success', { msg: 'Success! You are logged in.' });
+    ctx.redirect('/')
+    ctx.session.wtf = 'wtf'
+    await ctx.logIn(user)
+  })(ctx, next);
 })
 
 router.get('/register', function (req, res) {
@@ -46,10 +38,9 @@ router.get('/register', function (req, res) {
   })
 })
 
-router.get('/logout', function (req, res) {
-  req.logout()
-
-  res.redirect('/')
+router.get('/logout', async (ctx, next) => {
+  ctx.logout()
+  ctx.redirect('/')
 })
 
 router.post('/register', function (req, res, next) {

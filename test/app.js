@@ -7,7 +7,7 @@ const request = require('supertest'),
   Product = require('../models/Product')
 
 const expect = chai.expect
-const app = require('../index.js')
+const app = require('../index.js').server
 
 const user = request.agent(app)
 const USER_INFO = {
