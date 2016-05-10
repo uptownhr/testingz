@@ -205,7 +205,7 @@ function mapGithubProfile(profile) {
 passport.use(new GitHubStrategy({
   clientID: config.social.github.client_id,
   clientSecret: config.social.github.client_secret,
-  callbackURL: 'http://localhost:3000/auth/o/github/callback',
+  callbackURL: '/auth/o/github/callback',
   passReqToCallback: true
 }, handleOauthLogin(mapGithubProfile)))
 
