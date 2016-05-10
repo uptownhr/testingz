@@ -93,13 +93,6 @@ app.use(convert(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use(async (ctx, next) => {
-  console.log(ctx.session)
-  await next()
-})
-
-//app.use(convert(flash()))
-
 /* flash middleware */
 app.use(async (ctx, next) => {
   let data = ctx.session.flash || {}
@@ -107,13 +100,11 @@ app.use(async (ctx, next) => {
   delete ctx.session.flash
 
   ctx.flash = (type, val) => {
-    console.log(type, val)
+    console.log('flash received', type, val)
     ctx.session.flash = { [type]: val }
   }
 
-  ctx.messages = () => {
-    return data
-  }
+  ctx.messages = () => data
 
   await next()
 })
@@ -121,6 +112,7 @@ app.use(async (ctx, next) => {
 /* add flash messages */
 app.use(async (ctx, next) => {
   pug.locals.messages = ctx.messages()
+
   await next()
 })
 

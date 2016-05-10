@@ -21,11 +21,11 @@ router.post('/login', async (ctx, next) => {
   await passport.authenticate('local', async function (user, info, status) {
     if (!user) {
       console.log(info)
-      ctx.flash('errors', info.message);
+      ctx.flash('errors', [info.message]);
       return ctx.redirect('/auth/login');
     }
 
-    ctx.flash('success', { msg: 'Success! You are logged in.' });
+    ctx.flash('success', ['Success! You are logged in.']);
     ctx.redirect('/')
     ctx.session.wtf = 'wtf'
     await ctx.logIn(user)
@@ -47,7 +47,7 @@ router.post('/register', async (ctx, next) => {
   ctx.checkBody('email', 'Email is not valid').isEmail()
   ctx.checkBody('password', 'Password must be at least 6 characters long').len(6)
 
-  const body = ctx.body
+  const body = ctx.request.body
 
   if (ctx.errors) {
     ctx.flash('errors', errors);
@@ -64,23 +64,17 @@ router.post('/register', async (ctx, next) => {
     }
   })
 
-  User.findOne({ email: body.email }).exec()
-    .then((existingUser) => {
-      if (existingUser) {
+  const existingUser = await User.findOne({ email: body.email })
 
-        req.flash('errors', { msg: 'Account with that email address already exists.' });
-        return res.redirect('/auth/register')
-      }
+  if (existingUser) {
+    ctx.flash('errors', ['Account with that email address already exists.']);
+    return ctx.redirect('/auth/register')
+  }
 
-      return user.save()
-    })
-    .then(registeredUser => req.logIn(registeredUser, (err) => {
-      if (err) return next(err)
-      res.redirect('/')
-    }))
-    .catch((err) => {
-      if (err) return next(err)
-    })
+  const saved = await user.save()
+  await ctx.logIn(saved)
+  ctx.flash('success', ['Successfully registered'])
+  ctx.redirect('/')
 })
 
 router.get('/o/:provider', function (req, res, next) {
