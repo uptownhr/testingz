@@ -32,9 +32,9 @@ router.post('/login', async (ctx, next) => {
   })(ctx, next);
 })
 
-router.get('/register', function (req, res) {
-  res.render('register', {
-    query: req.query
+router.get('/register', async (ctx, next) => {
+  ctx.render('register', {
+    query: ctx.req.query || {}
   })
 })
 
@@ -43,15 +43,14 @@ router.get('/logout', async (ctx, next) => {
   ctx.redirect('/')
 })
 
-router.post('/register', function (req, res, next) {
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password must be at least 6 characters long').len(6);
+router.post('/register', async (ctx, next) => {
+  ctx.checkBody('email', 'Email is not valid').isEmail()
+  ctx.checkBody('password', 'Password must be at least 6 characters long').len(6)
 
-  const errors = req.validationErrors();
-  const body = req.body
+  const body = ctx.body
 
-  if (errors) {
-    req.flash('errors', errors);
+  if (ctx.errors) {
+    ctx.flash('errors', errors);
     delete body.password
 
     return res.redirect('/auth/register?' + queryString.stringify(body));
