@@ -21,52 +21,26 @@ block content
       .panel-heading.text-center 
         h3 Contacts 
       table.table.table-responsive.table-striped
-        thead
           tr
             th Name
             th Email
             th Date Recieved
             th Message
-        tbody        
-          tr 
-            td Hillary Clinton
-            td clinton@shadyemail.com
-            td 6/6/2016
-            td Liar, liar, pants on fire....
-            td 
-              a.btn.btn-primary-outline.btn-sm(href='#')
-                | View/Edit
-                span.icon.icon-pencil
-            td
-              a.btn.btn-primary-outline.btn-sm(href='#')
-                 | Delete
-                 span.icon.icon-erase
-          tr
-            td Bernie Sanders
-            td bernie@birdiemail.com
-            td 7/7/2016
-            td Feel the Bern Fools!...
-            td
-              a.btn.btn-primary-outline.btn-sm(href='#')
-                | View/Edit
-                span.icon.icon-pencil
-            td
-              a.btn.btn-primary-outline.btn-sm(href='#')
-                 | Delete
-                 span.icon.icon-erase
-          tr
-            td Donald Trump
-            td orangeman@trumptowers.com
-            td 5/5/1985
-            td Get em outta here!....
-            td 
-              a.btn.btn-primary-outline.btn-sm(href='#')
-                | View/Edit
-                span.icon.icon-pencil
-            td
-              a.btn.btn-primary-outline.btn-sm(href='#')
-                 | Delete
-                 span.icon.icon-erase
+          each person in collection     
+            tr 
+              td=person.name
+              td=person.email
+              td=person.created
+              td=person.message
+              td 
+                a.btn.btn-primary-outline.btn-sm(href='#')
+                  | View/Edit
+                  span.icon.icon-pencil
+              td
+                a.btn.btn-primary-outline.btn-sm(href='#')
+                  | Delete
+                  span.icon.icon-erase
+    
 
 
 

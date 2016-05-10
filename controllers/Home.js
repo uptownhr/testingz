@@ -52,32 +52,36 @@ router.get('/contact', function (req, res) {
 // Currently commented out because uncommenting breaks the app. 
 // Keeping code for further analysis by James 
 // POST Saving Individual Contact Info to Mongo
-/*router.post('/admin/contact', function (req, res) {
+router.post('/contact', function (req, res) {
   var id = req.body.id;
   var body = req.body;
-  Contact.findOne({ _id: id }, function(err, contact)) {
+  Contact.findOne( { _id: id }, function(err, contact) {
     if (contact) {
         contact.name = body.name;
         contact.email = body.email;
         contact.message = body.message;
         contact.created = body.created;
         contact.save(function(err, saved) {
+          if (err) {
+            console.log(err);
+          } else {
             res.redirect('/admin/contacts');
+          }
         }) //end of save method
     } //end of if clause
     else { // new contact instance
       var contact = new Contact({
-        name: body.name;
-        email: body.email;
-        message: body.message;
-        created: body.created;
+        name: body.name,
+        email: body.email,
+        message: body.message,
+        created: body.created
       })
       contact.save(function(err, saved) {
-        res.redirect('/admin/examples')
+        res.redirect('/admin/contacts')
       }) 
     }
-  }
-})*/ //end of post request
+  }); //end of mongoose findOne method
+}) //end of post request
 
 
 /**** End of Vick's code *****/

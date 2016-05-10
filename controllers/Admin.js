@@ -507,6 +507,16 @@ router.get('/contacts', function(req, res) {
   res.render('admin/contacts.jade')
 })
 
+// get contact information from Mongo, use it to send to admin contacts page
+// use jade to present info
+router.get('/contacts', function(req, res) {
+  Contact.find(function(err, contacts){
+    res.render('admin/contacts', {
+      collection: contacts
+    })
+  })
+})
+
 // route to individual contact view/edit in admin ctrl panel
 router.get('/contact', function(req, res) {
   res.render('admin/contact.jade')
