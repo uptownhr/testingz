@@ -18,97 +18,73 @@ router.get('/', async ctx => {
   ctx.render('admin/overview')
 })
 
-router.get('/user', function (req, res) {
+router.get('/users', async (ctx, next) => {
+  let search = ctx.query.search
+  let query = {}
+
+  if (search) {
+    search = { $regex: new RegExp(search, 'i') };
+    query = { $or: [{ email: search }, { 'profile.name': search }] }
+  }
+
+  const users = await User.find(query)
+  ctx.render('admin/users', { users, search: ctx.query.search })
+})
+
+router.get('/user', async ctx => {
   const user = {}
-  res.render('admin/user', { user })
+  const query = ctx.query
+
+  _.merge(user, query)
+  ctx.render('admin/user', { user })
 })
 
-router.get('/user/:id', function (req, res) {
-  User.findOne({ _id: req.params.id }).then(user => {
-    res.render('admin/user', { user })
-  })
+router.get('/user/:id', async ctx => {
+  const user = await User.findOne({ _id: ctx.params.id })
+  console.log(user, ctx.params)
+  ctx.render('admin/user', { user })
 })
 
-router.post('/user', function (req, res) {
-  req.assert('email', 'Email is not valid').isEmail();
+router.post('/user', async (ctx, next) => {
+  const body = ctx.request.body
+  ctx.checkBody('email', 'Email is not valid').isEmail();
 
-  if (req.body.confirmPassword || req.body.password) {
-    req.assert('password', 'Password must be at least 4 characters long').len(4);
-    req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  if (ctx.errors) {
+    ctx.flash('errors', ctx.errors);
+    return ctx.redirect('/admin/user?' + qs.stringify(body));
   }
 
-  var errors = req.validationErrors();
+  delete body.password
+  delete body.confirmPassword
 
-  if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('/admin/user?' + qs.stringify(req.body));
+  const update = body._id
+
+  let user = update ? await User.findOne({ _id: body._id }) : new User()
+
+  delete body._id
+
+  user = _.merge(user, body)
+
+  try {
+    const saved = await user.save()
+    ctx.flash('success', ['Saved'])
+    ctx.redirect('/admin/users')
+  } catch (e) {
+    console.log(e);
+    ctx.flash('errors', [e.message])
+    return ctx.redirect('back')
   }
-
-  const body = req.body;
-
-  async.waterfall([
-    function (callback) {
-      if (body._id.length) {
-        User.findOne({ _id: body._id }, function (err, user) {
-          user = _.merge(user, req.body);
-          callback(null, user);
-        });
-      } else {
-        delete body._id; //remove empty id from user
-
-        var user = new User(body);
-        callback(null, user);
-      }
-    },
-
-    function (user, callback) {
-      user.save(function (err, saved) {
-        callback(err, saved);
-      })
-    }
-  ], function (err, user) {
-    if (err) {
-      console.log(err);
-      req.flash('errors', [{ msg: err.message }])
-      return res.redirect('/admin/user?' + qs.stringify(req.body))
-    }
-
-    req.flash('success', [{ msg: 'Saved' }])
-    res.redirect('/admin/users')
-  });
 })
 
-router.get('/user/delete/:id', function (req, res) {
-  User.remove({ _id: req.params.id }, function (err) {
-    if (err) {
-      req.flash('error', { msg: err.message })
-    }else {
-      req.flash('success', { msg: 'deleted' })
-    }
-
-    return res.redirect('/admin/users')
-  })
-})
-
-router.get('/users', function (req, res) {
-
-  var query = User.find();
-  var param = '';
-
-  if (req.query.search) {
-    param = decodeURI(req.query.search);
-    var search = { $regex: new RegExp(param, 'i') };
-
-    query.or([
-      { email: search },
-      { 'profile.name': search }
-    ]);
+router.get('/user/delete/:id', async ctx => {
+  try{
+    User.remove({ _id: req.params.id })
+    ctx.flash('success', { msg: 'deleted' })
+  }catch(err) {
+    ctx.flash('error', { msg: err.message })
   }
 
-  query.exec(function (err, users) {
-    res.render('admin/users', { users, search: param })
-  });
-
+  return ctx.redirect('/admin/users')
 })
 
 /**
