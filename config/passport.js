@@ -23,13 +23,15 @@ passport.deserializeUser(function (id, done) {
 /**
  * Login Required middleware.
  */
-exports.isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated()) {
-    return next()
+exports.isAuthenticated = async (ctx, next) => {
+  if (ctx.isAuthenticated()) {
+    await next()
   }
 
-  req.session.returnTo = req.originalUrl
-  res.redirect('/auth/login')
+  if (!ctx.isAuthenticated()) {
+    ctx.session.returnTo = ctx.request.originalUrl
+    ctx.redirect('/auth/login')
+  }
 }
 
 /**
