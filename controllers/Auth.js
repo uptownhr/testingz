@@ -88,7 +88,7 @@ router.get('/o/:provider', async (ctx, next) => {
 
 router.get('/o/:provider/callback', async (ctx, next) => {
   const provider = ctx.params.provider
-  console.log(provider)
+
   if (config.social.hasOwnProperty(provider)) {
     return passport.authenticate(provider, { failureRedirect: '/auth/login' })(ctx, next);
   } else {
