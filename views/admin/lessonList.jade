@@ -1,0 +1,43 @@
+extends layout
+block content
+  .dashhead
+    .dashhead-titles
+      h6.dashhead-subtitle Contacts
+      h2.dashhead-title List
+    .btn-toolbar.dashhead-toolbar
+      .btn-group
+        a.btn.btn-primary-outline(href='/admin/contact', type='button')
+          | New Contact
+          span.icon.icon-plus
+
+  .flextable.table-actions
+    .flextable-item.flextable-primary
+      .btn-toolbar-item.input-with-icon
+        input.form-control.input-block.model_search(type='text', placeholder='Search Contacts')
+        span.icon.icon-magnifying-glass
+    .flextable-item
+    br
+    .panel.panel-primary(style='max-width: 823px;')
+      .panel-heading.text-center
+        h3 Lessons
+      table.table.table-responsive.table-striped
+        tr
+          th Title
+          th Function
+          th Description
+          th Date Created
+          th
+        each z in l
+          tr
+            td=z.title
+            td=z.function
+            td=z.description
+            td=z.created_date
+            td
+              a.btn.btn-primary-outline.btn-sm(href='/admin/lessons/#{z._id}')
+                | View/Edit
+                span.icon.icon-pencil
+            td
+              a.btn.btn-primary-outline.btn-sm(href='/admin/lessonDelete/#{z._id}')
+                | Delete
+                span.icon.icon-erase
