@@ -32,18 +32,18 @@ router.post('/login', async (ctx, next) => {
   })(ctx, next);
 })
 
-router.get('/register', async (ctx, next) => {
+router.get('/register', async ctx => {
   ctx.render('register', {
     query: ctx.req.query || {}
   })
 })
 
-router.get('/logout', async (ctx, next) => {
+router.get('/logout', async ctx => {
   ctx.logout()
   ctx.redirect('/')
 })
 
-router.post('/register', async (ctx, next) => {
+router.post('/register', async ctx => {
   ctx.checkBody('email', 'Email is not valid').isEmail()
   ctx.checkBody('password', 'Password must be at least 6 characters long').len(6)
 
@@ -77,26 +77,26 @@ router.post('/register', async (ctx, next) => {
   ctx.redirect('/')
 })
 
-router.get('/o/:provider', function (req, res, next) {
-  const provider = req.params.provider
+router.get('/o/:provider', async (ctx, next) => {
+  const provider = ctx.params.provider
   if (config.social.hasOwnProperty(provider)) {
-    return passport.authenticate(provider)(req, res, next)
+    return passport.authenticate(provider)(ctx, next)
   } else {
-    res.redirect('/');
+    ctx.redirect('/');
   }
 })
 
-router.get('/o/:provider/callback', function (req, res, next) {
-  const provider = req.params.provider
-
+router.get('/o/:provider/callback', async (ctx, next) => {
+  const provider = ctx.params.provider
+  console.log(provider)
   if (config.social.hasOwnProperty(provider)) {
-    return passport.authenticate(provider, { failureRedirect: '/auth/login' })(req, res, next);
+    return passport.authenticate(provider, { failureRedirect: '/auth/login' })(ctx, next);
   } else {
-    res.redirect('/');
+    ctx.redirect('/');
   }
-}, function (req, res) {
+}, function (ctx, next) {
 
-  res.redirect(req.session.returnTo || '/')
+  ctx.redirect(ctx.session.returnTo || '/')
 })
 
 module.exports = router

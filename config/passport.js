@@ -77,28 +77,27 @@ function findProviderUser(provider, id) {
  * @returns {Function}
  */
 function handleOauthLogin(profileMapper) {
-  return function (req, accessToken, secondaryToken, profile, done) {
-    const providerName = req.params.provider;
-    const mappedProfile = profileMapper(profile);
+  return async function (req, accessToken, secondaryToken, profile, done) {
+    const providerName = profile.provider
+    const mappedProfile = profileMapper(profile)
     const provider = { id: profile.id, accessToken, secondaryToken, name: providerName }
+
     if (req.user) {
       //check if this oauth login is already being used
-      findProviderUser(providerName, profile.id)
-        .then(user => {
-          if (user) {
-            req.flash('errors',
-              { msg: `There is already a ${provider.name}
+      let user = await findProviderUser(providerName, profile.id)
+
+      if (user) {
+        req.flash('errors',
+          { msg: `There is already a ${provider.name}
             account that belongs to you. Sign in with that account or
             delete it, then link it with your current account.` });
-            return done()
-          }
+        return done()
+      }
 
-          req.user.providers.push(provider)
-          req.user.save((err) => {
-            req.flash('success', { msg: providerName + ' account has been linked.' });
-            done(err, req.user);
-          })
-        })
+      req.user.providers.push(provider)
+      let saved = await req.user.save()
+      req.flash('success', { msg: providerName + ' account has been linked.' })
+      return done(null, saved)
     }else {
       findProviderUser(providerName, profile.id)
         .then(user => {
