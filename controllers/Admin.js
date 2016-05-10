@@ -14,8 +14,8 @@ const upload = multer({ dest: path.join(__dirname, '../public/uploads') })
 
 router.use(passport.isAuthenticated, passport.isAdmin)
 
-router.get('/', function (req, res) {
-  res.render('admin/overview')
+router.get('/', async ctx => {
+  ctx.render('admin/overview')
 })
 
 router.get('/user', function (req, res) {
