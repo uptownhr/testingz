@@ -18,9 +18,8 @@ router.post('/login', async (ctx, next) => {
     return ctx.redirect('login')
   }
 
-  await passport.authenticate('local', async function (user, info, status) {
+  await passport.authenticate('local', function (user, info, status) {
     if (!user) {
-      console.log(info)
       ctx.flash('errors', [info.message]);
       return ctx.redirect('/auth/login');
     }
@@ -28,7 +27,7 @@ router.post('/login', async (ctx, next) => {
     ctx.flash('success', ['Success! You are logged in.']);
     ctx.redirect('/')
     ctx.session.wtf = 'wtf'
-    await ctx.logIn(user)
+    return ctx.logIn(user)
   })(ctx, next);
 })
 

@@ -37,9 +37,9 @@ exports.isAuthenticated = async (ctx, next) => {
 /**
  * Role is admin
  */
-exports.isAdmin = function (req, res, next) {
-  if (req.user && req.user.role == 'admin') return next()
-  res.send('Only admins may access the admin page')
+exports.isAdmin = async (ctx, next) => {
+  if (ctx.req.user && ctx.req.user.role == 'admin') return await next()
+  ctx.body = 'Only admins may access the admin page'
 }
 
 /**

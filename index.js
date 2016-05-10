@@ -11,7 +11,6 @@ app.use(controllers.Auth.routes())
 app.use(controllers.Post.routes())
 app.use(controllers.User.routes())
 
-/*
-app.use('/admin', passport.isAuthenticated, passport.isAdmin, controllers.Admin)*/
+app.use(controllers.Admin.routes())
 
 module.exports = app

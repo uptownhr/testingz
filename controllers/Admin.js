@@ -1,15 +1,18 @@
-const router = require('express').Router()
+const router = require('koa-router')({ prefix: '/admin' })
 const
   _ = require('lodash'),
   async = require('async'),
   multer = require('multer'),
   path = require('path'),
   qs = require('qs'),
-  validator = require('validator')
+  validator = require('validator'),
+  passport = require('../config/passport')
 
 const { User, Post, File, Project, Product } = require('../models')
 
 const upload = multer({ dest: path.join(__dirname, '../public/uploads') })
+
+router.use(passport.isAuthenticated, passport.isAdmin)
 
 router.get('/', function (req, res) {
   res.render('admin/overview')

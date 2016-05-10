@@ -31,7 +31,7 @@ router.post('/account', async (ctx, next) => {
   ctx.checkBody('email', 'Email is not valid').isEmail();
 
   if (ctx.errors) {
-    ctx.flash('errors', errors);
+    ctx.flash('errors', ctx.errors);
     return ctx.redirect('/user/account');
   }
 

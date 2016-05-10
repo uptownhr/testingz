@@ -231,11 +231,12 @@ describe('App', () => {
         .expect(302, () => (
           user
             .post('/auth/login').send({ email: 'admin@admin.com' })
-            .expect(302, () => (
+            .expect(302, () => {
+              console.log('wtfzz')
               user
                 .get('/admin/')
                 .expect(302, done)
-            ))
+            })
 
         ))
     })
