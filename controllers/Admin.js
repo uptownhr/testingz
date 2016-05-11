@@ -79,7 +79,7 @@ router.post('/user', async (ctx, next) => {
 
 router.get('/user/delete/:id', async ctx => {
   try {
-    User.remove({ _id: req.params.id })
+    await User.remove({ _id: ctx.params.id })
     ctx.flash('success', { msg: 'deleted' })
   } catch (err) {
     ctx.flash('error', { msg: err.message })
@@ -207,15 +207,11 @@ router.get('/project/:id', async ctx => {
 // add new/edit
 router.post('/project', async (ctx, next) => {
   const body = ctx.request.body
-  ctx.checkBody('email', 'Email is not valid').isEmail();
 
   if (ctx.errors) {
     ctx.flash('errors', ctx.errors);
     return ctx.redirect('/admin/project?' + qs.stringify(body));
   }
-
-  delete body.password
-  delete body.confirmPassword
 
   const update = body._id
 
@@ -226,9 +222,9 @@ router.post('/project', async (ctx, next) => {
   project = _.merge(project, body)
 
   try {
-    const saved = await user.save()
+    const saved = await project.save()
     ctx.flash('success', ['Saved'])
-    ctx.redirect('/admin/users')
+    ctx.redirect('/admin/projects')
   }
   catch (e) {
     ctx.flash('errors', [e.message])
@@ -237,8 +233,10 @@ router.post('/project', async (ctx, next) => {
 })
 
 router.get('/project/delete/:id', async ctx => {
+  console.log('wtf', ctx.params.id);
   try {
-    Project.remove({ _id: req.params.id })
+    await Project.remove({ _id: ctx.params.id })
+    console.log("big fat mom");
     ctx.flash('success', { msg: 'deleted' })
   } catch (err) {
     ctx.flash('error', { msg: err.message })
