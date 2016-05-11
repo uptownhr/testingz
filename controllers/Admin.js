@@ -365,72 +365,18 @@ router.get('/files', async ctx => {
 })
 
 //ADD new file model
-router.get('/file', function (req, res) {
-  res.render('admin/file')
+router.get('/file', async ctx => {
+  ctx.render('admin/file')
 })
 
 //view/edit file model
-router.get('/file/:id', function (req, res) {
-  var id = req.params.id;
+router.get('/file/:id', async ctx => {
+  var id = ctx.params.id;
 
-  File.findOne({ _id: id }, function (err, file) {
-    res.render('admin/file', {
-      file
-    })
-  })
-})
+  const file = await File.findOne({ _id: id })
 
-// add new/edit file model
-router.post('/file', function (req, res) {
-  var body = req.body;
-
-  async.waterfall([
-    function (callback) {
-      if (body._id.length) {
-        File.findOne({ _id: body._id }, function (err, file) {
-          file = _.merge(file, req.body);
-          callback(null, file);
-        });
-      } else {
-        delete body._id; //remove empty id from user
-
-        var file = new File(body);
-        callback(null, file);
-      }
-    },
-
-    function (file, callback) {
-      file.save(function (err, saved) {
-        callback(err, saved);
-      })
-    }
-  ], function (err, file) {
-    if (err) {
-      console.log(err);
-      req.flash('errors', [{ msg: err.message }])
-      return res.redirect('/admin/file?' + qs.stringify(req.body))
-    }
-
-    req.flash('success', [{ msg: file.filename + ' saved' }])
-    res.redirect('/admin/files')
-  });
-})
-
-// update file model
-router.post('/file/:id', function (req, res) {
-  var id = req.params.id;
-  var body = req.body;
-  File.findOne({ _id: id }, function (err, file) {
-    file.original_name = body.original_name;
-    file.encoding = body.encoding;
-    file.mimetype = body.mimetype;
-    file.destination = body.destination;
-    file.filename = body.filename;
-    file.path = body.path;
-    file.size = body.size;
-    file.save(function (err, saved) {
-      res.redirect('/admin/files')
-    })
+  ctx.render('admin/file', {
+    file
   })
 })
 
