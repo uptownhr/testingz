@@ -9,7 +9,7 @@ block content
         a.btn.btn-primary-outline(href='/admin/contact', type='button')
           | New Contact
           span.icon.icon-plus
-   
+
    .flextable.table-actions
     .flextable-item.flextable-primary
       .btn-toolbar-item.input-with-icon
@@ -18,57 +18,28 @@ block content
     .flextable-item
     br
     .panel.panel-primary(style='max-width: 823px;')
-      .panel-heading.text-center 
-        h3 Contacts 
-      table.table.table-responsive.table-striped
+      .panel-heading.text-center
+        h3 Contacts
+      table.table.table-responsive.table-hover.table-bordered
         thead
           tr
-            th Name
-            th Email
-            th Date Recieved
-            th Message
-        tbody        
-          tr 
-            td Hillary Clinton
-            td clinton@shadyemail.com
-            td 6/6/2016
-            td Liar, liar, pants on fire....
-            td 
-              a.btn.btn-primary-outline.btn-sm(href='#')
-                | View/Edit
-                span.icon.icon-pencil
-            td
-              a.btn.btn-primary-outline.btn-sm(href='#')
-                 | Delete
-                 span.icon.icon-erase
+            th.text-center Name
+            th.text-center Email
+            th.text-center Date Recieved
+            th.text-center Message
+            th.text-center(colspan='2') Options
+        tbody
+        each contact in contacts
           tr
-            td Bernie Sanders
-            td bernie@birdiemail.com
-            td 7/7/2016
-            td Feel the Bern Fools!...
+            td=contact.name
+            td=contact.email
+            td=contact.created.toDateString()
+            td=contact.message
             td
-              a.btn.btn-primary-outline.btn-sm(href='#')
-                | View/Edit
-                span.icon.icon-pencil
+              a.btn.btn-primary-outline.btn-sm(href='/admin/contact/#{contact._id}')
+                | View
+                span.icon.icon-user
             td
-              a.btn.btn-primary-outline.btn-sm(href='#')
+              a.btn.btn-primary-outline.btn-sm(href='/admin/contact/delete/#{contact._id}')
                  | Delete
                  span.icon.icon-erase
-          tr
-            td Donald Trump
-            td orangeman@trumptowers.com
-            td 5/5/1985
-            td Get em outta here!....
-            td 
-              a.btn.btn-primary-outline.btn-sm(href='#')
-                | View/Edit
-                span.icon.icon-pencil
-            td
-              a.btn.btn-primary-outline.btn-sm(href='#')
-                 | Delete
-                 span.icon.icon-erase
-
-
-
-   
-   
