@@ -79,7 +79,7 @@ router.post('/user', async (ctx, next) => {
 
 router.get('/user/delete/:id', async ctx => {
   try {
-    User.remove({ _id: req.params.id })
+    await User.remove({ _id: ctx.params.id })
     ctx.flash('success', { msg: 'deleted' })
   } catch (err) {
     ctx.flash('error', { msg: err.message })
@@ -381,16 +381,15 @@ router.get('/file/:id', async ctx => {
 })
 
 // remove file model
-router.get('/file/delete/:id', function (req, res) {
-  File.remove({ _id: req.params.id }, function (err) {
-    if (err) {
-      req.flash('error', { msg: err.message })
-    }else {
-      req.flash('success', { msg: 'deleted' })
-    }
+router.get('/file/delete/:id', async ctx => {
+  try {
+    await File.remove({ _id: ctx.params.id })
+    ctx.flash('success', ['deleted'])
+  }catch (e) {
+    req.flash('success', { msg: 'deleted' })
+  }
 
-    return res.redirect('/admin/files')
-  })
+  return ctx.redirect('/admin/files')
 })
 
 module.exports = router
