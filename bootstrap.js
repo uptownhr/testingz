@@ -11,7 +11,6 @@ const Koa = require('koa'),
   session = require('koa-generic-session'),
   redisStore = require('koa-redis'),
   flash = require('koa-flash-simple'),
-  cookieParser = require('cookie-parser'),
   moment = require('moment'),
   _ = require('lodash')
 
@@ -48,7 +47,7 @@ mongoose.connection.on('connected', () => {
 })
 
 // listen on config port, default 3000
-app.server = app.listen(config.port, function (e) {
+app.server = app.listen(config.port, function () {
   console.log('listening on', config.port, config.mongodb)
 })
 

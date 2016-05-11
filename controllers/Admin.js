@@ -19,7 +19,7 @@ router.get('/', async ctx => {
   ctx.render('admin/overview')
 })
 
-router.get('/users', async (ctx, next) => {
+router.get('/users', async ctx => {
   let search = ctx.query.search
   let query = {}
 
@@ -365,26 +365,18 @@ router.get('/product/delete/:id', function (req, res) {
 
 //PRODUCT END
 
-// file model
-
 //display listings of files
-router.get('/files', function (req, res) {
-  var query = File.find();
-  var param = '';
+router.get('/files', async ctx => {
+  let search = ctx.query.search
+  let query = {}
 
-  if (req.query.search) {
-    param = decodeURI(req.query.search);
-    var search = { $regex: new RegExp(param, 'i') };
-
-    query.or([
-      { originalname: search },
-      { filename: search }
-    ]);
+  if (search) {
+    search = { $regex: new RegExp(search, 'i') };
+    query = { $or: [{ originalName: search }, { filename: search }] }
   }
 
-  query.exec(function (err, files) {
-    res.render('admin/files', { files, search: param })
-  });
+  const files = await File.find(query)
+  ctx.render('admin/files', { files, search: ctx.query.search })
 })
 
 //ADD new file model
