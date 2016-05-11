@@ -10,7 +10,6 @@ const Koa = require('koa'),
   bodyParser = require('koa-bodyparser'),
   session = require('koa-generic-session'),
   redisStore = require('koa-redis'),
-  flash = require('koa-flash-simple'),
   moment = require('moment'),
   _ = require('lodash')
 

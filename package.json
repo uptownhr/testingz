@@ -43,6 +43,7 @@
     "koa-redis": "^2.0.1",
     "koa-router": "^7.0.1",
     "koa-static": "^2.0.0",
+    "koa-validate": "^1.0.1",
     "koa-validator": "^0.6.4",
     "lodash": "^4.6.1",
     "moment": "^2.12.0",
