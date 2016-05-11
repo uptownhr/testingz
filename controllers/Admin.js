@@ -48,15 +48,23 @@ router.get('/user/:id', async ctx => {
 
 router.post('/user', async (ctx, next) => {
   const body = ctx.request.body
-  ctx.checkBody('email', 'Email is not valid').isEmail();
+  ctx.checkBody('email').isEmail('Email is not valid');
+  
+  if (body.confirmPassword || body.password){
+    ctx.checkBody('password').len(4, 'Password must be at least 4 characters long')
+    ctx.checkBody('confirmPassword').eq(body.password, 'Passwords do not match')
+  } else {
+    //no need to include password if user isn't setting one
+    delete body.password;
+  }
+  
+  //not a user model field
+  delete body.confirmPassword
 
   if (ctx.errors) {
     ctx.flash('errors', ctx.errors);
     return ctx.redirect('/admin/user?' + qs.stringify(body));
   }
-
-  delete body.password
-  delete body.confirmPassword
 
   const update = body._id
 
