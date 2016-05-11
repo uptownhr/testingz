@@ -2,31 +2,35 @@ extends layout
 block content
 	.dashhead
 		.dashhead-titles
-			h6.dashhead-subtitle Edit
+			h6.dashhead-subtitle View
 			h2.dashhead-title Contact
 		.btn-toolbar.dashhead-toolbar
 			.btn-group
-				a.btn.btn-primary-outline(href='#', type='button')
+				a.btn.btn-primary-outline(href='/contact', type='button')
 					| New Contact
 					span.icon.icon-plus
 	.row
 	.panel.panel-primary
 		.panel-heading.text-center
-				h3.text-center Edit Contact
+				h3.text-center Contact
 		.panel-body
 			.col-sm-8.col-sm-offset-2
-				form#contactForm(method='post', role='form')
+				form#contactForm(method='post', role='form' action='/admin/contact')
 				.row
 					.form-group.col-sm-6
 						label.h4(for='name') Name
-						input#name.form-control(type='text', name='name', required='')
+						input#name.form-control(type='text', name='name', required='' value=contact.name,
+						disabled)
 					.form-group.col-sm-6
-						label.h4(for='name') Email
-						input#email.form-control(type='email', name='email', required='')
+						label.h4(for='email') Email 
+						input#email.form-control(type='email', name='email', required='' value=contact.email, disabled)
+					.form-group.col-sm-12
+						label.h4(for='date') Message Sent on:
+						input#date.form-control(type='text', name='date', value=contact.created.toDateString(), disabled)
 					.form-group(style='padding: 15px')
 						label.h4(for='message') Message
-						textarea#message.form-control(rows='8', name='message', required='')
-					button#form-submit.btn.btn-primary-outline.btn-md.pull-right(type='submit') Save Changes
-						span.icon.icon-pencil
-					button#form-submit.btn.btn-warning-outline.btn-md.pull-right(type='submit'
-					style='margin-right: 8px;') Cancel
+						textarea#message.form-control(rows='8', name='message', disabled)=contact.message
+					a.button#form-submit.btn.btn-primary-outline.btn-md.pull-right(type='submit'
+					href='/admin/contacts') Back to Contacts List
+						
+					

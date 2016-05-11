@@ -231,6 +231,10 @@ router.get('/project', function (req, res) {
   res.render('admin/project', { project })
 })
 
+
+
+
+
 // view/edit projects
 router.get('/project/:id', function (req, res) {
   var id = req.params.id;
@@ -240,6 +244,8 @@ router.get('/project/:id', function (req, res) {
     })
   })
 })
+
+
 
 // add new/edit
 router.post('/project', function (req, res) {
@@ -494,7 +500,7 @@ router.get('/file/delete/:id', function (req, res) {
   File.remove({ _id: req.params.id }, function (err) {
     if (err) {
       req.flash('error', { msg: err.message })
-    }else {
+    } else {
       req.flash('success', { msg: 'deleted' })
     }
 
@@ -502,25 +508,50 @@ router.get('/file/delete/:id', function (req, res) {
   })
 })
 
-// route to contacts list view in admin ctrl panel 
-router.get('/contacts', function(req, res) {
-  res.render('admin/contacts.jade')
-})
-
 // get contact information from Mongo, use it to send to admin contacts page
 // use jade to present info
 router.get('/contacts', function(req, res) {
-  Contact.find(function(err, contacts){
-    res.render('admin/contacts', {
-      collection: contacts
+  Contact.find(function(err, contacts) {
+      res.render('admin/contacts', {
+          contacts: contacts
     })
   })
 })
 
+// view individual contact info in Admin
+router.get('/contact/:id', function (req, res) {
+  var id = req.params.id;
+  Contact.findOne({ _id: id}, function (err, contact) {
+    res.render('admin/contact', { contact })
+  })
+})
+
+
+// delete individual contact info in Admin
+router.get('/contact/delete/:id', function (req, res) {
+  var id = req.params.id;
+  Contact.remove({_id: id}, function(err) {
+    if (err) {
+      req.flash('error', {msg: err.message})
+    } else {
+      req.flash('success', {msg: 'Contact Deleted Successfully'})
+    }
+    return res.redirect('/admin/contacts')
+  })
+})
+
+
+// route to contacts list view in admin ctrl panel
+router.get('/contacts', function(req, res) {
+  res.render('admin/contacts')
+})
+
 // route to individual contact view/edit in admin ctrl panel
 router.get('/contact', function(req, res) {
-  res.render('admin/contact.jade')
+  res.render('admin/contact')
 })
+
+
 
 
 module.exports = router
