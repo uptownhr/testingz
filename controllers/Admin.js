@@ -2,11 +2,12 @@ const router = require('koa-router')({ prefix: '/admin' })
 const
   _ = require('lodash'),
   async = require('async'),
-  multer = require('multer'),
+  multer = require('koa-multer'),
   path = require('path'),
   qs = require('qs'),
   validator = require('validator'),
-  passport = require('../config/passport')
+  passport = require('../config/passport'),
+  Promise = require('bluebird')
 
 const { User, Post, File, Project, Product } = require('../models')
 
@@ -77,10 +78,10 @@ router.post('/user', async (ctx, next) => {
 })
 
 router.get('/user/delete/:id', async ctx => {
-  try{
+  try {
     User.remove({ _id: req.params.id })
     ctx.flash('success', { msg: 'deleted' })
-  }catch(err) {
+  } catch(err) {
     ctx.flash('error', { msg: err.message })
   }
 
@@ -262,14 +263,10 @@ router.get('/project/delete/:id', function (req, res) {
 
 // IMAGE DROP FUNCTION
 
-router.post('/images/upload', upload.array('file', 20), function (req, res) {
-  async.mapSeries(req.files, function (file, next) {
-    file = new File(file)
-    file.save(next)
-  }, function done(err, results) {
-
-    const fileNames = results.map(file => file.originalname).join('<br/>')
-    res.send(results)
+router.post('/images/upload', upload.array('file', 20), async ctx => {
+  ctx.body = await Promise.mapSeries(ctx.req.files, item => {
+    let file = new File(item)
+    return file.save()
   })
 })
 
