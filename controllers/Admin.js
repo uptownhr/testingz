@@ -16,7 +16,6 @@ const File = models.File
 const Project = models.Project
 const Product = models.Product
 const Contact = models.Contact
-const Lessons = models.lessons
 
 router.get('/', function (req, res) {
   res.render('admin/overview')
@@ -511,68 +510,6 @@ router.get('/contacts', function(req, res) {
 // route to individual contact view/edit in admin ctrl panel
 router.get('/contact', function(req, res) {
   res.render('admin/contact.jade')
-})
-
-
-router.get('/lessons', function(req, res) {
-  const lesson = {}
-    res.render('admin/lessons', { lesson });
-  })
-
-router.get('/lessons/:_id', function(req, res) {
-  var id = req.params._id;
-  Lessons.findOne({ _id: id }, function(err, lesson){
-    res.render('admin/lessons',{
-      lesson
-    })
-  })
-})
-
-router.post('/lessons', function (req, res) {
-  var body = req.body;
-  var id = req.body._id;
-  Lessons.findOne({id: id}, function(err, lesson) {
-    if(lesson){
-      lesson.title = body.title;
-      lesson.function = body.function;
-      lesson.description = body.description;
-      lesson.video_url = body.video_url;
-      lesson.image_url = body.image_url;
-      lesson.created_date = body.created_date;
-      lesson.save(function (err, saved) {
-        res.redirect('/admin/lessonList')
-      })
-    }
-  })
-  console.log(body);
-  var lesson = new Lessons({
-    title: body.title,
-    function: body.function,
-    description: body.description,
-    video_url: body.video_url,
-    image_url: body.image_url,
-    created_date: body.created_date
-  })
-  lesson.save(function (err, saved) {
-    res.redirect('/admin/lessonList');
-  })
-})
-
-router.get('/lessonList', function(req, res) {
-  Lessons.find(function (err, lesson) {
-    res.render('admin/lessonList', {l: lesson})
-  })
-})
-
-router.get('/lessonDelete/:_id', function(req, res) {
-  Lessons.remove({ _id: req.params._id }, function (err) {
-    if (err) {
-      req.flash('error', { msg: err.message })
-    }else {
-      req.flash('success', { msg: 'deleted' })
-    }
-    return res.redirect('/admin/lessonList')
-  })
 })
 
 
