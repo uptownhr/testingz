@@ -24,7 +24,7 @@ router.get('/users', async ctx => {
   let query = {}
 
   if (search) {
-    search = { $regex: new RegExp(search, 'i') };
+    search = { $regex: new RegExp(search, 'i') }
     query = { $or: [{ email: search }, { 'profile.name': search }] }
   }
 
@@ -48,6 +48,7 @@ router.get('/user/:id', async ctx => {
 
 router.post('/user', async (ctx, next) => {
   const body = ctx.request.body
+  
   ctx.checkBody('email').isEmail('Email is not valid');
   
   if (body.confirmPassword || body.password){
@@ -60,7 +61,7 @@ router.post('/user', async (ctx, next) => {
   
   //not a user model field
   delete body.confirmPassword
-
+  
   if (ctx.errors) {
     ctx.flash('errors', ctx.errors);
     return ctx.redirect('/admin/user?' + qs.stringify(body));
@@ -90,9 +91,8 @@ router.get('/user/delete/:id', async ctx => {
     User.remove({ _id: ctx.params.id }).then(err =>{
       if (err) console.log(err);
     })
-
     ctx.flash('success', { msg: 'deleted' })
-  } catch(err) {
+  } catch (err) {
     ctx.flash('error', { msg: err.message })
   }
 
@@ -183,90 +183,71 @@ router.get('/post/delete/:id', async ctx => {
 //PROJECT SECTION
 // list projects
 
-router.get('/projects', function (req, res) {
-
-  var query = Project.find();
-  var param = '';
-
-  if (req.query.search) {
-    param = decodeURI(req.query.search);
-    var search = { $regex: new RegExp(param, 'i') };
-
-    query.or([
-      { name: search },
-      { project_url: search }
-    ]);
+router.get('/projects', async ctx => {
+  let search = ctx.query.search
+  let query = {}
+  if (search) {
+    search = { $regex: new RegExp(search, 'i') };
+    query = { $or: [{ email: search }, { 'profile.name': search }] }
   }
 
-  query.exec(function (err, projects) {
-    res.render('admin/projects', { projects, search: param })
-  });
+  const projects = await Project.find(query)
+  ctx.render('admin/projects', { projects, search: ctx.query.search })
 })
 
 // new projects
-router.get('/project', function (req, res) {
+router.get('/project', async ctx => {
   const project = {}
-  res.render('admin/project', { project })
+  const query = ctx.query
+
+  _.merge(project, query)
+  ctx.render('admin/project', { project })
 })
 
 // view/edit projects
-router.get('/project/:id', function (req, res) {
-  var id = req.params.id;
-  Project.findOne({ _id: id }, function (err, project) {
-    res.render('admin/project', {
-      project
-    })
-  })
+router.get('/project/:id', async ctx => {
+  const project = await Project.findOne({ _id: ctx.params.id })
+  ctx.render('admin/project', { project })
 })
 
 // add new/edit
-router.post('/project', function (req, res) {
-  var body = req.body;
+router.post('/project', async (ctx, next) => {
+  const body = ctx.request.body
+  ctx.checkBody('name', 'Name of project is required').notEmpty();
+  if (ctx.errors) {
+    ctx.flash('errors', ctx.errors);
+    return ctx.redirect('/admin/project?' + qs.stringify(body));
+  }
 
-  async.waterfall([
-    function (callback) {
-      if (body._id.length) {
-        Project.findOne({ _id: body._id }, function (err, project) {
-          user = _.merge(project, req.body);
-          callback(null, project);
-        });
-      } else {
-        delete body._id; //remove empty id from user
+  const update = body._id
 
-        var project = new Project(body);
-        callback(null, project);
-      }
-    },
+  let project = update ? await Project.findOne({ _id: body._id }) : new Project()
 
-    function (project, callback) {
-      project.save(function (err, saved) {
-        callback(err, saved);
-      })
-    }
-  ], function (err, project) {
-    if (err) {
-      console.log(err);
-      req.flash('errors', [{ msg: err.message }])
-      return res.redirect('/admin/user?' + qs.stringify(req.body))
-    }
+  delete body._id
 
-    req.flash('success', [{ msg: 'Saved' }])
-    res.redirect('/admin/projects')
-  });
+  project = _.merge(project, body)
+
+  try {
+    const saved = await project.save()
+    ctx.flash('success', ['Saved'])
+    ctx.redirect('/admin/projects')
+  }
+  catch (e) {
+    ctx.flash('errors', [e.message])
+    return ctx.redirect('back')
+  }
 })
 
-router.get('/project/delete/:id', function (req, res) {
-  Project.remove({ _id: req.params.id }, function (err) {
-    if (err) {
-      req.flash('error', { msg: err.message })
-    }else {
-      req.flash('success', { msg: 'deleted' })
-    }
+router.get('/project/delete/:id', async ctx => {
+  try {
+    await Project.remove({ _id: ctx.params.id })
+    ctx.flash('success', { msg: 'deleted' })
+  } catch (err) {
+    ctx.flash('error', { msg: err.message })
+  }
 
-    return res.redirect('/admin/projects')
-  })
+  return ctx.redirect('/admin/projects')
 })
-
 // IMAGE DROP FUNCTION
 
 router.post('/images/upload', upload.array('file', 20), async ctx => {
@@ -402,16 +383,15 @@ router.get('/file/:id', async ctx => {
 })
 
 // remove file model
-router.get('/file/delete/:id', function (req, res) {
-  File.remove({ _id: req.params.id }, function (err) {
-    if (err) {
-      req.flash('error', { msg: err.message })
-    }else {
-      req.flash('success', { msg: 'deleted' })
-    }
+router.get('/file/delete/:id', async ctx => {
+  try {
+    await File.remove({ _id: ctx.params.id })
+    ctx.flash('success', ['deleted'])
+  }catch (e) {
+    req.flash('success', { msg: 'deleted' })
+  }
 
-    return res.redirect('/admin/files')
-  })
+  return ctx.redirect('/admin/files')
 })
 
 module.exports = router

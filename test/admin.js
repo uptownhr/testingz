@@ -44,7 +44,7 @@ describe('Admin', function(){
   const sample_post = Post({ title: ''})
   const sample_project = Project({name: "gordo", description: "projectFAT" })
   const sample_product = Product({name: "gordo", description: "productFAT" })
-  const sample_file = File({originalname: "gordo", destination: "fileFAT" })
+  const sample_file = File({mimetype: 'image/png', filename: 'gorod', originalname: "gordo", destination: "fileFAT" })
   
   /* Test POST requests */
   const test_user = { _id : "", email: "post@post.com", password: "postpost", confirmPassword: "postpost"};
@@ -61,9 +61,7 @@ describe('Admin', function(){
       sample_project.save(),
       sample_product.save(),
       sample_file.save()
-    ]).then( () => done(), function error(err){
-      done(err)
-    })
+    ]).then(done.bind(null,null)).catch( console.log )
 
   })
 
@@ -371,28 +369,10 @@ describe('Admin', function(){
     })
   })
   
-  describe('POST /admin/file', function(){
-    
-    it('should return 302', function(done){
-      admin
-        .post('/admin/file')
-        .send(test_file)
-        .expect(302, done);
-    });
-    
-    it('should create a new file', function(done){
-      File.findOne({ originalname : test_file.originalname}, function(err, file){
-        if (err) return done(err);
-        expect(file).to.not.be.null;
-        done();
-      })
-    })
-  })
-  
   describe('GET /admin/file/delete/:id', function(){
     
     it('should return 302', function(done){
-      File.findOne({ originalname : test_file.originalname }, function(err, file) {
+      File.findOne({ _id : sample_file._id }, function(err, file) {
         var url = '/admin/file/delete/' + file._id;
         admin
           .get(url)
@@ -400,8 +380,8 @@ describe('Admin', function(){
       });
     });
     
-    it('should delete a product', function(done){
-      File.findOne({ originalname : test_file.originalname }, function(err,file){
+    it('should delete a file', function(done){
+      File.findOne({ _id : sample_file._id }, function(err,file){
         expect(file).to.be.null;
         done();
       })
