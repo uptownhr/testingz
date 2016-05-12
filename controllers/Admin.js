@@ -51,8 +51,8 @@ router.post('/user', async (ctx, next) => {
   ctx.checkBody('email', 'Email is not valid').isEmail()
 
   if (ctx.errors) {
-    ctx.flash('errors', ctx.errors);
-    return ctx.redirect('/admin/user?' + qs.stringify(body));
+    ctx.flash('errors', ctx.errors)
+    return ctx.redirect('/admin/user?' + qs.stringify(body))
   }
 
   delete body.password
@@ -71,7 +71,7 @@ router.post('/user', async (ctx, next) => {
     ctx.flash('success', ['Saved'])
     ctx.redirect('/admin/users')
   } catch (e) {
-    console.log(e);
+    console.log(e)
     ctx.flash('errors', [e.message])
     return ctx.redirect('back')
   }
@@ -94,20 +94,20 @@ router.get('/user/delete/:id', async ctx => {
 
 router.get('/posts', function (req, res) {
 
-  var query = Post.find();
-  var param = '';
+  var query = Post.find()
+  var param = ''
 
   if (req.query.search) {
-    param = decodeURI(req.query.search);
+    param = decodeURI(req.query.search)
 
     query.or([{ title:
       { $regex: new RegExp(param, 'i') } }
-    ]);
+    ])
   }
 
   query.exec(function (err, posts) {
     res.render('admin/posts', { posts, search: param })
-  });
+  })
 
 })
 
@@ -126,40 +126,40 @@ router.get('/post/:id', function (req, res) {
 })
 
 router.post('/post', function (req, res) {
-  const body = req.body;
-  const userId = req.user._id;
+  const body = req.body
+  const userId = req.user._id
 
   async.waterfall([
     function (callback) {
       if (body._id.length) {
         Post.findOne({ _id: body._id }, function (err, post) {
-          post = _.merge(post, body);
-          callback(null, post);
-        });
+          post = _.merge(post, body)
+          callback(null, post)
+        })
       } else {
-        delete body._id; //remove empty id from post
+        delete body._id //remove empty id from post
 
-        var post = new Post(body);
-        post._author = userId;
-        callback(null, post);
+        var post = new Post(body)
+        post._author = userId
+        callback(null, post)
       }
     },
 
     function (post, callback) {
       post.save(function (err, saved) {
-        callback(err, saved);
+        callback(err, saved)
       })
     }
   ], function (err, user) {
     if (err) {
-      console.log(err);
+      console.log(err)
       req.flash('errors', [{ msg: err.message }])
       return res.redirect('/admin/post?' + qs.stringify(req.body))
     }
 
     req.flash('success', [{ msg: 'Saved' }])
     res.redirect('/admin/posts')
-  });
+  })
 })
 
 router.get('/post/delete/:id', function (req, res) {
@@ -181,7 +181,7 @@ router.get('/projects', async ctx => {
   let search = ctx.query.search
   let query = {}
   if (search) {
-    search = { $regex: new RegExp(search, 'i') };
+    search = { $regex: new RegExp(search, 'i') }
     query = { $or: [{ email: search }, { 'profile.name': search }] }
   }
 
@@ -207,10 +207,10 @@ router.get('/project/:id', async ctx => {
 // add new/edit
 router.post('/project', async (ctx, next) => {
   const body = ctx.request.body
-  ctx.checkBody('name', 'Name of project is required').notEmpty();
+  ctx.checkBody('name', 'Name of project is required').notEmpty()
   if (ctx.errors) {
-    ctx.flash('errors', ctx.errors);
-    return ctx.redirect('/admin/project?' + qs.stringify(body));
+    ctx.flash('errors', ctx.errors)
+    return ctx.redirect('/admin/project?' + qs.stringify(body))
   }
 
   const update = body._id
@@ -254,19 +254,19 @@ router.post('/images/upload', upload.array('file', 20), async ctx => {
 //PRODUCT START
 // list products
 router.get('/products', function (req, res) {
-  var query = Product.find();
-  var param = '';
+  var query = Product.find()
+  var param = ''
   if (req.query.search) {
-    var param = decodeURI(req.query.search);
-    var search = { $regex: new RegExp(param, 'i') };
+    var param = decodeURI(req.query.search)
+    var search = { $regex: new RegExp(param, 'i') }
     query.or([
       { name: search }
-    ]);
+    ])
   }
 
   query.exec(function (err, products) {
     res.render('admin/products', { products, search: param })
-  });
+  })
 })
 
 // new products
@@ -278,7 +278,7 @@ router.get('/product', function (req, res) {
 
 // view/edit projects
 router.get('/product/:id', function (req, res) {
-  var id = req.params.id;
+  var id = req.params.id
   Product.findOne({ _id: id }, function (err, product) {
     res.render('admin/product', {
       product
@@ -289,47 +289,47 @@ router.get('/product/:id', function (req, res) {
 // add new/edit
 router.post('/product', function (req, res) {
   var id = req.body._id
-  var body = req.body;
+  var body = req.body
 
-  var errors = [];
+  var errors = []
   if (!validator.isCurrency(body.price))
-    errors.push('Price is not valid');
+    errors.push('Price is not valid')
 
   if (errors.length) {
-    req.flash('errors', { msg: errors.join('<br>') });
-    return res.redirect('/admin/product/' + id);
+    req.flash('errors', { msg: errors.join('<br>') })
+    return res.redirect('/admin/product/' + id)
   }
 
   async.waterfall([
     function (callback) {
       if (body._id.length) {
         Product.findOne({ _id: body._id }, function (err, product) {
-          product = _.merge(product, req.body);
-          callback(null, product);
-        });
+          product = _.merge(product, req.body)
+          callback(null, product)
+        })
       } else {
-        delete body._id; //remove empty id from user
+        delete body._id //remove empty id from user
 
-        var product = new Product(body);
-        callback(null, product);
+        var product = new Product(body)
+        callback(null, product)
       }
     },
 
     function (product, callback) {
       product.save(function (err, saved) {
-        callback(err, saved);
+        callback(err, saved)
       })
     }
   ], function (err, product) {
     if (err) {
-      console.log(err);
+      console.log(err)
       req.flash('errors', [{ msg: err.message }])
       return res.redirect('/admin/product?' + qs.stringify(req.body))
     }
 
     req.flash('success', [{ msg: product.name + ' saved' }])
     res.redirect('/admin/products')
-  });
+  })
 })
 
 router.get('/product/delete/:id', function (req, res) {
@@ -342,7 +342,7 @@ router.get('/product/delete/:id', function (req, res) {
 
     return res.redirect('/admin/products')
   })
-});
+})
 
 //PRODUCT END
 
@@ -352,7 +352,7 @@ router.get('/files', async ctx => {
   let query = {}
 
   if (search) {
-    search = { $regex: new RegExp(search, 'i') };
+    search = { $regex: new RegExp(search, 'i') }
     query = { $or: [{ originalName: search }, { filename: search }] }
   }
 
@@ -367,7 +367,7 @@ router.get('/file', async ctx => {
 
 //view/edit file model
 router.get('/file/:id', async ctx => {
-  var id = ctx.params.id;
+  var id = ctx.params.id
 
   const file = await File.findOne({ _id: id })
 
