@@ -67,7 +67,7 @@ router.post('/user', async (ctx, next) => {
   }
 
   const update = body._id
-
+  
   let user = update ? await User.findOne({ _id: body._id }) : new User()
 
   delete body._id
@@ -87,7 +87,10 @@ router.post('/user', async (ctx, next) => {
 
 router.get('/user/delete/:id', async ctx => {
   try {
-    User.remove({ _id: req.params.id })
+    User.remove({ _id: ctx.params.id }).then(err =>{
+      if (err) console.log(err);
+    })
+
     ctx.flash('success', { msg: 'deleted' })
   } catch(err) {
     ctx.flash('error', { msg: err.message })
@@ -100,77 +103,72 @@ router.get('/user/delete/:id', async ctx => {
  * Blog Post Editing
  */
 
-router.get('/posts', function (req, res) {
+router.get('/posts', async ctx => {
 
-  var query = Post.find();
-  var param = '';
+  let search = ctx.query.search
+  let query = {}
 
-  if (req.query.search) {
-    param = decodeURI(req.query.search);
-
-    query.or([{ title:
-      { $regex: new RegExp(param, 'i') } }
-    ]);
+  if (search) {
+    search = { $regex: new RegExp(search, 'i') }
+    query = { $or : [{ title: search }] } 
   }
 
-  query.exec(function (err, posts) {
-    res.render('admin/posts', { posts, search: param })
-  });
+  const posts = await Post.find(query);
+  ctx.render('admin/posts', { posts, search: ctx.query.search})
 
 })
 
-router.get('/post', function (req, res) {
+router.get('/post', async ctx =>  {
   const post = {}
-  res.render('admin/post', { post })
+  const query = ctx.query
+
+  _.merge(post, query)
+  ctx.render('admin/post', { post })
 })
 
-router.get('/post/:id', function (req, res) {
-  const id = req.params.id
+router.get('/post/:id', async ctx => {
+  const post = await Post.findOne({ _id : ctx.params.id })
 
-  Post.findOne({ _id: id }, function (err, post) {
-    if (post) return res.render('admin/post', { post })
-  })
+  ctx.render('admin/post', { post })
+})
+
+router.post('/post', async (ctx, next) => {
+  const body = ctx.request.body;
+  const userId = ctx.request._id;
+  const update = body._id;
+
+  let post = update ? await Post.findOne({ _id: body._id }) : new Post()
+  
+  delete body._id
+
+  post = _.merge(post, body);
+
+  try {
+    const saved = await post.save()
+    ctx.flash('success', ['Saved'])
+    ctx.redirect('/admin/posts')
+  } catch (e) {
+    console.log(e)
+    ctx.flash('errors', [e.message])
+    return ctx.redirect('back')
+  }
 
 })
 
-router.post('/post', function (req, res) {
-  const body = req.body;
-  const userId = req.user._id;
+router.get('/post/delete/:id', async ctx => {
 
-  async.waterfall([
-    function (callback) {
-      if (body._id.length) {
-        Post.findOne({ _id: body._id }, function (err, post) {
-          post = _.merge(post, body);
-          callback(null, post);
-        });
-      } else {
-        delete body._id; //remove empty id from post
+  try {
+    console.log(ctx.params.id)
+    Post.remove({ _id: ctx.params.id }).then(err =>{
+      if (err) console.log(err);
+    })
+    ctx.flash('success', { msg : 'deleted'}) 
+  } catch(err){
+    ctx.flash('error', { msg: err.message })
+  }
 
-        var post = new Post(body);
-        post._author = userId;
-        callback(null, post);
-      }
-    },
-
-    function (post, callback) {
-      post.save(function (err, saved) {
-        callback(err, saved);
-      })
-    }
-  ], function (err, user) {
-    if (err) {
-      console.log(err);
-      req.flash('errors', [{ msg: err.message }])
-      return res.redirect('/admin/post?' + qs.stringify(req.body))
-    }
-
-    req.flash('success', [{ msg: 'Saved' }])
-    res.redirect('/admin/posts')
-  });
-})
-
-router.get('/post/delete/:id', function (req, res) {
+  return ctx.redirect('/admin/posts')
+/*
   Post.remove({ _id: req.params.id }, function (err) {
     if (err) {
       req.flash('error', { msg: err.message })
@@ -179,7 +177,7 @@ router.get('/post/delete/:id', function (req, res) {
     }
 
     return res.redirect('/admin/posts')
-  })
+  })*/
 })
 
 //PROJECT SECTION
