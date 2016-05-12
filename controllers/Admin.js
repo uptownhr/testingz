@@ -246,21 +246,23 @@ router.post('/images/upload', upload.array('file', 20), async ctx => {
 
 //PRODUCT START
 // list products
-router.get('/products', function (req, res) {
-  var query = Product.find();
-  var param = '';
-  if (req.query.search) {
-    var param = decodeURI(req.query.search);
-    var search = { $regex: new RegExp(param, 'i') };
-    query.or([
-      { name: search }
-    ]);
-  }
 
-  query.exec(function (err, products) {
-    res.render('admin/products', { products, search: param })
-  });
-})
+   /** Koa /products route based on user
+    * purpose is to list products   **/
+  router.get('/products', async ctx => {
+    let search = ctx.query.search
+    let query = {}
+
+    if (search) {
+      query = { $regex: new RegExp(search, 'i') }
+    }
+
+    const products = await Product.find(query)
+    ctx.render('admin/products', { products, search: ctx.query.search })
+  })
+
+  /** End of /products route **/
+
 
 // new products
 
@@ -268,6 +270,17 @@ router.get('/product', function (req, res) {
   const product = {}
   res.render('admin/product', { product })
 })
+
+/*** KOA /product route ********/
+router.get('/product', async ctx => {
+  const product = {}
+  const query = ctx.query
+
+  _.merge(product, query)
+  ctx.render('admin/product', { product })
+})
+
+/****** End of KOA /product route ********/
 
 // view/edit projects
 router.get('/product/:id', function (req, res) {
