@@ -24,7 +24,7 @@ router.get('/users', async ctx => {
   let query = {}
 
   if (search) {
-    search = { $regex: new RegExp(search, 'i') };
+    search = { $regex: new RegExp(search, 'i') }
     query = { $or: [{ email: search }, { 'profile.name': search }] }
   }
 
@@ -48,7 +48,7 @@ router.get('/user/:id', async ctx => {
 
 router.post('/user', async (ctx, next) => {
   const body = ctx.request.body
-  ctx.checkBody('email', 'Email is not valid').isEmail();
+  ctx.checkBody('email', 'Email is not valid').isEmail()
 
   if (ctx.errors) {
     ctx.flash('errors', ctx.errors);
@@ -207,7 +207,7 @@ router.get('/project/:id', async ctx => {
 // add new/edit
 router.post('/project', async (ctx, next) => {
   const body = ctx.request.body
-
+  ctx.checkBody('name', 'Name of project is required').notEmpty();
   if (ctx.errors) {
     ctx.flash('errors', ctx.errors);
     return ctx.redirect('/admin/project?' + qs.stringify(body));
@@ -233,10 +233,8 @@ router.post('/project', async (ctx, next) => {
 })
 
 router.get('/project/delete/:id', async ctx => {
-  console.log('wtf', ctx.params.id);
   try {
     await Project.remove({ _id: ctx.params.id })
-    console.log("big fat mom");
     ctx.flash('success', { msg: 'deleted' })
   } catch (err) {
     ctx.flash('error', { msg: err.message })
