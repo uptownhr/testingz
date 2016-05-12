@@ -158,26 +158,14 @@ router.post('/post', async (ctx, next) => {
 router.get('/post/delete/:id', async ctx => {
 
   try {
-    console.log(ctx.params.id)
-    Post.remove({ _id: ctx.params.id }).then(err =>{
-      if (err) console.log(err);
-    })
+    await Post.remove({ _id: ctx.params.id })
     ctx.flash('success', { msg : 'deleted'}) 
   } catch(err){
     ctx.flash('error', { msg: err.message })
   }
 
   return ctx.redirect('/admin/posts')
-/*
-  Post.remove({ _id: req.params.id }, function (err) {
-    if (err) {
-      req.flash('error', { msg: err.message })
-    }else {
-      req.flash('success', { msg: 'deleted' })
-    }
 
-    return res.redirect('/admin/posts')
-  })*/
 })
 
 //PROJECT SECTION
@@ -248,6 +236,7 @@ router.get('/project/delete/:id', async ctx => {
 
   return ctx.redirect('/admin/projects')
 })
+
 // IMAGE DROP FUNCTION
 
 router.post('/images/upload', upload.array('file', 20), async ctx => {
