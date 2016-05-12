@@ -16,7 +16,6 @@ const File = models.File
 const Project = models.Project
 const Product = models.Product
 const Contact = models.Contact
-const Lessons = models.lessons
 
 router.get('/', function (req, res) {
   res.render('admin/overview')
@@ -232,6 +231,10 @@ router.get('/project', function (req, res) {
   res.render('admin/project', { project })
 })
 
+
+
+
+
 // view/edit projects
 router.get('/project/:id', function (req, res) {
   var id = req.params.id;
@@ -241,6 +244,8 @@ router.get('/project/:id', function (req, res) {
     })
   })
 })
+
+
 
 // add new/edit
 router.post('/project', function (req, res) {
@@ -495,7 +500,7 @@ router.get('/file/delete/:id', function (req, res) {
   File.remove({ _id: req.params.id }, function (err) {
     if (err) {
       req.flash('error', { msg: err.message })
-    }else {
+    } else {
       req.flash('success', { msg: 'deleted' })
     }
 
@@ -503,77 +508,50 @@ router.get('/file/delete/:id', function (req, res) {
   })
 })
 
-// route to contacts list view in admin ctrl panel 
+// get contact information from Mongo, use it to send to admin contacts page
+// use jade to present info
 router.get('/contacts', function(req, res) {
-  res.render('admin/contacts.jade')
-})
-
-// route to individual contact view/edit in admin ctrl panel
-router.get('/contact', function(req, res) {
-  res.render('admin/contact.jade')
-})
-
-
-router.get('/lessons', function(req, res) {
-  const lesson = {}
-    res.render('admin/lessons', { lesson });
-  })
-
-router.get('/lessons/:_id', function(req, res) {
-  var id = req.params._id;
-  Lessons.findOne({ _id: id }, function(err, lesson){
-    res.render('admin/lessons',{
-      lesson
+  Contact.find(function(err, contacts) {
+      res.render('admin/contacts', {
+          contacts: contacts
     })
   })
 })
 
-router.post('/lessons', function (req, res) {
-  var body = req.body;
-  var id = req.body._id;
-  Lessons.findOne({id: id}, function(err, lesson) {
-    if(lesson){
-      lesson.title = body.title;
-      lesson.function = body.function;
-      lesson.description = body.description;
-      lesson.video_url = body.video_url;
-      lesson.image_url = body.image_url;
-      lesson.created_date = body.created_date;
-      lesson.save(function (err, saved) {
-        res.redirect('/admin/lessonList')
-      })
-    }
-  })
-  console.log(body);
-  var lesson = new Lessons({
-    title: body.title,
-    function: body.function,
-    description: body.description,
-    video_url: body.video_url,
-    image_url: body.image_url,
-    created_date: body.created_date
-  })
-  lesson.save(function (err, saved) {
-    res.redirect('/admin/lessonList');
+// view individual contact info in Admin
+router.get('/contact/:id', function (req, res) {
+  var id = req.params.id;
+  Contact.findOne({ _id: id}, function (err, contact) {
+    res.render('admin/contact', { contact })
   })
 })
 
-router.get('/lessonList', function(req, res) {
-  Lessons.find(function (err, lesson) {
-    res.render('admin/lessonList', {l: lesson})
-  })
-})
 
-router.get('/lessonDelete/:_id', function(req, res) {
-  Lessons.remove({ _id: req.params._id }, function (err) {
+// delete individual contact info in Admin
+router.get('/contact/delete/:id', function (req, res) {
+  var id = req.params.id;
+  Contact.remove({_id: id}, function(err) {
     if (err) {
-      req.flash('error', { msg: err.message })
-    }else {
-      req.flash('success', { msg: 'deleted' })
+      req.flash('error', {msg: err.message})
+    } else {
+      req.flash('success', {msg: 'Contact Deleted Successfully'})
     }
-    return res.redirect('/admin/lessonList')
+    return res.redirect('/admin/contacts')
   })
 })
+
+
+// route to contacts list view in admin ctrl panel
+router.get('/contacts', function(req, res) {
+  res.render('admin/contacts')
+})
+
+// route to individual contact view/edit in admin ctrl panel
+router.get('/contact', function(req, res) {
+  res.render('admin/contact')
+})
+
+
 
 
 module.exports = router
