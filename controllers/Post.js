@@ -1,13 +1,13 @@
 const router = require('koa-router')({ prefix: '/blog' })
 
-const Post = require('../models/Post');
-const Remarkable = require('remarkable');
+const Post = require('../models/Post')
+const Remarkable = require('remarkable')
 
-const md = new Remarkable();
+const md = new Remarkable()
 /*
 
 
-var marked = require('marked');
+var marked = require('marked')
 
 marked.setOptions({
   gfm: false
