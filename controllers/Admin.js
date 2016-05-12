@@ -88,9 +88,7 @@ router.post('/user', async (ctx, next) => {
 
 router.get('/user/delete/:id', async ctx => {
   try {
-    User.remove({ _id: ctx.params.id }).then(err =>{
-      if (err) console.log(err);
-    })
+    await User.remove({ _id: ctx.params.id })
     ctx.flash('success', { msg: 'deleted' })
   } catch (err) {
     ctx.flash('error', { msg: err.message })
