@@ -75,7 +75,7 @@ router.post('/contact', function (req, res) {
         } else {
           req.flash('success', {msg: 'Your message was sent successfully, Thank You!'})
         }
-         res.redirect('/');
+         res.redirect('/contact');
       })
     }
   }) //end of mongoose findOne method
