@@ -11,7 +11,8 @@ const Koa = require('koa'),
   session = require('koa-generic-session'),
   redisStore = require('koa-redis'),
   moment = require('moment'),
-  _ = require('lodash')
+  _ = require('lodash'),
+  convert = require('koa-convert')
 
 require('./config/seed.js')
 
@@ -66,7 +67,7 @@ const pug = new Pug({
 })
 pug.options.noCache = true
 pug.use(app)
-const convert = require('koa-convert')
+
 
 //specify public static directory
 app.use(async (ctx, next) => {

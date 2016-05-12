@@ -17,7 +17,7 @@ const USER_INFO = {
 
 const TEST_USER = User({ email: 'asdf@asdf.com', password: 'asdf' })
 
-describe.only('App', () => {
+describe('App', () => {
   before(done => {
     user
       .post('/auth/login')

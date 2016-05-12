@@ -42,33 +42,33 @@ router.get('/user', async ctx => {
 
 router.get('/user/:id', async ctx => {
   const user = await User.findOne({ _id: ctx.params.id })
-  console.log(user, ctx.params)
+
   ctx.render('admin/user', { user })
 })
 
 router.post('/user', async (ctx, next) => {
   const body = ctx.request.body
-  
+
   ctx.checkBody('email').isEmail('Email is not valid');
-  
-  if (body.confirmPassword || body.password){
+
+  if (body.confirmPassword || body.password) {
     ctx.checkBody('password').len(4, 'Password must be at least 4 characters long')
     ctx.checkBody('confirmPassword').eq(body.password, 'Passwords do not match')
   } else {
     //no need to include password if user isn't setting one
     delete body.password;
   }
-  
+
   //not a user model field
   delete body.confirmPassword
-  
+
   if (ctx.errors) {
     ctx.flash('errors', ctx.errors);
     return ctx.redirect('/admin/user?' + qs.stringify(body));
   }
 
   const update = body._id
-  
+
   let user = update ? await User.findOne({ _id: body._id }) : new User()
 
   delete body._id
@@ -108,11 +108,11 @@ router.get('/posts', async ctx => {
 
   if (search) {
     search = { $regex: new RegExp(search, 'i') }
-    query = { $or : [{ title: search }] } 
+    query = { $or: [{ title: search }] }
   }
 
   const posts = await Post.find(query);
-  ctx.render('admin/posts', { posts, search: ctx.query.search})
+  ctx.render('admin/posts', { posts, search: ctx.query.search })
 
 })
 
@@ -125,7 +125,7 @@ router.get('/post', async ctx =>  {
 })
 
 router.get('/post/:id', async ctx => {
-  const post = await Post.findOne({ _id : ctx.params.id })
+  const post = await Post.findOne({ _id: ctx.params.id })
 
   ctx.render('admin/post', { post })
 })
@@ -136,7 +136,7 @@ router.post('/post', async (ctx, next) => {
   const update = body._id;
 
   let post = update ? await Post.findOne({ _id: body._id }) : new Post()
-  
+
   delete body._id
 
   post = _.merge(post, body);
@@ -157,8 +157,8 @@ router.get('/post/delete/:id', async ctx => {
 
   try {
     await Post.remove({ _id: ctx.params.id })
-    ctx.flash('success', { msg : 'deleted'}) 
-  } catch(err){
+    ctx.flash('success', { msg: 'deleted' })
+  } catch (err) {
     ctx.flash('error', { msg: err.message })
   }
 
