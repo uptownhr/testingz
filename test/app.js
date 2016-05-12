@@ -17,7 +17,7 @@ const USER_INFO = {
 
 const TEST_USER = User({ email: 'asdf@asdf.com', password: 'asdf' })
 
-describe('App', () => {
+describe.only('App', () => {
   before(done => {
     user
       .post('/auth/login')
@@ -110,13 +110,13 @@ describe('App', () => {
   })
 
   describe('GET /blog/post/:id', () => {
-    it('should return 200', done => {
-      Post.findOne({ title: 'First Blog Post' }, (err, post) => {
-        var url = '/blog/post/' + post._id;
-        request(app)
-          .get(url)
-          .expect(200, done)
-      });
+    it('should return 200', async (done) => {
+      const post = await Post.findOne({ title: 'First Blog Post' })
+
+      var url = '/blog/post/' + post._id;
+      request(app)
+        .get(url)
+        .expect(200, done)
     });
   });
 
@@ -150,13 +150,16 @@ describe('App', () => {
         .expect(302, done)
     })
 
-    it('should not find the mock_provider', done => {
-      User.findOne({ email: USER_INFO.email }, (err, user) => {
-        if (err) return done(err);
+    it('should not find the mock_provider', async done => {
+      try {
+        const user = await User.findOne({ email: USER_INFO.email })
         var providers = _.map(user.providers, 'name');
         expect('mock_provider').to.not.be.oneOf(providers);
-        done();
-      });
+      } catch (err) {
+        return done(err);
+      }
+
+      done();
     });
 
   });
@@ -232,7 +235,6 @@ describe('App', () => {
           user
             .post('/auth/login').send({ email: 'admin@admin.com' })
             .expect(302, () => {
-              console.log('wtfzz')
               user
                 .get('/admin/')
                 .expect(302, done)

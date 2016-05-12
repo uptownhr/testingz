@@ -26,7 +26,6 @@ router.post('/login', async (ctx, next) => {
 
     ctx.flash('success', ['Success! You are logged in.']);
     ctx.redirect('/')
-    ctx.session.wtf = 'wtf'
     return ctx.logIn(user)
   })(ctx, next);
 })

@@ -7,7 +7,7 @@
     "dev": "nodemon index.js",
     "test": "PORT=9999 TEST=true istanbul cover _mocha",
     "posttest": "cat ./coverage/lcov.info | coveralls",
-    "test-watch": "PORT=9999 TEST=true nodemon --exec 'mocha --reporter spec --timeout 5000'",
+    "test-watch": "PORT=9999 TEST=true nodemon --exec 'mocha --reporter spec --timeout 5000 --compilers js:babel-core/register'",
     "postversion": "git push && git push --tags",
     "cover": "istanbul cover _mocha && cat ./coverage/lcov.info | coveralls",
     "dev-docker": "npm install && npm run dev",
