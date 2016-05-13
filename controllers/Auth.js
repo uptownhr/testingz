@@ -97,4 +97,27 @@ router.get('/o/:provider/callback', async (ctx, next) => {
   ctx.redirect(ctx.session.returnTo || '/')
 })
 
+router.get('/askEmail', ctx => {
+  ctx.render('askEmail')
+})
+
+router.post('/askEmail', async ctx => {
+  ctx.checkBody('email', 'Email is not valid').isEmail()
+
+  if (ctx.errors) {
+    ctx.flash('errors', ctx.errors)
+    return ctx.redirect('/auth/askEmail')
+  }
+
+  const body = ctx.request.body
+
+  ctx.req.user.askEmail = false
+  ctx.req.user.email = body.email
+
+  await ctx.req.user.save()
+
+  ctx.redirect('/')
+})
+
+
 module.exports = router
