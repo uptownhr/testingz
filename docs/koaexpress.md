@@ -16,7 +16,7 @@ router.get('/user/:id', function(req,res) {
 ```
 
 ### KoaJs
-```
+```js
 router.get('/user/:id', async ctx => {
   const id = ctx.params.id
   var user = await User.findOne({_id: id})
