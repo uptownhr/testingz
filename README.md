@@ -2,7 +2,7 @@
   <a href="http://gulpjs.com">
     <img src="https://raw.githubusercontent.com/uptownhr/hackable/master/public/site/img/hackable-logo.png">
   </a>
-  <p align="center">Personal site starter for express developers.</p>
+  <p align="center">Personal site starter for nodejs developers.</p>
 </p>
 
 [![Build Status](https://travis-ci.org/uptownhr/hackable.svg)](https://travis-ci.org/uptownhr/hackable)
@@ -12,9 +12,9 @@
 [![Coverage Status](https://coveralls.io/repos/github/uptownhr/hackable/badge.svg?branch=master)](https://coveralls.io/github/uptownhr/hackable?branch=master)
 
 # hackable
-Personal site starter for express developers.
+Personal site starter for nodejs developers.
 
-Hackable comes pre-built with an admin that is easy to hack with your express chops. Hackable keeps things familiar and uses libraries common to express developers. No new API's to learn - no magic. 
+Hackable comes pre-built with an admin that is easy to hack with your nodejs chops. Hackable keeps things familiar and uses libraries common to expressjs or koajs. No new API's to learn - no magic. 
 
 The goal of the project is to provide you with a hackable prototype that you can mold to your liking.
 
@@ -27,6 +27,7 @@ Admin Login: admin@admin.com / asdfasdf
 To access admin, use pull-down menu once logged in as admin or go to /admin
 
 ## Main Stack
+- Koa@2.0 / Express@1.4.0
 - Mongoose
 - Pug (previously known as Jade)
 - Passport
@@ -74,5 +75,3 @@ If you have docker available, you can get started in two steps.
 - [docker basics](docs/docker.md)
 
 [all guides](docs)
-
-testing
