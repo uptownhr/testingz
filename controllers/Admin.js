@@ -9,7 +9,7 @@ const
   passport = require('../config/passport'),
   Promise = require('bluebird')
 
-const { User, Post, File, Project, Product } = require('../models')
+const { User, Post, File, Project, Product, Contact } = require('../models')
 
 const upload = multer({ dest: path.join(__dirname, '../public/uploads') })
 
@@ -359,44 +359,31 @@ router.get('/file/delete/:id', async ctx => {
 
 // get contact information from Mongo, use it to send to admin contacts page
 // use jade to present info
-router.get('/contacts', function (req, res) {
-  Contact.find(function (err, contacts) {
-    res.render('admin/contacts', {
-      contacts: contacts
-    })
-  })
+router.get('/contacts', async ctx => {
+  const contacts = await Contact.find()
+  ctx.render('admin/contacts', { contacts })
 })
 
 // view individual contact info in Admin
-router.get('/contact/:id', function (req, res) {
-  var id = req.params.id;
-  Contact.findOne({ _id: id }, function (err, contact) {
-    res.render('admin/contact', { contact })
-  })
+router.get('/contact/:id', async ctx => {
+  const id = ctx.params.id;
+  const contact = await Contact.findOne({ _id: id })
+  
+  ctx.render('admin/contact', { contact })
 })
 
 // delete individual contact info in Admin
-router.get('/contact/delete/:id', function (req, res) {
-  var id = req.params.id;
-  Contact.remove({ _id: id }, function (err) {
-    if (err) {
-      req.flash('error', { msg: err.message })
-    } else {
-      req.flash('success', { msg: 'Contact Deleted Successfully' })
-    }
+router.get('/contact/delete/:id', async ctx => {
+  const id = ctx.params.id;
 
-    return res.redirect('/admin/contacts')
-  })
-})
+  try {
+    await Contact.remove({ _id: id })
+    ctx.flash('success', { msg: 'Contact Deleted Successfully' })
+  } catch (e) {
+    ctx.flash('error', { msg: err.message })
+  }
 
-// route to contacts list view in admin ctrl panel
-router.get('/contacts', function (req, res) {
-  res.render('admin/contacts')
-})
-
-// route to individual contact view/edit in admin ctrl panel
-router.get('/contact', function (req, res) {
-  res.render('admin/contact')
+  return ctx.redirect('/admin/contacts')
 })
 
 module.exports = router
