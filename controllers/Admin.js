@@ -240,11 +240,8 @@ router.post('/images/upload', upload.array('file', 20), async ctx => {
   })
 })
 
-//PRODUCT START
+// PRODUCT START
 // list products
-
-   /** Koa /products route based on user
-    * purpose is to list products   **/
   router.get('/products', async ctx => {
     let search = ctx.query.search
     let query = {}
@@ -257,15 +254,8 @@ router.post('/images/upload', upload.array('file', 20), async ctx => {
     ctx.render('admin/products', { products, search: ctx.query.search })
   })
 
-  /** End of /products route **/
-// new products
 
-router.get('/product', function (req, res) {
-  const product = {}
-  res.render('admin/product', { product })
-})
-
-/*** KOA /product route ********/
+/*** add new product  ********/
 router.get('/product', async ctx => {
   const product = {}
   const query = ctx.query
@@ -274,78 +264,17 @@ router.get('/product', async ctx => {
   ctx.render('admin/product', { product })
 })
 
-/****** End of KOA /product route ********/
 
-// Koa specific product 
+// view/edit update product 
 router.get('/product/:id', async ctx => {
   const product = await Product.findOne({ _id: ctx.params.id })
-
   ctx.render('admin/product', { product })
 })
 
-//end of Koa specific product
-
-
-// view/edit product 
-// router.get('/product/:id', function (req, res) {
-//   var id = req.params.id
-//   Product.findOne({ _id: id }, function (err, product) {
-//     res.render('admin/product', {
-//       product
-//     })
-//   })
-// })
 
 
 
-
-// add new/edit
-// router.post('/product', function (req, res) {
-//   var id = req.body._id
-//   var body = req.body
-
-//   var errors = []
-//   if (!validator.isCurrency(body.price))
-//     errors.push('Price is not valid')
-
-//   if (errors.length) {
-//     req.flash('errors', { msg: errors.join('<br>') })
-//     return res.redirect('/admin/product/' + id)
-//   }
-
-//   async.waterfall([
-//     function (callback) {
-//       if (body._id.length) {
-//         Product.findOne({ _id: body._id }, function (err, product) {
-//           product = _.merge(product, req.body)
-//           callback(null, product)
-//         })
-//       } else {
-//         delete body._id //remove empty id from user
-
-//         var product = new Product(body)
-//         callback(null, product)
-//       }
-//     },
-
-//     function (product, callback) {
-//       product.save(function (err, saved) {
-//         callback(err, saved)
-//       })
-//     }
-//   ], function (err, product) {
-//     if (err) {
-//       console.log(err)
-//       req.flash('errors', [{ msg: err.message }])
-//       return res.redirect('/admin/product?' + qs.stringify(req.body))
-//     }
-
-//     req.flash('success', [{ msg: product.name + ' saved' }])
-//     res.redirect('/admin/products')
-//   })
-// })
-
-/****Koa product edit/view   *******/
+/**** new product edit  *******/
 router.post('/product', async (ctx, next) => {
   const body = ctx.request.body
   
@@ -354,7 +283,7 @@ router.post('/product', async (ctx, next) => {
     return ctx.redirect('/admin/product?', qs.stringify(body))
   }
   
-  const update = body._id //maybe use body.id koa/es6 specific thing
+  const update = body._id 
   
   let product = update ? await Product.findOne({_id: body._id}) : new Product()
   
@@ -365,31 +294,16 @@ router.post('/product', async (ctx, next) => {
    try {
     const saved = await product.save()
     ctx.flash('success', ['Saved'])
-    ctx.redirect('/admin/users')
+    ctx.redirect('/admin/products')
   } catch (e) {
     console.log(e)
     ctx.flash('errors', [e.message])
     return ctx.redirect('back')
   }
   
-})// end of Koa product edit/view
+})
 
-/****End of KOA product edit/view */
-
-
-// router.get('/product/delete/:id', function (req, res) {
-//   Product.remove({ _id: req.params.id }, function (err) {
-//     if (err) {
-//       req.flash('error', { msg: err.message })
-//     }else {
-//       req.flash('success', { msg: 'deleted' })
-//     }
-
-//     return res.redirect('/admin/products')
-//   })
-// })
-
-// Koa product delete 
+// product delete 
 router.get('/product/delete/:id', async ctx => {
   try {
     await Product.remove({_id: ctx.params.id })

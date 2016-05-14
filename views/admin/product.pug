@@ -1,7 +1,7 @@
 extends layout
 block content
   form(method="POST" action="/admin/product")
-    input(type="hidden" name="_id" value=product._id)
+    input(type="hidden" name="_id" value=product.id)
     .dashhead
       .dashhead-titles
         h6.dashhead-subtitle Product

@@ -41,11 +41,11 @@ block content
                 td
                   =moment(product.date).format("YYYY-MM-DD")
                 td
-                  a.btn.btn-primary-outline.btn-sm(href='/admin/product/#{product._id}')
+                  a.btn.btn-primary-outline.btn-sm(href=`/admin/product/${product._id}`)
                     | View/Edit
                     span.icon.icon-pencil
                   | &nbsp;
-                  a.btn.btn-primary-outline.btn-sm(href='/admin/product/delete/#{product._id}', data-remote='true', data-confirm='Are You Sure?')
+                  a.btn.btn-primary-outline.btn-sm(href=`/admin/product/delete/${product._id}`, data-remote='true', data-confirm='Are You Sure?')
                     | Delete
                     span.icon.icon-erase
                   | &nbsp;
