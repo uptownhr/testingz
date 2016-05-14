@@ -174,7 +174,8 @@ router.get('/projects', async ctx => {
   }
 
   const projects = await Project.find(query)
-  ctx.render('admin/projects', { projects, search: ctx.query.search })
+  ctx.render('admin/projects', { projects, 
+    search: search === undefined ? '' : ctx.query.search })
 })
 
 // new projects
@@ -247,11 +248,13 @@ router.post('/images/upload', upload.array('file', 20), async ctx => {
     let query = {}
 
     if (search) {
-      query = { $regex: new RegExp(search, 'i') }
-    }
+      search = { $regex: new RegExp(search, 'i')}
+      query = { $or:  [{name: search}] }
+    } 
 
     const products = await Product.find(query)
-    ctx.render('admin/products', { products, search: ctx.query.search })
+    ctx.render('admin/products', 
+    { products, search: search === undefined ? '': ctx.query.search })
   })
 
 
