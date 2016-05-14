@@ -174,7 +174,8 @@ router.get('/projects', async ctx => {
   }
 
   const projects = await Project.find(query)
-  ctx.render('admin/projects', { projects, search: ctx.query.search })
+  ctx.render('admin/projects', { projects, 
+    search: search === undefined ? '' : ctx.query.search })
 })
 
 // new projects
@@ -240,98 +241,82 @@ router.post('/images/upload', upload.array('file', 20), async ctx => {
   })
 })
 
-//PRODUCT START
+// PRODUCT START
 // list products
-router.get('/products', function (req, res) {
-  var query = Product.find()
-  var param = ''
-  if (req.query.search) {
-    var param = decodeURI(req.query.search)
-    var search = { $regex: new RegExp(param, 'i') }
-    query.or([
-      { name: search }
-    ])
-  }
+  router.get('/products', async ctx => {
+    let search = ctx.query.search
+    let query = {}
 
-  query.exec(function (err, products) {
-    res.render('admin/products', { products, search: param })
+    if (search) {
+      search = { $regex: new RegExp(search, 'i')}
+      query = { $or:  [{name: search}] }
+    } 
+
+    const products = await Product.find(query)
+    ctx.render('admin/products', 
+    { products, search: search === undefined ? '': ctx.query.search })
   })
-})
 
-// new products
 
-router.get('/product', function (req, res) {
+/*** add new product  ********/
+router.get('/product', async ctx => {
   const product = {}
-  res.render('admin/product', { product })
+  const query = ctx.query
+
+  _.merge(product, query)
+  ctx.render('admin/product', { product })
 })
 
-// view/edit projects
-router.get('/product/:id', function (req, res) {
-  var id = req.params.id
-  Product.findOne({ _id: id }, function (err, product) {
-    res.render('admin/product', {
-      product
-    })
-  })
+
+// view/edit update product 
+router.get('/product/:id', async ctx => {
+  const product = await Product.findOne({ _id: ctx.params.id })
+  ctx.render('admin/product', { product })
 })
 
-// add new/edit
-router.post('/product', function (req, res) {
-  var id = req.body._id
-  var body = req.body
 
-  var errors = []
-  if (!validator.isCurrency(body.price))
-    errors.push('Price is not valid')
 
-  if (errors.length) {
-    req.flash('errors', { msg: errors.join('<br>') })
-    return res.redirect('/admin/product/' + id)
+
+/**** new product edit  *******/
+router.post('/product', async (ctx, next) => {
+  const body = ctx.request.body
+  
+  if (ctx.errors) {
+    ctx.flash('errors', ctx.errors)
+    return ctx.redirect('/admin/product?', qs.stringify(body))
   }
-
-  async.waterfall([
-    function (callback) {
-      if (body._id.length) {
-        Product.findOne({ _id: body._id }, function (err, product) {
-          product = _.merge(product, req.body)
-          callback(null, product)
-        })
-      } else {
-        delete body._id //remove empty id from user
-
-        var product = new Product(body)
-        callback(null, product)
-      }
-    },
-
-    function (product, callback) {
-      product.save(function (err, saved) {
-        callback(err, saved)
-      })
-    }
-  ], function (err, product) {
-    if (err) {
-      console.log(err)
-      req.flash('errors', [{ msg: err.message }])
-      return res.redirect('/admin/product?' + qs.stringify(req.body))
-    }
-
-    req.flash('success', [{ msg: product.name + ' saved' }])
-    res.redirect('/admin/products')
-  })
+  
+  const update = body._id 
+  
+  let product = update ? await Product.findOne({_id: body._id}) : new Product()
+  
+  delete body._id
+  
+  product = _.merge(product, body)
+  
+   try {
+    const saved = await product.save()
+    ctx.flash('success', ['Saved'])
+    ctx.redirect('/admin/products')
+  } catch (e) {
+    console.log(e)
+    ctx.flash('errors', [e.message])
+    return ctx.redirect('back')
+  }
+  
 })
 
-router.get('/product/delete/:id', function (req, res) {
-  Product.remove({ _id: req.params.id }, function (err) {
-    if (err) {
-      req.flash('error', { msg: err.message })
-    }else {
-      req.flash('success', { msg: 'deleted' })
-    }
-
-    return res.redirect('/admin/products')
-  })
-})
+// product delete 
+router.get('/product/delete/:id', async ctx => {
+  try {
+    await Product.remove({_id: ctx.params.id })
+    ctx.flash('success', { msg: 'deleted' })
+  } catch (err) {
+    ctx.flash('error', {msg: err.message})
+  }
+  
+  return ctx.redirect('/admin/products')
+}) // end of Koa product delete 
 
 //PRODUCT END
 
