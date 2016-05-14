@@ -75,3 +75,39 @@ If you have docker available, you can get started in two steps.
 - [docker basics](docs/docker.md)
 
 [all guides](docs)
+
+## List of Packages
+
+| Package                         | Description                                                           |
+| ------------------------------- | --------------------------------------------------------------------- |
+| babel-preset-stage-3            | To obtain latest approved JS features                                 |
+| babel-register                  | To auto compile on runtime                                            |
+| bcrypt-nodejs                   | Library for hashing and salting user passwords.                       |
+| bluebird                        | Promise Utility                                                       |
+| crypto                          | To create hash                                                        |
+| koa                             | Node.js framework using async                                         |
+| koa-bodyparser                  | koa middleware gives, ctx.request.body                                |
+| koa-convert                     | koa middleware to convert to new 2.0 middleware style                 |
+| koa-generic-session             | koa middleware handles cookies and session                            |
+| koa-multer                      | koa middleware handles file uploads                                   |
+| koa-passport                    | koa middleware single-sign on                                         |
+| koa-pug                         | koa middleware view template (formly known as jade)                   |
+| koa-redis                       | koa middleware redis sessionas                                        |
+| koa-router                      | koa middleware creating controllers                                   |
+| koa-static                      | koa middleware serve static files                                     |
+| koa-validate                    | koa middleware request validation                                     |
+| mongoose                        | MongoDB ODM.                                                          |
+| passport-facebook               | Sign-in with Facebook plugin.                                         |
+| passport-github                 | Sign-in with GitHub plugin.                                           |
+| passport-google-oauth           | Sign-in with Google plugin.                                           |
+| passport-twitter                | Sign-in with Twitter plugin.                                          |
+| passport-instagram              | Sign-in with Instagram plugin.                                        |
+| passport-local                  | Sign-in with Username and Password plugin.                            |
+| passport-oauth                  | Allows you to set up your own OAuth 1.0a and OAuth 2.0 strategies.    |
+| stripe                          | Offical Stripe API library.                                           |
+| lodash                          | Handy JavaScript utlities library.                                    |
+| mocha                           | Test framework.                                                       |
+| chai                            | BDD/TDD assertion library.                                            |
+| supertest                       | HTTP assertion library.                                               |
+| qs                              | parse query string                                                    |
+| remarkable                      | parse and convert markdown                                            |
