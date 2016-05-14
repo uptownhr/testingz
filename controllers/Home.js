@@ -1,46 +1,43 @@
-const router = require('express').Router()
+const router = require('koa-router')({ prefix: '/' })
+
 const async = require('async'),
   Promise = require('bluebird'),
   config = require('../config'),
-  Project = require('../models/Project'),
-  Contact = require('../models/Contact'),
-  Product = require('../models/Product');
+  { Project, Contact, Product } = require('../models')
 
-const stripe = require('stripe')(config.payment.stripe.secret_key);
-router.get('/', function (req, res) {
+const stripe = require('stripe')(config.payment.stripe.secret_key)
 
-  const projects = Project.find({}).exec()
-  const products = Product.find({}).exec()
+router.get('/', async ctx => {
+  const [projects, products] = await Promise.all([Project.find(), Product.find()])
 
-  Promise.all([projects, products]).then(docs => {
-    res.render('index', {
-      projects: docs[0],
-      products: docs[1],
-      stripe: config.payment.stripe.public_key
-    })
-  })
+  ctx.render('index', {
+    projects,
+    products,
+    stripe: config.payment.stripe.public_key
+  }, true)
 })
 
-router.post('/charge', function (req, res) {
-  const stripeToken = req.body.stripeToken
+router.post('charge', async ctx => {
+  const stripeToken = ctx.request.body.stripeToken
+  const product = await Product.findOne({ _id: ctx.request.body.id })
 
-  Product.findOne({ _id: req.body.id }).exec().then(product => {
-    var charge = stripe.charges.create({
+  try {
+    let charge = await stripe.charges.create({
       amount: product.price * 100, //cents
       description: product.name,
       currency: 'usd',
       source: stripeToken
-    }, function (err, charge) {
-      if (err && err.type == 'StripeCardError') {
-        req.flash('errors', { msg: 'Error: Card has been declined.' });
-      } else if (err) {
-        req.flash('errors', { msg: 'Error: Payment did not go through.' });
-      } else {
-        req.flash('success', { msg: 'Success: Payment has been accepted.' });
-      }
-      res.redirect('/');
-    });
-  }).catch(e => console.log(err))
+    })
+  }catch (err) {
+    if (err && err.type == 'StripeCardError') {
+      ctx.flash.errors = [{ msg: 'Error: Card has been declined.' }]
+    } else if (err) {
+      ctx.flash.errors = [{ msg: 'Error: Payment did not go through.' }]
+    }
+  }
+
+  ctx.flash.success = [{ msg: 'Success: Payment has been accepted.' }]
+  ctx.redirect('/')
 })
 
 // contact us route
@@ -68,18 +65,19 @@ router.post('/contact', function (req, res) {
         email: body.email,
         message: body.message,
         created: body.created
-    })
+      })
+
       contact.save(function (err, saved) {
         if (err) {
           req.flash('errors', { msg: 'Contact Info Was Not Saved!' });
         } else {
-          req.flash('success', {msg: 'Your message was sent successfully, Thank You!'})
+          req.flash('success', { msg: 'Your message was sent successfully, Thank You!' })
         }
-         res.redirect('/contact');
+
+        res.redirect('/contact');
       })
     }
   }) //end of mongoose findOne method
 }) //end of post request
-
 
 module.exports = router
