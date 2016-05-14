@@ -1,7 +1,7 @@
 extends layout
 block content
   form(method="POST" action="/admin/user")
-    input(type="hidden" name="_id" value=user._id)
+    input(type="hidden" name="_id" value=user.id)
     .dashhead
       .dashhead-titles
         h6.dashhead-subtitle Dashboards

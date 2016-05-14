@@ -52,13 +52,13 @@ block content
             p.text-xs-center=product.description
             p
               form(action="/charge", method="POST", style='text-align: center')
-                input(type="hidden", name="id", value="#{product._id}")
+                input(type="hidden", name="id", value=product.id)
                 script(
                   src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                  data-key="#{stripe}"
-                  data-amount="#{product.price * 100}"
-                  data-name="#{product.name}"
-                  data-description="#{product.description}"
-                  data-image="#{product.image_url}"
+                  data-key=stripe
+                  data-amount=product.price * 100
+                  data-name=product.name
+                  data-description=product.description
+                  data-image=product.image_url
                   data-locale="auto"
                 )
