@@ -27,7 +27,7 @@ Admin Login: admin@admin.com / asdfasdf
 To access admin, use pull-down menu once logged in as admin or go to /admin
 
 ## Main Stack
-- Koa@2.0 / Express@1.4.0
+- Koa / Express (older release [1.4.0](https://github.com/uptownhr/hackable/releases/tag/v2.0.0)
 - Mongoose
 - Pug (previously known as Jade)
 - Passport
