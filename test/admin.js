@@ -20,7 +20,8 @@ const admin_user = {
 
 const sample_user_info = {
   email: 'test@test.com',
-  password: 'asdfasdf'
+  password: 'asdfasdf',
+  askEmail: false
 }
 
 // for storing session
@@ -77,9 +78,10 @@ describe('Admin', function(){
       user.post('/auth/login')
         .send(sample_user_info)
         .expect(302, function(err, res) {
+          console.log('wtf', err)
           if(err) return done(err)
 
-          user.get('/admin/')
+          user.get('/admin/users')
             .expect(200, done)
         })
 
