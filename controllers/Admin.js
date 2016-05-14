@@ -42,33 +42,33 @@ router.get('/user', async ctx => {
 
 router.get('/user/:id', async ctx => {
   const user = await User.findOne({ _id: ctx.params.id })
-  console.log(user, ctx.params)
+
   ctx.render('admin/user', { user })
 })
 
 router.post('/user', async (ctx, next) => {
   const body = ctx.request.body
-  
+
   ctx.checkBody('email').isEmail('Email is not valid');
-  
-  if (body.confirmPassword || body.password){
+
+  if (body.confirmPassword || body.password) {
     ctx.checkBody('password').len(4, 'Password must be at least 4 characters long')
     ctx.checkBody('confirmPassword').eq(body.password, 'Passwords do not match')
   } else {
     //no need to include password if user isn't setting one
     delete body.password;
   }
-  
+
   //not a user model field
   delete body.confirmPassword
-  
+
   if (ctx.errors) {
-    ctx.flash('errors', ctx.errors);
-    return ctx.redirect('/admin/user?' + qs.stringify(body));
+    ctx.flash('errors', ctx.errors)
+    return ctx.redirect('/admin/user?' + qs.stringify(body))
   }
 
   const update = body._id
-  
+
   let user = update ? await User.findOne({ _id: body._id }) : new User()
 
   delete body._id
@@ -80,7 +80,7 @@ router.post('/user', async (ctx, next) => {
     ctx.flash('success', ['Saved'])
     ctx.redirect('/admin/users')
   } catch (e) {
-    console.log(e);
+    console.log(e)
     ctx.flash('errors', [e.message])
     return ctx.redirect('back')
   }
@@ -108,12 +108,11 @@ router.get('/posts', async ctx => {
 
   if (search) {
     search = { $regex: new RegExp(search, 'i') }
-    query = { $or : [{ title: search }] } 
+    query = { $or: [{ title: search }] }
   }
 
-  const posts = await Post.find(query);
-  ctx.render('admin/posts', { posts, search: ctx.query.search})
-
+  const posts = await Post.find(query)
+  ctx.render('admin/posts', { posts, search: ctx.query.search })
 })
 
 router.get('/post', async ctx =>  {
@@ -125,18 +124,18 @@ router.get('/post', async ctx =>  {
 })
 
 router.get('/post/:id', async ctx => {
-  const post = await Post.findOne({ _id : ctx.params.id })
+  const post = await Post.findOne({ _id: ctx.params.id })
 
   ctx.render('admin/post', { post })
 })
 
-router.post('/post', async (ctx, next) => {
+router.post('/post', async ctx => {
   const body = ctx.request.body;
   const userId = ctx.request._id;
   const update = body._id;
 
   let post = update ? await Post.findOne({ _id: body._id }) : new Post()
-  
+
   delete body._id
 
   post = _.merge(post, body);
@@ -150,20 +149,17 @@ router.post('/post', async (ctx, next) => {
     ctx.flash('errors', [e.message])
     return ctx.redirect('back')
   }
-
 })
 
 router.get('/post/delete/:id', async ctx => {
-
   try {
     await Post.remove({ _id: ctx.params.id })
-    ctx.flash('success', { msg : 'deleted'}) 
-  } catch(err){
+    ctx.flash('success', { msg: 'deleted' })
+  } catch (err) {
     ctx.flash('error', { msg: err.message })
   }
 
   return ctx.redirect('/admin/posts')
-
 })
 
 //PROJECT SECTION
@@ -173,7 +169,7 @@ router.get('/projects', async ctx => {
   let search = ctx.query.search
   let query = {}
   if (search) {
-    search = { $regex: new RegExp(search, 'i') };
+    search = { $regex: new RegExp(search, 'i') }
     query = { $or: [{ email: search }, { 'profile.name': search }] }
   }
 
@@ -199,10 +195,10 @@ router.get('/project/:id', async ctx => {
 // add new/edit
 router.post('/project', async (ctx, next) => {
   const body = ctx.request.body
-  ctx.checkBody('name', 'Name of project is required').notEmpty();
+  ctx.checkBody('name', 'Name of project is required').notEmpty()
   if (ctx.errors) {
-    ctx.flash('errors', ctx.errors);
-    return ctx.redirect('/admin/project?' + qs.stringify(body));
+    ctx.flash('errors', ctx.errors)
+    return ctx.redirect('/admin/project?' + qs.stringify(body))
   }
 
   const update = body._id
@@ -262,8 +258,6 @@ router.post('/images/upload', upload.array('file', 20), async ctx => {
   })
 
   /** End of /products route **/
-
-
 // new products
 
 router.get('/product', function (req, res) {
@@ -282,73 +276,130 @@ router.get('/product', async ctx => {
 
 /****** End of KOA /product route ********/
 
-// view/edit projects
-router.get('/product/:id', function (req, res) {
-  var id = req.params.id;
-  Product.findOne({ _id: id }, function (err, product) {
-    res.render('admin/product', {
-      product
-    })
-  })
+// Koa specific product 
+router.get('/product/:id', async ctx => {
+  const product = await Product.findOne({ _id: ctx.params.id })
+
+  ctx.render('admin/product', { product })
 })
+
+//end of Koa specific product
+
+
+// view/edit product 
+// router.get('/product/:id', function (req, res) {
+//   var id = req.params.id
+//   Product.findOne({ _id: id }, function (err, product) {
+//     res.render('admin/product', {
+//       product
+//     })
+//   })
+// })
+
+
+
 
 // add new/edit
-router.post('/product', function (req, res) {
-  var id = req.body._id
-  var body = req.body;
+// router.post('/product', function (req, res) {
+//   var id = req.body._id
+//   var body = req.body
 
-  var errors = [];
-  if (!validator.isCurrency(body.price))
-    errors.push('Price is not valid');
+//   var errors = []
+//   if (!validator.isCurrency(body.price))
+//     errors.push('Price is not valid')
 
-  if (errors.length) {
-    req.flash('errors', { msg: errors.join('<br>') });
-    return res.redirect('/admin/product/' + id);
+//   if (errors.length) {
+//     req.flash('errors', { msg: errors.join('<br>') })
+//     return res.redirect('/admin/product/' + id)
+//   }
+
+//   async.waterfall([
+//     function (callback) {
+//       if (body._id.length) {
+//         Product.findOne({ _id: body._id }, function (err, product) {
+//           product = _.merge(product, req.body)
+//           callback(null, product)
+//         })
+//       } else {
+//         delete body._id //remove empty id from user
+
+//         var product = new Product(body)
+//         callback(null, product)
+//       }
+//     },
+
+//     function (product, callback) {
+//       product.save(function (err, saved) {
+//         callback(err, saved)
+//       })
+//     }
+//   ], function (err, product) {
+//     if (err) {
+//       console.log(err)
+//       req.flash('errors', [{ msg: err.message }])
+//       return res.redirect('/admin/product?' + qs.stringify(req.body))
+//     }
+
+//     req.flash('success', [{ msg: product.name + ' saved' }])
+//     res.redirect('/admin/products')
+//   })
+// })
+
+/****Koa product edit/view   *******/
+router.post('/product', async (ctx, next) => {
+  const body = ctx.request.body
+  
+  if (ctx.errors) {
+    ctx.flash('errors', ctx.errors)
+    return ctx.redirect('/admin/product?', qs.stringify(body))
   }
+  
+  const update = body._id //maybe use body.id koa/es6 specific thing
+  
+  let product = update ? await Product.findOne({_id: body._id}) : new Product()
+  
+  delete body._id
+  
+  product = _.merge(product, body)
+  
+   try {
+    const saved = await product.save()
+    ctx.flash('success', ['Saved'])
+    ctx.redirect('/admin/users')
+  } catch (e) {
+    console.log(e)
+    ctx.flash('errors', [e.message])
+    return ctx.redirect('back')
+  }
+  
+})// end of Koa product edit/view
 
-  async.waterfall([
-    function (callback) {
-      if (body._id.length) {
-        Product.findOne({ _id: body._id }, function (err, product) {
-          product = _.merge(product, req.body);
-          callback(null, product);
-        });
-      } else {
-        delete body._id; //remove empty id from user
+/****End of KOA product edit/view */
 
-        var product = new Product(body);
-        callback(null, product);
-      }
-    },
 
-    function (product, callback) {
-      product.save(function (err, saved) {
-        callback(err, saved);
-      })
-    }
-  ], function (err, product) {
-    if (err) {
-      console.log(err);
-      req.flash('errors', [{ msg: err.message }])
-      return res.redirect('/admin/product?' + qs.stringify(req.body))
-    }
+// router.get('/product/delete/:id', function (req, res) {
+//   Product.remove({ _id: req.params.id }, function (err) {
+//     if (err) {
+//       req.flash('error', { msg: err.message })
+//     }else {
+//       req.flash('success', { msg: 'deleted' })
+//     }
 
-    req.flash('success', [{ msg: product.name + ' saved' }])
-    res.redirect('/admin/products')
-  });
-})
+//     return res.redirect('/admin/products')
+//   })
+// })
 
-router.get('/product/delete/:id', function (req, res) {
-  Product.remove({ _id: req.params.id }, function (err) {
-    if (err) {
-      req.flash('error', { msg: err.message })
-    }else {
-      req.flash('success', { msg: 'deleted' })
-    }
-
-    return res.redirect('/admin/products')
-  })
-});
+// Koa product delete 
+router.get('/product/delete/:id', async ctx => {
+  try {
+    await Product.remove({_id: ctx.params.id })
+    ctx.flash('success', { msg: 'deleted' })
+  } catch (err) {
+    ctx.flash('error', {msg: err.message})
+  }
+  
+  return ctx.redirect('/admin/products')
+}) // end of Koa product delete 
 
 //PRODUCT END
 
@@ -358,7 +409,7 @@ router.get('/files', async ctx => {
   let query = {}
 
   if (search) {
-    search = { $regex: new RegExp(search, 'i') };
+    search = { $regex: new RegExp(search, 'i') }
     query = { $or: [{ originalName: search }, { filename: search }] }
   }
 
@@ -373,7 +424,7 @@ router.get('/file', async ctx => {
 
 //view/edit file model
 router.get('/file/:id', async ctx => {
-  var id = ctx.params.id;
+  var id = ctx.params.id
 
   const file = await File.findOne({ _id: id })
 

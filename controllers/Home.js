@@ -4,9 +4,9 @@ const async = require('async'),
   Promise = require('bluebird'),
   config = require('../config'),
   Project = require('../models/Project'),
-  Product = require('../models/Product');
+  Product = require('../models/Product')
 
-const stripe = require('stripe')(config.payment.stripe.secret_key);
+const stripe = require('stripe')(config.payment.stripe.secret_key)
 
 router.get('/', async ctx => {
   const [projects, products] = await Promise.all([Project.find(), Product.find()])
@@ -38,7 +38,7 @@ router.post('charge', async ctx => {
   }
 
   ctx.flash.success = [{ msg: 'Success: Payment has been accepted.' }]
-  ctx.redirect('/');
+  ctx.redirect('/')
 })
 
 module.exports = router

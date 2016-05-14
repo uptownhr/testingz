@@ -11,7 +11,8 @@ const Koa = require('koa'),
   session = require('koa-generic-session'),
   redisStore = require('koa-redis'),
   moment = require('moment'),
-  _ = require('lodash')
+  _ = require('lodash'),
+  convert = require('koa-convert')
 
 require('./config/seed.js')
 
@@ -66,7 +67,7 @@ const pug = new Pug({
 })
 pug.options.noCache = true
 pug.use(app)
-const convert = require('koa-convert')
+
 
 //specify public static directory
 app.use(async (ctx, next) => {
@@ -120,39 +121,10 @@ app.use(async (ctx, next) => {
   await next()
 })
 
-/*
-app.use(async (req, res, next) => {
-  console.log('wtf')
-  if (!req.user || !req.user.askEmail || req.user.email || req.path == '/askEmail') return next()
+app.use(async (ctx, next) => {
+  if (!ctx.req.user || !ctx.req.user.askEmail || ctx.path == '/auth/askEmail') return next()
 
-  console.log('redirecting for email')
-  return res.redirect('/askEmail')
-})*/
-
-/*app.get('/askEmail', (req, res) => {
-  res.render('askEmail')
+  return ctx.redirect('/auth/askEmail')
 })
-
-app.post('/askEmail', (req, res) => {
-  console.log('POST EMAIL')
-  req.assert('email', 'Email is not valid').isEmail();
-
-  var errors = req.validationErrors();
-
-  if (errors) {
-    console.log('error', errors)
-    req.flash('errors', errors);
-    return res.redirect('/askEmail');
-  }
-
-  const body = req.body
-
-  req.user.askEmail = false
-  req.user.email = body.email
-  req.user.save((err, saved) => {
-    console.log(err, saved)
-    res.redirect('/')
-  })
-})*/
 
 module.exports = app

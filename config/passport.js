@@ -121,6 +121,7 @@ function handleOauthLogin(profileMapper) {
           user = new User()
           user.profile = mappedProfile
           user.providers.push(provider)
+          user.email = `${user.profile.name}@${provider}.com`
 
           user.save(err => done(err, user))
         })

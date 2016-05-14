@@ -62,7 +62,6 @@ describe('Admin', function(){
       sample_product.save(),
       sample_file.save()
     ]).then(done.bind(null,null)).catch( console.log )
-
   })
 
   describe('Admin not logged in', function(){
