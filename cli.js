@@ -2,6 +2,7 @@
 require('babel-register')
 const program = require('commander')
 const actions = require('./actions')
+const colors = require('colors')
 
 
 program
@@ -27,4 +28,12 @@ program.command('step5 <date>')
   .description('portfolio summary and asset allocation on given date')
   .action(actions.step5)
 
+if (!process.argv.slice(2).length) {
+  program.outputHelp(make_red);
+}
+
 program.parse(process.argv);
+
+function make_red(txt) {
+  return colors.red(txt); //display the help text in red on the console
+}
