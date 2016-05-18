@@ -67,7 +67,7 @@ describe('yahoo_charts', function() {
     })
   })
 
-  describe.only('find_portfolio', function(){
+  describe('find_portfolio', function(){
     it('returns merged portfolio for given date', async function(){
       const historical_prices = require('../data/historical_prices')
       const allocation_sets = require('../data/allocation_sets.json')
