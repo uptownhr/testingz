@@ -1,5 +1,5 @@
 # captain401
-CLI interface for captain401 yahoo stock challenge
+CLI interface for tess yahoo stock challenge
 
 ## Requirements
 - NodeJS
