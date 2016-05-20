@@ -24,6 +24,8 @@ var userSchema = new mongoose.Schema({
     picture: { type: String, default: '' }
   },
 
+  available_fund: { type: Number, default: 0 },
+
   askEmail: { type: Boolean, default: true },
   created: { type: Date, default: Date.now },
   resetPasswordToken: String,

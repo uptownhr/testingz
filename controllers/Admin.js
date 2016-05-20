@@ -9,15 +9,67 @@ const
   passport = require('../config/passport'),
   Promise = require('bluebird')
 
-const { User, Post, File, Project, Product, Contact } = require('../models')
+const { Fund, User, Post, File, Project, Product, Contact } = require('../models')
 
 const upload = multer({ dest: path.join(__dirname, '../public/uploads') })
+
+const yahoo_charts = require('../lib/yahoo_charts')
 
 router.use(passport.isAuthenticated, passport.isAdmin)
 
 router.get('/', async ctx => {
   ctx.render('admin/overview')
 })
+
+router.get('/funds', async ctx => {
+  let search = ctx.query.search
+  let query = {}
+
+  if (search) {
+    search = { $regex: new RegExp(search, 'i') }
+    query = { $or: [{ name: search }, { 'symbol': search }] }
+  }
+
+  const funds = await Fund.find(query)
+  console.log(funds)
+  ctx.render('admin/funds', { funds, search: ctx.query.search })
+})
+
+router.get('/fund', async ctx => {
+  const fund = {}
+  const query = ctx.query
+
+  _.merge(fund, query)
+  ctx.render('admin/fund', { fund })
+})
+
+router.get('/fund/:id', async ctx => {
+  const fund = await Fund.findOne({ _id: ctx.params.id })
+  const price = await yahoo_charts.get_quotes([fund.symbol])
+
+  ctx.render('admin/fund', { fund, price: price[0] })
+})
+
+router.post('/fund', async (ctx, next) => {
+  const body = ctx.request.body
+
+  let fund = body._id ? await Fund.findOne({ _id: body._id }) : new Fund()
+
+  delete body._id
+
+  fund = _.merge(fund, body)
+
+  try {
+    const saved = await fund.save()
+    ctx.flash('success', ['Saved'])
+    ctx.redirect('/admin/funds')
+  } catch (e) {
+    console.log(e)
+    ctx.flash('errors', [e.message])
+    return ctx.redirect('back')
+  }
+})
+
 
 router.get('/users', async ctx => {
   let search = ctx.query.search
