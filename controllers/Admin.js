@@ -9,7 +9,7 @@ const
   passport = require('../config/passport'),
   Promise = require('bluebird')
 
-const { Fund, User, Post, File, Project, Product, Contact } = require('../models')
+const { Fund, FundPrice, User, Post, File, Project, Product, Contact } = require('../models')
 
 const upload = multer({ dest: path.join(__dirname, '../public/uploads') })
 
@@ -46,13 +46,15 @@ router.get('/fund', async ctx => {
 router.get('/fund/:id', async ctx => {
   const fund = await Fund.findOne({ _id: ctx.params.id })
   const price = await yahoo_charts.get_quotes([fund.symbol])
-  const historical_prices = await yahoo_charts.get_historical_quotes([fund.symbol])
+
+  let historical_prices = await FundPrice.find({ _fund: ctx.params.id })
+
   historical_prices.reverse()
 
-  const beginng = historical_prices[0].price
+  const beginning = historical_prices[0].price
   const current = historical_prices[historical_prices.length - 1].price
 
-  const change = Math.round( ((current-beginng) / beginng) * 100 )
+  const change = Math.round( ((current-beginning) / beginning) * 100 )
 
   ctx.render('admin/fund', {
     fund,
@@ -73,6 +75,9 @@ router.post('/fund', async (ctx, next) => {
 
   try {
     const saved = await fund.save()
+    if( !(await FundPrice.findOne({_fund: saved.id})) ) {
+      addHistoricalPrices(saved)
+    }
     ctx.flash('success', ['Saved'])
     ctx.redirect('/admin/funds')
   } catch (e) {
@@ -82,6 +87,38 @@ router.post('/fund', async (ctx, next) => {
   }
 })
 
+router.get('/fund/delete/:id', async ctx => {
+  try {
+    await Fund.remove({ _id: ctx.params.id })
+    ctx.flash('success', { msg: 'deleted' })
+  } catch (err) {
+    ctx.flash('error', { msg: err.message })
+  }
+
+  return ctx.redirect('/admin/funds')
+})
+
+async function addHistoricalPrices (fund) {
+  const historical_prices = await yahoo_charts.get_historical_quotes([fund.symbol])
+  const mapped = historical_prices.map( price => {
+    delete price.symbol
+    price._fund = fund._id
+    price.price = parseFloat(price.price)
+    price.date = new Date(price.date)
+
+    return price
+  })
+
+  console.log('inserting')
+  FundPrice.collection.insert(mapped, err => {
+    if (err) {
+      console.log(err)
+    }else{
+      console.log('inserted', err)
+    }
+  })
+
+}
 
 router.get('/users', async ctx => {
   let search = ctx.query.search

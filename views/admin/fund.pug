@@ -33,11 +33,12 @@ block content
           // /.form-group
         // /.col
       // /.row
-    section
-      .statcard.statcard-success
-        .p-a
-          span.statcard-desc Current price
-          h2.statcard-number=price.price
-            small.delta-indicator.delta-positive #{change}%
-          hr.statcard-hr.m-b-0
-        canvas#sparkline1.sparkline(width='378', height='94', data-chart='spark-line', data-value=`[{data:[${historical_prices}]}]`, data-labels=`[${historical_prices}]`, style='width: 189px; height: 47px;')
+    if fund.id
+      section
+        .statcard.statcard-success
+          .p-a
+            span.statcard-desc Current price
+            h2.statcard-number=price.price
+              small.delta-indicator.delta-positive #{change}%
+            hr.statcard-hr.m-b-0
+          canvas#sparkline1.sparkline(width='378', height='94', data-chart='spark-line', data-value=`[{data:[${historical_prices}]}]`, data-labels=`[${historical_prices}]`, style='width: 189px; height: 47px;')
