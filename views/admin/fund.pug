@@ -9,9 +9,6 @@ block content
       .btn-toolbar.dashhead-toolbar
         button.btn.btn-primary-outline Save Fund
     hr.m-t
-    section
-      blockquote
-        | Current price: #{price.price}
     section.content-header
       #field_name.field.row
         .col-md-12
@@ -39,9 +36,8 @@ block content
     section
       .statcard.statcard-success
         .p-a
-          span.statcard-desc Page views
-          h2.statcard-number
-            | 12,938
-            small.delta-indicator.delta-positive 5%
+          span.statcard-desc Current price
+          h2.statcard-number=price.price
+            small.delta-indicator.delta-positive #{change}%
           hr.statcard-hr.m-b-0
-        canvas#sparkline1.sparkline(width='378', height='94', data-chart='spark-line', data-value='[{data:[28,68,41,43,96,45,100]}]', data-labels="['a','b','c','d','e','f','g']", style='width: 189px; height: 47px;')
+        canvas#sparkline1.sparkline(width='378', height='94', data-chart='spark-line', data-value=`[{data:[${historical_prices}]}]`, data-labels=`[${historical_prices}]`, style='width: 189px; height: 47px;')

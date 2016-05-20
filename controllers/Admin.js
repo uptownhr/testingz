@@ -46,8 +46,20 @@ router.get('/fund', async ctx => {
 router.get('/fund/:id', async ctx => {
   const fund = await Fund.findOne({ _id: ctx.params.id })
   const price = await yahoo_charts.get_quotes([fund.symbol])
+  const historical_prices = await yahoo_charts.get_historical_quotes([fund.symbol])
+  historical_prices.reverse()
 
-  ctx.render('admin/fund', { fund, price: price[0] })
+  const beginng = historical_prices[0].price
+  const current = historical_prices[historical_prices.length - 1].price
+
+  const change = Math.round( ((current-beginng) / beginng) * 100 )
+
+  ctx.render('admin/fund', {
+    fund,
+    change,
+    price: price[0],
+    historical_prices: historical_prices.map( p => p.price ).join(',')
+  })
 })
 
 router.post('/fund', async (ctx, next) => {
