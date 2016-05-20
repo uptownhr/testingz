@@ -75,9 +75,7 @@ router.post('/fund', async (ctx, next) => {
 
   try {
     const saved = await fund.save()
-    if( !(await FundPrice.findOne({_fund: saved.id})) ) {
-      addHistoricalPrices(saved)
-    }
+
     ctx.flash('success', ['Saved'])
     ctx.redirect('/admin/funds')
   } catch (e) {
@@ -97,28 +95,6 @@ router.get('/fund/delete/:id', async ctx => {
 
   return ctx.redirect('/admin/funds')
 })
-
-async function addHistoricalPrices (fund) {
-  const historical_prices = await yahoo_charts.get_historical_quotes([fund.symbol])
-  const mapped = historical_prices.map( price => {
-    delete price.symbol
-    price._fund = fund._id
-    price.price = parseFloat(price.price)
-    price.date = new Date(price.date)
-
-    return price
-  })
-
-  console.log('inserting')
-  FundPrice.collection.insert(mapped, err => {
-    if (err) {
-      console.log(err)
-    }else{
-      console.log('inserted', err)
-    }
-  })
-
-}
 
 router.get('/users', async ctx => {
   let search = ctx.query.search
